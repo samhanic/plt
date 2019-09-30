@@ -1,12 +1,12 @@
 # Projet IS : "RobostrikeIS"
 
-Principalement inspiré du jeu en ligne multijoueurs [Robostrike](http://www.robostrike.com/)(2001) lui même imaginé à partir du jeu de société [RoboRally](https://fr.wikipedia.org/wiki/RoboRally/)(1994), RoboRigolo permet d'alier action et stratégie.
+Principalement inspiré du jeu en ligne multijoueurs [Robostrike](http://www.robostrike.com/)(2001) lui même imaginé à partir du jeu de société [RoboRally](https://fr.wikipedia.org/wiki/RoboRally/)(1994), RobostrikeIS permet d'alier action et stratégie.
 
 ## Règles du jeu
 
 Lors d’une manche, les joueurs choisissent six actions ordonnées (avancer, reculer, droite, gauche, attaquer, …) avant la fin du temps imparti. Une fois que les joueurs ont tous entré leurs ordres ou que le temps est écoulé, le jeu exécute les actions des joueurs tour par tour. 
 
-### Déplacement
+### Déplacements
 
 Les joueurs peuvent avancer, reculer, tourner sur eux même et sauter des cases en utilisant des boosts.
 

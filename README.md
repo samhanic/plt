@@ -10,7 +10,7 @@ Lors d’une manche, les joueurs choisissent six actions ordonnées (avancer, re
 Les manches s’enchaînent jusqu’à la victoire finale de l’un des joueurs. Le gagnant est le joueur qui atteint le premier tous les objectifs ou qui est le dernier survivant.
 A l’exception du départ, plusieurs joueurs ne peuvent pas se trouver sur la même case. Si deux joueurs se retrouvent sur une même case, une collision a lieu et le joueur présent initialement sur la case disputée se fait pousser sur une case adjacente.
 
-### Déplacement
+### Déplacements
 
 Les déplacements de base sont : avancer, reculer, quart de tour à droite et quart de tour à gauche. A cela s'ajoute le boost, qui combiné à une action de déplacement vers le haut, le bas, la droite ou la gauche permet de sauter un nombre de cases égal au nombre de boost mis à la suite. Le robot reste immobilisé sur place pendant le chargement du boost et effectue le saut lors de l'action de déplacement suivant le ou les boosts. 
 

@@ -2,6 +2,6 @@
 
 namespace state {
 
-MapTile::MapTile(SpaceTypeId id) : idStatic {id} {}
+MapTile::MapTile(TypeId id) : idStatic {id} {}
 
 };

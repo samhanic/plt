@@ -1,7 +1,15 @@
 #include "MapTile.h"
 
-namespace state {
+using namespace state;
 
-MapTile::MapTile(TypeId id) : idStatic {id} {}
+MapTile::MapTile(TypeId id) : idStatic {id} {
+    idStatic=id;
+    bombDropped=false;
+}
 
-};
+void MapTile::dropBomb(void){
+    bombDropped=true;
+}
+void MapTile::removeBomb(void){
+    bombDropped=false;
+}

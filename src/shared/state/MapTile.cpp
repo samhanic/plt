@@ -13,3 +13,11 @@ void MapTile::dropBomb(void){
 void MapTile::removeBomb(void){
     bombDropped=false;
 }
+
+bool MapTile::isStatic(){
+	return true;
+}
+
+bool const MapTile::isReachable(){
+    return 1;
+}

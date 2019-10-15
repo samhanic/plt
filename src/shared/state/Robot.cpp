@@ -1,5 +1,5 @@
-#include "Robot.h"
-
+#include "../state.h"
+/*
 using namespace state;
 
 Robot::Robot(int id, int color){
@@ -164,4 +164,4 @@ void Robot::deathRobot(){
     else{
         ActionStatus=DEAD;
     }
-}
+}*/

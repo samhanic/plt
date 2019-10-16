@@ -2,8 +2,10 @@
 
 using namespace state; 
 
-/*
-void Rotator::moveRobotOnRotator (Action action) {
-	// to write
-	return;	
-}*/
+RotatorTypeId Rotator::getRotatorTypeId() const {
+	return rotatorTypeId;
+}
+
+void Rotator::setRotatorTypeId(RotatorTypeId rotatorTypeId){
+	this->rotatorTypeId = rotatorTypeId;
+}

@@ -4,25 +4,19 @@
 using namespace std;
 using namespace state; 
 
-ConvBeltTypeId ConvBelt::getConvBeltTypeId() const {
-	return convBeltTypeId;
-}
-
-void ConvBelt::setConvBeltTypeId(ConvBeltTypeId convBeltTypeId) {
-	this->convBeltTypeId = convBeltTypeId;
-}
 
 bool ConvBelt::getConvBeltSpeed(){
 	return fastOrNot;
 }
-/*
-void ConvBelt::getConvBeltSpeed (ConvBeltTypeId id) {
-	// to write
-	return;	
+
+void ConvBelt::setConvBeltSpeed (bool setSpeed){
+	fastOrNot=setSpeed;
 }
 
-ConvBeltTypeId ConvBelt::setConvBeltSpeed () {
-	// to write
-	return 12;	
+ConvBeltTypeId ConvBelt::getConvBeltTypeId() const {
+	return convBeltTypeId;
 }
-*/
+
+void ConvBelt::setConvBeltTypeId(ConvBeltTypeId convBeltTypeId){
+	this->convBeltTypeId = convBeltTypeId;
+}

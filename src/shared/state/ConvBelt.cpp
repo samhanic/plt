@@ -1,14 +1,24 @@
 #include "../state.h"
+#include <iostream>
 
+using namespace std;
 using namespace state; 
 
-void ConvBelt::getConvBeltTypeId (ConvBeltTypeId id) {
+ConvBeltTypeId ConvBelt::getConvBeltTypeId() const {
+	return convBeltTypeId;
+}
+
+void ConvBelt::setConvBeltTypeId(ConvBeltTypeId convBeltTypeId) {
+	this->convBeltTypeId = convBeltTypeId;
+}
+/*
+void ConvBelt::getConvBeltSpeed (ConvBeltTypeId id) {
 	// to write
 	return;	
 }
 
-ConvBeltTypeId ConvBelt::setConvBeltTypeId () {
+ConvBeltTypeId ConvBelt::setConvBeltSpeed () {
 	// to write
 	return 12;	
 }
-
+*/

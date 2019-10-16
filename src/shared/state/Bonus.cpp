@@ -1,26 +1,31 @@
 #include "../state.h"
+#include <iostream>
 
+using namespace std;
 using namespace state; 
 
-void Bonus::clearRefillBonus (int respawnTime, bool clearRefill) {
-	/* case we want to refill bonus and counter indicates end of round */
-	if (clearRefill = 1) {
-		if (respawnTime == 0) {
-			isEmpty =  0;
-		}
+BonusTypeId Bonus::getBonusTypeId() const {
+	return bonusTypeId;
+}
+
+void Bonus::setBonusTypeId(BonusTypeId bonusTypeId) {
+	this->bonusTypeId = bonusTypeId;
+}
+
+bool Bonus::getBonusAvailability (int respawnTime) {
+	if (respawnTime == 0) {
+		return this->bonusOrNot;	
 	} else {
-		isEmpty = 1;
+		cout <<  "Can't refill bonus before the end of the round";
 	}
 	
-	return;	
+	return this->bonusOrNot;	
 }
 
-void Bonus::getBonusTypeId (BonusTypeId id) {
-	// to write
-	return;	
-}
-
-BonusTypeId Bonus::setBonusTypeId () {
-	// to write
-	return 12;	
+ void Bonus::setBonusAvailability(bool isBonus) {
+	if (isBonus == false) {
+		this->bonusOrNot = false;
+	} else {
+		this->bonusOrNot = true;
+	}
 }

@@ -11,6 +11,10 @@ ConvBeltTypeId ConvBelt::getConvBeltTypeId() const {
 void ConvBelt::setConvBeltTypeId(ConvBeltTypeId convBeltTypeId) {
 	this->convBeltTypeId = convBeltTypeId;
 }
+
+bool ConvBelt::getConvBeltSpeed(){
+	return fastOrNot;
+}
 /*
 void ConvBelt::getConvBeltSpeed (ConvBeltTypeId id) {
 	// to write

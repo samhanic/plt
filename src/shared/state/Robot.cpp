@@ -24,6 +24,78 @@ void Robot::setRobotId(int robotId){
     this->robotId = robotId;
 }
 
+int Robot::getColor() const{
+    return color;
+}
+
+void Robot::setColor(int color){
+    this->color = color;
+}
+
+const std::vector<int>& Robot::getVisitedCheckpoints() const{
+    return visitedCheckpoints;
+}
+
+void Robot::setVisitedCheckpoints(const std::vector<int>& visitedCheckpoints){
+    this->visitedCheckpoints = visitedCheckpoints;
+}
+
+int Robot::getLifePoints() const{
+    return lifePoints;
+}
+
+void Robot::setLifePoints(int lifePoints){
+    this->lifePoints = lifePoints;
+}
+
+int Robot::getLifeNumber() const{
+    return lifeNumber;
+}
+
+void Robot::setLifeNumber(int lifeNumber){
+    this->lifeNumber = lifeNumber;
+}
+
+DirectionStatus Robot::getOrientation() const{
+    return orientation;
+}
+
+void Robot::setOrientation(DirectionStatus orientation){
+    this->orientation=orientation;
+}
+
+int Robot::getIsBoosted() const{
+    return isBoosted;
+}
+
+void Robot::setIsBoosted(int isBoosted){
+    this->isBoosted = isBoosted;
+}
+
+ActionStatus Robot::getStatus() const{
+    return status;
+}
+
+void Robot::setStatus(ActionStatus status){
+    this->status = status;
+}
+
+const std::array<bool,5>& Robot::getBonusOwned() const{
+    return bonusOwned;
+}
+
+void Robot::setBonusOwned(const std::array<bool,5>& bonusOwned){
+    this->bonusOwned = bonusOwned;
+}
+
+const std::array<bool,2>& Robot::getBonusActivated() const{
+    return bonusActivated;
+}
+
+void Robot::setBonusActivated(const std::array<bool,2>& bonusActivated){
+    this->bonusActivated = bonusActivated;
+}
+
 // void Robot::doAction(Action action){
 //     if (action==FORWARD){
 //         if (orientation==EAST){

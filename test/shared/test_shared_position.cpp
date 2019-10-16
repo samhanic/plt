@@ -5,7 +5,6 @@ using namespace ::state;
 
 BOOST_AUTO_TEST_CASE(TestPosition)
 {
-
   Element testEntity {};
   Position testEntityPos= testEntity.getPosition();
   testEntityPos.setX(5);

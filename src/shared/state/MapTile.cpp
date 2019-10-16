@@ -1,6 +1,5 @@
 #include "MapTile.h"
 #include <iostream>
-#include <algorithm>
 
 using namespace state;
 using namespace std;

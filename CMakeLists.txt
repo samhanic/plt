@@ -51,11 +51,15 @@ if(BUILD_CODE_COVERAGE)
     '/usr/*'
     '${PROJECT_SOURCE_DIR}/test/*'
     '${PROJECT_SOURCE_DIR}/extern/*')
+  set(COVERAGE_GCOVR_EXCLUDES
+    /usr/
+    "${PROJECT_SOURCE_DIR}/test/"
+    "${PROJECT_SOURCE_DIR}/extern/")
   # Create script to run tests for code coverage
   set(test_runner "${CMAKE_CURRENT_BINARY_DIR}/run_test.sh")
   file(WRITE ${test_runner}
     "cd \"${CMAKE_CURRENT_BINARY_DIR}/test\"\n"
-    "ctest"
+    "ctest||/usr/bin/true"
     )
   # Create target for code coverage
   SETUP_TARGET_FOR_COVERAGE_LCOV(
@@ -63,10 +67,19 @@ if(BUILD_CODE_COVERAGE)
     EXECUTABLE sh ${test_runner}
     DEPENDS ${test_runner}
     )
+  SETUP_TARGET_FOR_COVERAGE_GCOVR_XML(
+    NAME code-coverage-gcov
+    EXECUTABLE sh ${test_runner}
+    DEPENDS ${test_runner}
+    )
 endif()
 
 # Build dia2code
 add_subdirectory(extern/dia2code)
+
+# Add option to enable special build for ENSEA's machines
+set(MACHINE_ENSEA OFF CACHE BOOL
+  "Set MACHINE_ENSEA to ON to build on the CentOS machine at ENSEA")
 
 # Find library jsoncpp
 set(jsoncpp_include_dir "${PROJECT_SOURCE_DIR}/extern/jsoncpp-1.8.0")
@@ -80,11 +93,14 @@ if(WIN32)
 else(WIN32)
   set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
 endif(WIN32)
-if($ENV{MACHINE_ENSEA})
+if(${MACHINE_ENSEA})
   set(SFML_ROOT "/usr/lsa")
   set(CMAKE_MODULE_PATH "${SFML_ROOT}/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-endif($ENV{MACHINE_ENSEA})
-find_package(SFML 2 COMPONENTS graphics network)
+endif()
+find_package(SFML 2 COMPONENTS graphics network window system)
+if(NOT ${MACHINE_ENSEA})
+  set(SFML_LIBRARIES sfml-graphics sfml-network sfml-window sfml-system)
+endif()
 
 # Find library libmicrohttpd
 find_library(

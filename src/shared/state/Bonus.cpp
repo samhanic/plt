@@ -4,9 +4,16 @@
 using namespace std;
 using namespace state; 
 
-//Bonus::Bonus() {
-	//bonusOrNot = true;
-//}
+Bonus::Bonus () {
+	this->bonusOrNot = true;
+}
+
+/*Bonus::Bonus (BonusTypeId bonusType) {
+	btype = bonusType;
+	if (btype == 1){
+		bonusOrNor = false;
+	}
+}*/
 
 BonusTypeId Bonus::getBonusTypeId() const {
 	return bonusTypeId;

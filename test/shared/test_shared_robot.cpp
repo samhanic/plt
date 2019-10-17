@@ -1,5 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include "../../src/shared/state.h"
+#include <bits/stdc++.h> 
+using namespace std; 
 
 using namespace ::state;
 
@@ -17,6 +19,8 @@ BOOST_AUTO_TEST_CASE(TestRobot)
 	BOOST_CHECK_EQUAL(testRobot.getLifeNumber(), 2);
 	testRobot.setOrientation(NORTH);
 	BOOST_CHECK_EQUAL(testRobot.getOrientation(), NORTH);
+	testRobot.setIsBoosted(true);
+	BOOST_CHECK_EQUAL(testRobot.getIsBoosted(), true);
 	testRobot.setStatus(DEAD);
 	BOOST_CHECK_EQUAL(testRobot.getStatus(), DEAD);
 	

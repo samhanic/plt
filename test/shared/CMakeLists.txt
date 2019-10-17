@@ -1,6 +1,6 @@
 # List of test functions
 #add_custom_test(shared_dummy)
-#add_custom_test(shared_mapTile)
+#add_custom_test(shared_bonus)
 add_custom_test(shared_position)
 add_custom_test(shared_robot)
 

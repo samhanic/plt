@@ -4,6 +4,10 @@
 using namespace std;
 using namespace state; 
 
+//Bonus::Bonus() {
+	//bonusOrNot = true;
+//}
+
 BonusTypeId Bonus::getBonusTypeId() const {
 	return bonusTypeId;
 }
@@ -15,7 +19,8 @@ void Bonus::setBonusTypeId(BonusTypeId bonusTypeId) {
 bool Bonus::getBonusAvailability (int respawnTime) {
 	if (respawnTime == 0) {
 		return this->bonusOrNot;	
-	} else {
+	}
+	else {
 		cout <<  "Can't refill bonus before the end of the round";
 	}
 	

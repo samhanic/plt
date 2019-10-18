@@ -1,14 +1,19 @@
 #include <boost/test/unit_test.hpp>
-#include "../../src/shared/state/ConvBelt.h"
+#include "../../src/shared/state.h"
+#include <bits/stdc++.h> 
+using namespace std; 
 
 using namespace ::state;
 
-BOOST_AUTO_TEST_CASE(testConvBelt)
+BOOST_AUTO_TEST_CASE(TestConvBelt)
 {
 	ConvBelt testCV {};
 	
 	testCV.setConvBeltSpeed(true);
 	BOOST_CHECK_EQUAL(testCV.getConvBeltSpeed(), true);
-	//testCV.setConvBeltId(CB_N_S);
-	//BOOST_CHECK_EQUAL(testCV.getConvBeltId(), CB_N_S);
+	testCV.setConvBeltTypeId(CB_N_S);
+	BOOST_CHECK_EQUAL(testCV.getConvBeltTypeId(), CB_N_S);
+
+	testCV.setConvBeltSpeed(true);
+	BOOST_CHECK_EQUAL(testCV.getConvBeltSpeed(), true);
 }

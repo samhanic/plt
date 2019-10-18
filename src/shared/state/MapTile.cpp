@@ -4,6 +4,11 @@
 using namespace state;
 using namespace std;
 
+MapTile::MapTile(){
+    idStatic=NO_ID;
+    bombDropped=false;
+}
+
 MapTile::MapTile(TypeId id) : idStatic {id} {
     idStatic=id;
     bombDropped=false;
@@ -18,13 +23,6 @@ void MapTile::dropBomb(void){
 }
 void MapTile::removeBomb(void){
     bombDropped=false;
-}
-
-bool const MapTile::isReachable(){
-    if (getTypeId()==WALL){
-        return false;
-    }
-    return true;
 }
 
 int MapTile::isOccupied (State& state){

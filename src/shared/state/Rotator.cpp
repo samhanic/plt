@@ -2,7 +2,7 @@
 
 using namespace state; 
 
-RotatorTypeId Rotator::getRotatorTypeId() const {
+RotatorTypeId Rotator::getRotatorTypeId() {
 	return rotatorTypeId;
 }
 

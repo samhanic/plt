@@ -12,10 +12,26 @@ void Element::initElement() {
     this->position.setY(0);
 }
 
+TypeId Element::getTypeId() const {
+    return typeId;
+}
+
+void Element::setTypeId(TypeId typeId) {
+   this->typeId = typeId;
+}
+
+
+bool Element::isReachable(){
+    if (getTypeId()==WALL){
+        return false;
+    }
+    return true;
+}
+
 state::Position Element::getPosition () {
     return position;
 }
 
-
-
-
+void Element::setPosition(const Position& position){
+    this->position=position;
+}

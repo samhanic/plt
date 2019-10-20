@@ -4,10 +4,10 @@ using namespace state;
 
 Robot::Robot(){
     robotId=0;
-    color=0;
+    color=BLUE;
 }
 
-Robot::Robot(int id, int color){
+Robot::Robot(int id, ColorStatus color){
     robotId=id;
     color=color;
 }
@@ -24,11 +24,11 @@ void Robot::setRobotId(int robotId){
     this->robotId = robotId;
 }
 
-int Robot::getColor() const{
+ColorStatus Robot::getColor() const{
     return color;
 }
 
-void Robot::setColor(int color){
+void Robot::setColor(ColorStatus color){
     this->color = color;
 }
 

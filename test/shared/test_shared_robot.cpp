@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_CASE(TestRobot)
 	
 	testRobot.setRobotId(18);
 	BOOST_CHECK_EQUAL(testRobot.getRobotId(), 18);
-	testRobot.setColor(11);
-	BOOST_CHECK_EQUAL(testRobot.getColor(), 11);
+	testRobot.setColor(RED);
+	BOOST_CHECK_EQUAL(testRobot.getColor(), RED);
 	vector<int> tab = {0 , 0};
 	testRobot.setVisitedCheckpoints(tab);
 	bool testBool = testRobot.getVisitedCheckpoints()[0] == 0;

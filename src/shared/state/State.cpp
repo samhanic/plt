@@ -72,7 +72,7 @@ int State::initMap (std::string map_txt) {
     return 1;
 }
 
-int State::initRobot (ColorStatus color) {
+int State::initRobot (ColorStatus) {
     // Add parameter to choose wich robot to create 
     Robot blueRobot(players.size() + 1, BLUE);
 	std::unique_ptr<Robot> ptrBR(new Robot(blueRobot));

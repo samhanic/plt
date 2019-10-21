@@ -7,7 +7,7 @@ add_custom_test(shared_rotator)
 add_custom_test(shared_convbelt)
 add_custom_test(shared_maptile)
 add_custom_test(shared_element)
-
+add_custom_test(shared_state)
 
 
 # vim: set sw=2 sts=2 et:

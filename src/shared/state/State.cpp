@@ -72,26 +72,30 @@ int State::initMap (std::string map_txt) {
     return 1;
 }
 
-int State::initRobot (ColorStatus) {
+int State::initRobot (ColorStatus color) {
     // Add parameter to choose wich robot to create 
-    Robot blueRobot(players.size() + 1, BLUE);
-	std::unique_ptr<Robot> ptrBR(new Robot(blueRobot));
-	players.push_back(move(ptrBR));
+    // Robot blueRobot(players.size() + 1, BLUE);
+	// std::unique_ptr<Robot> ptrBR(new Robot(blueRobot));
+	// players.push_back(move(ptrBR));
 
-    Robot yellowRobot(players.size() + 1, YELLOW);
-	std::unique_ptr<Robot> ptrYR(new Robot(yellowRobot));
-	players.push_back(move(ptrYR));
+    // Robot yellowRobot(players.size() + 1, YELLOW);
+	// std::unique_ptr<Robot> ptrYR(new Robot(yellowRobot));
+	// players.push_back(move(ptrYR));
 
-    Robot pinkRobot(players.size() + 1, PINK);
-	std::unique_ptr<Robot> ptrPR(new Robot(pinkRobot));
-	players.push_back(move(ptrPR));
+    // Robot pinkRobot(players.size() + 1, PINK);
+	// std::unique_ptr<Robot> ptrPR(new Robot(pinkRobot));
+	// players.push_back(move(ptrPR));
 
-    Robot orangeRobot(players.size() + 1, ORANGE);
-	std::unique_ptr<Robot> ptrOR(new Robot(orangeRobot));
-	players.push_back(move(ptrOR));
+    // Robot orangeRobot(players.size() + 1, ORANGE);
+	// std::unique_ptr<Robot> ptrOR(new Robot(orangeRobot));
+	// players.push_back(move(ptrOR));
 
-    Robot redRobot(players.size() + 1, RED);
-	std::unique_ptr<Robot> ptrRR(new Robot(redRobot));
+    // Robot redRobot(players.size() + 1, RED);
+	// std::unique_ptr<Robot> ptrRR(new Robot(redRobot));
+	// players.push_back(move(ptrRR));
+
+	Robot robot(players.size() + 1, color);
+	std::unique_ptr<Robot> ptrRR(new Robot(robot));
 	players.push_back(move(ptrRR));
 
     return 1;

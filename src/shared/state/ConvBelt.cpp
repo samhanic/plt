@@ -8,7 +8,7 @@ ConvBelt::ConvBelt() {
 
 }
 
-ConvBelt::ConvBelt (ConvBeltTypeId convBeltTypeId, int newX, int newY, int newTileCode) {
+ConvBelt::ConvBelt(ConvBeltTypeId convBeltTypeId, int newX, int newY, int newTileCode) : MapTile(CONVBELT, newX, newY, newTileCode) {
 }
 
 bool ConvBelt::getConvBeltSpeed(){

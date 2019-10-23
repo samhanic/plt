@@ -30,8 +30,11 @@ int main(int argc,char* argv[])
 
 		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
 		StateLayer statelayer(window);
-		statelayer.initMap();
-
+		statelayer.initSurface();
+	
+	State state;
+	MapFactory mapFactory;
+	state.initMap("../res/map.txt", mapFactory);
 		/* TESTS DE RENDU */
 		
 		
@@ -52,9 +55,6 @@ int main(int argc,char* argv[])
 		// stateLayer.draw(renderWindow);
 				
 			
-
-
-
 		// while (renderWindow.isOpen()){
 		// 	sf::Event event;
 		// 	while (renderWindow.pollEvent(event)){

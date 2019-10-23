@@ -47,50 +47,27 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     	std::vector<std::unique_ptr<MapTile>> newLigne;
     
     	for (j = 0; j < longueur; j++){//itération sur les colonnes
-    		if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] < 5){
+    		if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] < 5){//Creation des bonus
 				Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
 				std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
 				cout<<"Nouveau Bonus créé :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k]>=5 && map_tuiles_code[k]<18){
+			else if (map_tuiles_code[k]>=5 && map_tuiles_code[k]<18){//creation des convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
 				cout<<"Nouveau onvBelt créé :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k]>=18 && map_tuiles_code[k]<20){
+			else if (map_tuiles_code[k]>=18 && map_tuiles_code[k]<20){//creation des rotator
 				Rotator newRotator(mapFactory.doConvertMapRotator()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<Rotator> ptr(new Rotator(newRotator));
 				newLigne.push_back(move(ptr));
-			}
-
-				//Conversion des tuiles bonus         
-				// if (mapFactory.doConvertMapBonus().find(map_tuiles_code[k]) != mapFactory.doConvertMapBonus().end()){
-				// 	Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
-				// 	std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
-				// 	//cout<<"Nouveau Bonus créé :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;
-					
-				// 	newLigne.push_back(move(ptr));
-				// }
-			
-			//conversion des tuiles checkpoint
-			//conversion des tuiles convbelt
-			//conversion des tuiles rotator
-				/*
-				else if (correspondances.getCorrespondanceTNP().find(map_tuiles_code[k]) != correspondances.getCorrespondanceTNP().end()){
-					TerrainNonPraticable newTNP(correspondances.getCorrespondanceTNP()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-					std::unique_ptr<TerrainNonPraticable> ptr(new TerrainNonPraticable(newTNP)) ;
-					newLigne.push_back(move(ptr));
-				}
-				*/
-			
+			}			
     		else{
     			cerr << "Code Tuile " << map_tuiles_code[k]<< " invalide dans le fichier " << map_txt << endl;
     			return 0;
-    		
     		}
-    		
     		k++;
     	}
     	twoDTab.push_back(move(newLigne));

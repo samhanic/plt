@@ -14,6 +14,14 @@ MapTile::MapTile(TypeId id) : idStatic {id} {
     bombDropped=false;
 }
 
+MapTile::MapTile (TypeId id, int newX, int newY, int newCodeTuile) : idStatic {id}{
+    idStatic=id;
+    bombDropped=false;
+    position.setX(newX);
+    position.setY(newY);
+    tileCode=newCodeTuile;
+}
+
 bool MapTile::isStatic(){
 	return true;
 }

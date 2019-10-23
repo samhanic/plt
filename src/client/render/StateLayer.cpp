@@ -18,7 +18,7 @@ StateLayer::StateLayer (state::State& etat, sf::RenderWindow& window):window(win
     
 }
 
-void StateLayer::initMap (){//state::State& state){
+void StateLayer::initSurface (){//state::State& state){
     TileMap surfaceMap;
     //surfaceMap.load(state, tilesets[0]->getTexture, sf::Vector2u(tilesets[0]->getCellWidth(),tilesets[0]->getCellHeight()),state.getMap()[0].size());
     //surfaceMap.load(chemin,  sf::Vector2u(tilesets[0]->getCellWidth(),tilesets[0]->getCellHeight()), tilesets[0]->getTexture,state.getMap()[0].size(),state.getMap()[1].size());
@@ -29,13 +29,9 @@ void StateLayer::initMap (){//state::State& state){
     		// create the window
 		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
 
-        int largeur =10;
-        int longueur =10;
         std::ifstream fichier(map_txt, ios::in);    
         std::string contenu, ligne, code_tuile;
-        
-        int map_tuiles_code[largeur*longueur];
-        
+                
         // Lecture Fichier
         if (fichier){
             while (getline(fichier,ligne)){

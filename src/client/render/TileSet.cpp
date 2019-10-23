@@ -1,4 +1,4 @@
-/*#include <string>
+#include <string>
 #include "../../src/client/render.h"
 
 #include <iostream>
@@ -59,4 +59,3 @@ sf::Texture& TileSet::getTexture(){
 	sf::Texture & refTexture = textureTileset;
 	return refTexture;
 }
-*/

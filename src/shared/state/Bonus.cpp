@@ -8,11 +8,11 @@ Bonus::Bonus () {
 	this->bonusOrNot = true;
 }
 
-Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) {
-	/*if (bonusType == 1){
-		bonusOrNor = false;
-	}*/
+Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) :MapTile(BONUS){
+	position.setX(newX);
+	position.setY(newY);
 }
+
 
 BonusTypeId Bonus::getBonusTypeId() const {
 	return bonusTypeId;

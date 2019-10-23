@@ -4,6 +4,8 @@
 #include <iostream>
 
 using namespace render;
+#define esp_tile 80
+#define larg_tile 64
 
 bool TileMap::load (const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int  height) {
         
@@ -36,10 +38,10 @@ bool TileMap::load (const std::string& tileset, sf::Vector2u tileSize, const int
                 quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
 
                 // on définit ses quatre coordonnées de texture
-                quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-                quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-                quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
-                quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+                quad[0].texCoords = sf::Vector2f(tu * esp_tile, tv * esp_tile);
+                quad[1].texCoords = sf::Vector2f(tu * esp_tile +larg_tile, tv * esp_tile);
+                quad[2].texCoords = sf::Vector2f(tu * esp_tile + larg_tile, tv * esp_tile + larg_tile);
+                quad[3].texCoords = sf::Vector2f(tu * esp_tile, tv * esp_tile + larg_tile);
             }
 
         return true;

@@ -4,6 +4,9 @@
 using namespace std;
 using namespace state; 
 
+ConvBelt::ConvBelt() {
+	
+}
 
 bool ConvBelt::getConvBeltSpeed(){
 	return fastOrNot;

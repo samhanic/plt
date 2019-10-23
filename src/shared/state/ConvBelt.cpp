@@ -5,7 +5,10 @@ using namespace std;
 using namespace state; 
 
 ConvBelt::ConvBelt() {
-	
+
+}
+
+ConvBelt::ConvBelt (ConvBeltTypeId convBeltTypeId, int newX, int newY, int newTileCode) {
 }
 
 bool ConvBelt::getConvBeltSpeed(){

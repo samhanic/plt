@@ -35,3 +35,11 @@ state::Position Element::getPosition () {
 void Element::setPosition(const Position& position){
     this->position=position;
 }
+
+int Element::getTileCode (){
+	return tileCode;
+}
+
+void Element::setTileCode (int newCodeTuile){
+	tileCode = newCodeTuile;
+}

@@ -8,12 +8,11 @@ Bonus::Bonus () {
 	this->bonusOrNot = true;
 }
 
-/*Bonus::Bonus (BonusTypeId bonusType) {
-	btype = bonusType;
-	if (btype == 1){
+Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) {
+	/*if (bonusType == 1){
 		bonusOrNor = false;
-	}
-}*/
+	}*/
+}
 
 BonusTypeId Bonus::getBonusTypeId() const {
 	return bonusTypeId;

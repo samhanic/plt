@@ -11,31 +11,31 @@ MapFactory::MapFactory() {
 	convertMapBonus[3] = BONUS_CROSS_ATTACK;
 	convertMapBonus[4] = BONUS_BOMB;
 	
-	convertMapConvBelt[0] = CB_N_S;
-    convertMapConvBelt[1] = CB_E_W;
-    convertMapConvBelt[2] = CB_S_N;
-    convertMapConvBelt[3] = CB_W_E;
-    convertMapConvBelt[4] = CB_N_E;
-    convertMapConvBelt[5] = CB_N_W;
-    convertMapConvBelt[6] = CB_E_N;
-    convertMapConvBelt[7] = CB_E_S;
-    convertMapConvBelt[8] = CB_S_E;
-    convertMapConvBelt[9] = CB_S_W;
-    convertMapConvBelt[10] = CB_W_N;
-    convertMapConvBelt[11] = CB_W_S;
-    convertMapConvBelt[11] = CB_NW_E;
+	convertMapConvBelt[5] = CB_N_S;
+    convertMapConvBelt[6] = CB_E_W;
+    convertMapConvBelt[7] = CB_S_N;
+    convertMapConvBelt[8] = CB_W_E;
+    convertMapConvBelt[9] = CB_N_E;
+    convertMapConvBelt[10] = CB_N_W;
+    convertMapConvBelt[11] = CB_E_N;
+    convertMapConvBelt[12] = CB_E_S;
+    convertMapConvBelt[13] = CB_S_E;
+    convertMapConvBelt[14] = CB_S_W;
+    convertMapConvBelt[15] = CB_W_N;
+    convertMapConvBelt[16] = CB_W_S;
+    convertMapConvBelt[17] = CB_NW_E;
     
-    convertMapRotator[0] = ROT_CLK;
-    convertMapRotator[1] = ROT_CCLK;
+    convertMapRotator[18] = ROT_CLK;
+    convertMapRotator[19] = ROT_CCLK;
     
-    convertMapOthers[0] = ROBOT;
-    convertMapOthers[1] = NORMAL_TILE;
-    convertMapOthers[2] = CHECKPOINT;
-    convertMapOthers[3] = HOLE;
-    convertMapOthers[4] = WALL;
-    convertMapOthers[5] = BONUS;
-    convertMapOthers[6] = ROTATOR;
-    convertMapOthers[7] = CONVBELT;    
+    convertMapOthers[20] = ROBOT;
+    convertMapOthers[21] = NORMAL_TILE;
+    convertMapOthers[22] = CHECKPOINT;
+    convertMapOthers[23] = HOLE;
+    convertMapOthers[24] = WALL;
+    convertMapOthers[25] = BONUS;
+    convertMapOthers[26] = ROTATOR;
+    convertMapOthers[27] = CONVBELT;    
 }
 
 std::map<int, BonusTypeId>& MapFactory::doConvertMapBonus () {

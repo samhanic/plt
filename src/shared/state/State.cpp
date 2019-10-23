@@ -8,7 +8,7 @@
 using namespace state;
 using namespace std;
 
-int State::initMap (std::string map_txt) {
+int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 
     // L'idéal serait de déterminer longueur et largeur à partir de la map en entrée.
     int largeur =10;
@@ -26,8 +26,12 @@ int State::initMap (std::string map_txt) {
 			contenu = contenu + ligne;
 		}
 		fichier.close();
+		cout << contenu << endl;
     }
-    else {return -1;}
+    else {
+		cout << "le frichier ne peut être lu" << endl;
+		return -1;
+	}
 
      // Conversion des codes des tuiles en int
     std::stringstream contenuStream(contenu);
@@ -43,15 +47,16 @@ int State::initMap (std::string map_txt) {
     	std::vector<std::unique_ptr<MapTile>> newLigne;
     
     	for (j = 0; j < longueur; j++){
-    		if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] <= 46){
-                // Recherche à determiner type de tuile : à coder 
-                /*
-				if (correspondances.getCorrespondanceTP().find(map_tuiles_code[k]) != correspondances.getCorrespondanceTP().end()){
-					TerrainPraticable newTP(correspondances.getCorrespondanceTP()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-					std::unique_ptr<TerrainPraticable> ptr(new TerrainPraticable(newTP)) ;
+    		if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] <= 5){
+                // Recherche à determiner type de tuile : à coder           
+				if (mapFactory.doConvertMapBonus().find(map_tuiles_code[k]) != mapFactory.doConvertMapBonus().end()){
+					Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
+					std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
+					cout<<"Nouveau Bonus créé :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;
+					
 					newLigne.push_back(move(ptr));
 				}
-
+				/*
 				else if (correspondances.getCorrespondanceTNP().find(map_tuiles_code[k]) != correspondances.getCorrespondanceTNP().end()){
 					TerrainNonPraticable newTNP(correspondances.getCorrespondanceTNP()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 					std::unique_ptr<TerrainNonPraticable> ptr(new TerrainNonPraticable(newTNP)) ;
@@ -69,7 +74,8 @@ int State::initMap (std::string map_txt) {
     	}
     	twoDTab.push_back(move(newLigne));
     }    
-    return 1;
+
+	return 1;
 }
 
 int State::initRobot (ColorStatus color) {

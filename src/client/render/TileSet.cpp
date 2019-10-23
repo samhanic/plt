@@ -1,5 +1,16 @@
-#include <string>
+/*#include <string>
 #include "../../src/client/render.h"
+
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include <sstream>
+#include <map>
+#include <memory>
+#include <unistd.h>
+#include <thread>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>	
 
 using namespace render;
 
@@ -10,19 +21,19 @@ TileSet::TileSet(TileSetID newID){
 	if (id == MAP_TILESET){
 		cellWidth=64;
 		cellHeight=64;
-		imageFile="res/map.png";
+		imageFile="../res/map.png";
 	}
 	
 	else if (id==COMMAND_TILESET){
 		cellWidth=42;
 		cellHeight=40;
-		imageFile="res/command.png";
+		imageFile="../res/command.png";
 	}
 	
 	else if (id==PAWN_TILESET){
 		cellWidth=64;
 		cellHeight=64;
-		imageFile="res/pawn.png";
+		imageFile="../res/pawn.png";
 	}
 	
 	textureTileset.loadFromFile(imageFile);
@@ -48,3 +59,4 @@ sf::Texture& TileSet::getTexture(){
 	sf::Texture & refTexture = textureTileset;
 	return refTexture;
 }
+*/

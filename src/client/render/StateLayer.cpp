@@ -27,7 +27,7 @@ void StateLayer::initSurface (){//state::State& state){
 	State state;
     state.initMap(map_txt, tabMapFactory);
     		// create the window
-		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
+		sf::RenderWindow window(sf::VideoMode(1000, 640), "RobotIS");
 
         std::ifstream fichier(map_txt, ios::in);    
         std::string contenu, ligne, code_tuile;
@@ -63,7 +63,11 @@ void StateLayer::initSurface (){//state::State& state){
 		if (!map.load("../res/map.png", sf::Vector2u(64, 64), level, 10, 10))
 			cout<<"Erreur de chargement"<<endl;
 
-		// run the main loop
+        sf::Texture texture;
+		texture.loadFromFile("../res/command.png");
+		sf::Sprite sprite(texture);
+        sprite.setPosition(730.f, 70.f);
+		
 		while (window.isOpen())
 		{
 			// handle events
@@ -77,6 +81,7 @@ void StateLayer::initSurface (){//state::State& state){
 			// draw the map
 			window.clear();
 			window.draw(map);
+            window.draw(sprite);
 			window.display();
 		}
 }

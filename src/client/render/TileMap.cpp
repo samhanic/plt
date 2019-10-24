@@ -18,7 +18,7 @@ bool TileMap::load (const std::string& tileset, sf::Vector2u tileSize, const int
         m_vertices.resize(width * height * 4);
 
         // on remplit le tableau de vertex, avec un quad par tuile
-        for (unsigned int i = 0; i < width; ++i)
+        for (unsigned int i = 0; i < width; ++i) {
             for (unsigned int j = 0; j < height; ++j)
             {
                 // on récupère le numéro de tuile courant
@@ -43,7 +43,7 @@ bool TileMap::load (const std::string& tileset, sf::Vector2u tileSize, const int
                 quad[2].texCoords = sf::Vector2f(tu * esp_tile + larg_tile, tv * esp_tile + larg_tile);
                 quad[3].texCoords = sf::Vector2f(tu * esp_tile, tv * esp_tile + larg_tile);
             }
-
+        }
         return true;
     }
 

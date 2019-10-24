@@ -28,7 +28,7 @@ int main(int argc,char* argv[])
 		system("make code-coverage");
 	} else if (entry == "render") {
 
-		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
+		sf::RenderWindow window(sf::VideoMode(1, 1), "RobotIS");
 		StateLayer statelayer(window);
 		statelayer.initSurface();
 	

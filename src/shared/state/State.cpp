@@ -47,23 +47,52 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     	std::vector<std::unique_ptr<MapTile>> newLigne;
     
     	for (j = 0; j < longueur; j++){//itération sur les colonnes
-    		if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] < 5){//Creation des bonus
-				Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
-				std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
-				cout<<"Nouveau Bonus créé :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
-				newLigne.push_back(move(ptr));
-			}
-			else if (map_tuiles_code[k]>=5 && map_tuiles_code[k]<18){//creation des convbelt
+    		
+			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//creation des convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
-				cout<<"Nouveau onvBelt créé :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
+				cout<<"Nouveau ConvBelt :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k]>=18 && map_tuiles_code[k]<20){//creation des rotator
+			else if (map_tuiles_code[k] >= 27 && map_tuiles_code[k] <= 31){//Creation des bonus
+				Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
+				std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
+				cout<<"Nouveau Bonus :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
+				newLigne.push_back(move(ptr));
+			}
+			else if (map_tuiles_code[k]>=32 && map_tuiles_code[k]<=33){//creation des rotator
 				Rotator newRotator(mapFactory.doConvertMapRotator()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<Rotator> ptr(new Rotator(newRotator));
 				newLigne.push_back(move(ptr));
-			}			
+			}
+			else if (map_tuiles_code[k]>=0 && map_tuiles_code[k]<=2){//creation des cases basiques
+				Basic newBasic(mapFactory.doConvertMapBasic()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
+				std::unique_ptr<Basic> ptr(new Basic(newBasic));
+				newLigne.push_back(move(ptr));
+			}
+			else if (map_tuiles_code[k]>=3 && map_tuiles_code[k]<=7){//creation des cases basiques
+				CheckPoint newCheckPoint(mapFactory.doConvertMapCheckPoint()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
+				std::unique_ptr<CheckPoint> ptr(new CheckPoint(newCheckPoint));
+				newLigne.push_back(move(ptr));
+			}
+			/*	if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] <= 18){
+					// On regarde si le code de la tuile est celui d'un Terrain Praticable
+					if (mapFactory.doConvertMapBonus().find(map_tuiles_code[k]) != mapFactory.doConvertMapBonus().end()){
+						Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
+						std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
+						newLigne.push_back(move(ptr));
+					}
+					// Cas du Terrain Non Praticable
+					else if (mapFactory.doConvertMapConvBelt().find(map_tuiles_code[k]) != mapFactory.doConvertMapConvBelt().end()){
+						ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
+						std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt)) ;
+						newLigne.push_back(move(ptr));
+					}	
+				}
+
+*/
+
+
     		else{
     			cerr << "Code Tuile " << map_tuiles_code[k]<< " invalide dans le fichier " << map_txt << endl;
     			return 0;

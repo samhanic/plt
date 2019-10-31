@@ -26,47 +26,30 @@ int main(int argc,char* argv[])
 		cout << "Hello world" << endl;
 	} else if (entry == "state") {
 		system("make code-coverage");
-	} else if (entry == "render") {
-
+	}
+	else if (entry == "render") {
+		State state;
 		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
-		StateLayer statelayer(window);
-		statelayer.initSurface();
-	
-	State state;
-	MapFactory mapFactory;
-	state.initMap("../res/map.txt", mapFactory);
-		/* TESTS DE RENDU */
+		window.setFramerateLimit(25);
+		StateLayer statelayer(state, window);
 		
-		
-		// std::string chemin_fichier_map_txt = "../res/map.txt";
-		// MapFactory tabMapFactory = MapFactory();
-		// State state;
-		
+		MapFactory mapFactory;
+		state.initMap("../res/map.txt", mapFactory);
+		cout<<"Debut de l'affichage"<<endl;
 
-		// state.initMap(chemin_fichier_map_txt, tabMapFactory);
-		//cout <<"MYX : "<<'\t'<<state.getMap()[2][1]->getPosition().getX()<<'\t'<< endl;
-		// sf::RenderWindow renderWindow(sf::VideoMode(800, 550), "RobotIS");
-		// //sf::Texture texture;
-		// //texture.loadFromFile("../res/map.png");
-		// //sf::Sprite sprite(texture);
-		
-		// StateLayer stateLayer(state, renderWindow);
-		// stateLayer.initSurfaces(state);
-		// stateLayer.draw(renderWindow);
-				
-			
-		// while (renderWindow.isOpen()){
-		// 	sf::Event event;
-		// 	while (renderWindow.pollEvent(event)){
-		// 		if (event.type == sf::Event::EventType::Closed) {
-		// 			renderWindow.close();
-		// 		}
-		// 	}
-		// 	renderWindow.clear();
-		// 	//renderWindow.draw(sprite);
-		// 	renderWindow.display();
-		// }
-   		
+		statelayer.initSurface(state);
+
+		while (window.isOpen()){
+			sf::Event event;
+			while (window.pollEvent(event)){
+				if (event.type == sf::Event::Closed)
+					window.close();
+			}
+
+			window.clear();
+			statelayer.draw(window);
+			window.display();
+		}
 
 		// create the window
 		// sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");

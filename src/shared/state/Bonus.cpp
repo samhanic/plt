@@ -8,7 +8,7 @@ Bonus::Bonus () {
 	this->bonusOrNot = true;
 }
 
-Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) :MapTile(BONUS){
+Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) :MapTile(BONUS, newX, newY, newTileCode){
 	position.setX(newX);
 	position.setY(newY);
 }

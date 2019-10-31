@@ -3,6 +3,11 @@
 
 using namespace state;
 
+CheckPoint::CheckPoint (CheckPointTypeId checkPointTypeId, int newX, int newY, int newTileCode):MapTile(CHECKPOINT, newX, newY, newTileCode) {
+	position.setX(newX);
+	position.setY(newY);
+}
+
 bool CheckPoint::isVisited (Robot robot) {
     std::vector<int> v = robot.getVisitedCheckpoints();
 

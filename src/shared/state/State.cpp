@@ -4,6 +4,7 @@
 #include <sstream>
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 using namespace state;
 using namespace std;
@@ -11,8 +12,8 @@ using namespace std;
 int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 
     // L'idéal serait de déterminer longueur et largeur à partir de la map en entrée.
-    int largeur =10;
-    int longueur =10;
+    int largeur = 10;
+    int longueur = 10;
 
     std::ifstream fichier(map_txt, ios::in);    
     std::string contenu, ligne, code_tuile;
@@ -169,4 +170,39 @@ bool State::getEndRound () {
 
 void State::setEndRound (int result) {
 	endRound = result;
+}
+
+unsigned int State::getHeightMap (std::string map_txt) {
+	unsigned int numberOfLines = 0;
+    std::string line;
+	std::ifstream myfile(map_txt, ios::in); 
+	if(myfile) {
+		while (std::getline(myfile, line))
+			++numberOfLines;
+		std::cout << "Number of lines in text file: " << numberOfLines;
+		return numberOfLines;
+	} else {
+		cout << "le frichier ne peut être lu" << endl;
+		return 0;
+	}
+}
+
+unsigned int State::getWidthMap (std::string map_txt) {
+	unsigned int numberOfComas = 0;
+	std::string line;
+	std::ifstream myfile(map_txt, ios::in);
+	if (myfile){
+		// Get first line
+		string sLine;
+		getline(myfile, sLine);
+		myfile.close();
+		// Count number of comas in the first line
+		numberOfComas = std::count(sLine.begin(), sLine.end(), ',');
+		// +1 because there is no coma at the end of a line
+		return numberOfComas + 1;
+    }
+    else {
+		cout << "le frichier ne peut être lu" << endl;
+		return -1;
+	}
 }

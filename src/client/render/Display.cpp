@@ -8,14 +8,14 @@ using namespace render;
 #define esp_tile 0
 #define larg_tile 64
 
-bool TileMap::load (state::State& etatLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
+bool Display::loadMap(state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
         //cout<< "Affichage tuile"<<endl;
         // on charge la texture du tileset
         // if (!m_tileset.loadFromFile(tileset))
         //     return false;
         m_tileset = textureTileSet; 
-        unsigned int width = 10;// etatLayer.getWidthMap();
-        unsigned int height = 10; //etatLayer.getHeightMap();
+        unsigned int width = stateLayer.getWidthMap("../res/map.txt");// stateLayer.getWidthMap();
+        unsigned int height = stateLayer.getHeightMap("../res/map.txt");
         // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
         m_vertices.setPrimitiveType(sf::Quads);
         m_vertices.resize(width * height * 4);
@@ -26,7 +26,7 @@ bool TileMap::load (state::State& etatLayer, sf::Texture& textureTileSet, sf::Ve
             {
                 
                 // on récupère le numéro de tuile courant
-                int tileNumber = etatLayer.getMap()[i][j]->getTileCode();
+                int tileNumber = stateLayer.getMap()[i][j]->getTileCode();
                 //int tileNumber = tiles[i + j * width];
 
                 // on en déduit sa position dans la texture du tileset
@@ -48,10 +48,10 @@ bool TileMap::load (state::State& etatLayer, sf::Texture& textureTileSet, sf::Ve
                 quad[2].texCoords = sf::Vector2f(tu * esp_tile + larg_tile, tv * esp_tile + larg_tile);
                 quad[3].texCoords = sf::Vector2f(tu * esp_tile, tv * esp_tile + larg_tile); */
                 
-                quad[0].position = sf::Vector2f(etatLayer.getMap()[j][i]->getPosition().getX() * tileSize.x, etatLayer.getMap()[j][i]->getPosition().getY() * tileSize.y);
-				quad[1].position = sf::Vector2f((etatLayer.getMap()[j][i]->getPosition().getX()+ 1) * tileSize.x, etatLayer.getMap()[j][i]->getPosition().getY() * tileSize.y);
-				quad[2].position = sf::Vector2f((etatLayer.getMap()[j][i]->getPosition().getX() + 1) * tileSize.x, (etatLayer.getMap()[j][i]->getPosition().getY() + 1) * tileSize.y);
-				quad[3].position = sf::Vector2f(etatLayer.getMap()[j][i]->getPosition().getX() * tileSize.x, (etatLayer.getMap()[j][i]->getPosition().getY() + 1) * tileSize.y);
+                quad[0].position = sf::Vector2f(stateLayer.getMap()[j][i]->getPosition().getX() * tileSize.x, stateLayer.getMap()[j][i]->getPosition().getY() * tileSize.y);
+				quad[1].position = sf::Vector2f((stateLayer.getMap()[j][i]->getPosition().getX()+ 1) * tileSize.x, stateLayer.getMap()[j][i]->getPosition().getY() * tileSize.y);
+				quad[2].position = sf::Vector2f((stateLayer.getMap()[j][i]->getPosition().getX() + 1) * tileSize.x, (stateLayer.getMap()[j][i]->getPosition().getY() + 1) * tileSize.y);
+				quad[3].position = sf::Vector2f(stateLayer.getMap()[j][i]->getPosition().getX() * tileSize.x, (stateLayer.getMap()[j][i]->getPosition().getY() + 1) * tileSize.y);
 				
 // on définit ses quatre coordonnées de texture
 				quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
@@ -63,7 +63,7 @@ bool TileMap::load (state::State& etatLayer, sf::Texture& textureTileSet, sf::Ve
         return true;
     }
 
-void  TileMap::draw (sf::RenderTarget& target, sf::RenderStates states) const {
+void  Display::draw (sf::RenderTarget& target, sf::RenderStates states) const {
         // on applique la transformation
         states.transform *= getTransform();
 

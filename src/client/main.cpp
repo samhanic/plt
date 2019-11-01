@@ -31,12 +31,11 @@ int main(int argc,char* argv[])
 		State state;
 		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
 		window.setFramerateLimit(25);
+
 		StateLayer statelayer(state, window);
 		
 		MapFactory mapFactory;
 		state.initMap("../res/map.txt", mapFactory);
-		cout<<"Debut de l'affichage"<<endl;
-
 		statelayer.initSurface(state);
 
 		while (window.isOpen()){

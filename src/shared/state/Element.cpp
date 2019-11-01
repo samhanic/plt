@@ -22,8 +22,9 @@ void Element::setTypeId(TypeId typeId) {
 
 
 bool Element::isReachable(){
-    if (getTypeId()==WALL){
-        return false;
+    if (getTypeId()==BASIC){
+        // add test on BasicTypeId
+           return false;
     }
     return true;
 }

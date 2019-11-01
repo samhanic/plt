@@ -32,5 +32,4 @@ BOOST_AUTO_TEST_CASE(TestState)
     
     //testState.initMap("../res/map.txt");
     //BOOST_CHECK_EQUAL(testState.initMap("../res/map.txt"),1);
-    testState.initClickManager();
 }

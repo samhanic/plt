@@ -134,15 +134,7 @@ int State::initRobot (ColorStatus color) {
     return 1;
 }
 
-int State::initClickManager () {
-    ptr_clickManager = nullptr;
-	ptr_clickManager = new ClickManager();
-	return 1;
-}
-
 State::~State() {
-	delete ptr_clickManager;
-	ptr_clickManager = nullptr;
 }
 
 std::vector<std::vector<std::unique_ptr<MapTile>>>& State::getMap () {
@@ -177,8 +169,4 @@ bool State::getEndRound () {
 
 void State::setEndRound (int result) {
 	endRound = result;
-}
-
-ClickManager* State::getActions () {
-    return ptr_clickManager;
 }

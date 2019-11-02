@@ -76,24 +76,6 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 				std::unique_ptr<CheckPoint> ptr(new CheckPoint(newCheckPoint));
 				newLigne.push_back(move(ptr));
 			}
-			/*	if (map_tuiles_code[k] >= 0 && map_tuiles_code[k] <= 18){
-					// On regarde si le code de la tuile est celui d'un Terrain Praticable
-					if (mapFactory.doConvertMapBonus().find(map_tuiles_code[k]) != mapFactory.doConvertMapBonus().end()){
-						Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-						std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
-						newLigne.push_back(move(ptr));
-					}
-					// Cas du Terrain Non Praticable
-					else if (mapFactory.doConvertMapConvBelt().find(map_tuiles_code[k]) != mapFactory.doConvertMapConvBelt().end()){
-						ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-						std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt)) ;
-						newLigne.push_back(move(ptr));
-					}	
-				}
-
-*/
-
-
     		else{
     			cerr << "Code Tuile " << map_tuiles_code[k]<< " invalide dans le fichier " << map_txt << endl;
     			return 0;
@@ -128,9 +110,10 @@ int State::initRobot (ColorStatus color) {
 	// std::unique_ptr<Robot> ptrRR(new Robot(redRobot));
 	// players.push_back(move(ptrRR));
 
-	Robot robot(players.size() + 1, color);
+	Robot robot(players.size(), color);
 	std::unique_ptr<Robot> ptrRR(new Robot(robot));
 	players.push_back(move(ptrRR));
+	cerr << "new player n° "<<players.size()<<" with color "<<color<< endl;
 
     return 1;
 }
@@ -176,10 +159,11 @@ unsigned int State::getHeightMap (std::string map_txt) {
 	unsigned int numberOfLines = 0;
     std::string line;
 	std::ifstream myfile(map_txt, ios::in); 
-	if(myfile) {
-		while (std::getline(myfile, line))
+	if (myfile) {
+		while (std::getline(myfile, line)) {
 			++numberOfLines;
-		std::cout << "Number of lines in text file: " << numberOfLines;
+		}
+		myfile.close();
 		return numberOfLines;
 	} else {
 		cout << "le frichier ne peut être lu" << endl;

@@ -22,18 +22,14 @@ TileSet::TileSet(TileSetID newID){
 		cellWidth=64;
 		cellHeight=64;
 		imageFile="../res/map.png";
-	}
-	
-	else if (id==COMMAND_TILESET){
-		cellWidth=42;
-		cellHeight=40;
-		imageFile="../res/command.png";
-	}
-	
-	else if (id==PAWN_TILESET){
+	} else if (id==PAWN_TILESET){
 		cellWidth=64;
 		cellHeight=64;
 		imageFile="../res/pawn.png";
+	} else if (id==COMMAND_TILESET){
+		cellWidth=42;
+		cellHeight=40;
+		imageFile="../res/command.png";
 	}
 	
 	textureTileset.loadFromFile(imageFile);

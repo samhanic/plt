@@ -10,6 +10,8 @@
 #include "../../src/shared/state.h"
 #include "../../src/client/render.h"
 
+#define MAP_FILE "../res/map.txt"
+
 using namespace std;
 using namespace render;
 using namespace state;
@@ -28,15 +30,22 @@ int main(int argc,char* argv[])
 		system("make code-coverage");
 	}
 	else if (entry == "render") {
+		/* Creation of a State and Window */
 		State state;
-		sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
+		unsigned int width = state.getWidthMap(MAP_FILE);
+        unsigned int height = state.getHeightMap(MAP_FILE);
+		sf::RenderWindow window(sf::VideoMode(width * 64 + 400, height * 64), "RobotIS");
 		window.setFramerateLimit(25);
 
-		StateLayer statelayer(state, window);
-		
 		MapFactory mapFactory;
-		state.initMap("../res/map.txt", mapFactory);
-		statelayer.initSurface(state);
+		state.initMap(MAP_FILE, mapFactory);
+		state.initRobot(BLUE);
+		state.initRobot(RED);
+		state.getPlayers()[0]->setTileCode(1);
+		state.getPlayers()[1]->setTileCode(2);
+
+		StateLayer statelay(state, window);
+		statelay.initSurface(state);
 
 		while (window.isOpen()){
 			sf::Event event;
@@ -46,47 +55,9 @@ int main(int argc,char* argv[])
 			}
 
 			window.clear();
-			statelayer.draw(window);
+			statelay.draw(window);
 			window.display();
 		}
-
-		// create the window
-		// sf::RenderWindow window(sf::VideoMode(640, 640), "RobotIS");
-
-		// // define the level with an array of tile indices
-		// const int level[] =
-		// {
-		// 	0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		// 	0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
-		// 	1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-		// 	0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 0,
-		// 	0, 1, 1, 0, 3, 3, 3, 8, 0, 0, 1, 1, 1, 2, 0, 0,
-		// 	0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 18, 1, 1, 1, 2, 0,
-		// 	2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
-		// 	0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
-		// };
-
-		// // create the tilemap from the level definition
-		// TileMap map;
-		// if (!map.load("../res/map.png", sf::Vector2u(64, 64), level, 10, 10))
-		// 	return -1;
-
-		// // run the main loop
-		// while (window.isOpen())
-		// {
-		// 	// handle events
-		// 	sf::Event event;
-		// 	while (window.pollEvent(event))
-		// 	{
-		// 		if(event.type == sf::Event::Closed)
-		// 			window.close();
-		// 	}
-
-		// 	// draw the map
-		// 	window.clear();
-		// 	window.draw(map);
-		// 	window.display();
-		// }
 
 		return 0;
 

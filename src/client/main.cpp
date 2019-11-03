@@ -34,17 +34,20 @@ int main(int argc,char* argv[])
 		State state;
 		unsigned int width = state.getWidthMap(MAP_FILE);
         unsigned int height = state.getHeightMap(MAP_FILE);
-		sf::RenderWindow window(sf::VideoMode(width * 64 + 400, height * 64), "RobotIS");
-		window.setFramerateLimit(25);
+		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
+		window.setFramerateLimit(1);
 
 		MapFactory mapFactory;
 		state.initMap(MAP_FILE, mapFactory);
 		state.initRobot(BLUE);
+		state.initRobot(YELLOW);
+		state.initRobot(RED);
+		state.initRobot(PINK);
+		state.initRobot(ORANGE);
 
 
 		StateLayer statelay(state, window);
 		statelay.initSurface(state);
-
 		while (window.isOpen()){
 			sf::Event event;
 			while (window.pollEvent(event)){
@@ -53,8 +56,9 @@ int main(int argc,char* argv[])
 			}
 
 			window.clear();
-			statelay.draw(window);
+			statelay.draw(state, window);
 			window.display();
+			
 		}
 
 		return 0;

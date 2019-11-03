@@ -109,7 +109,7 @@ int State::initRobot (ColorStatus color) {
 	// Gives coordinates to the robot in function of the firt CP of the map
 	getPlayers()[players.size() - 1]->setPosition(robotLastVisitedCP (getPlayers()[players.size() - 1]));
 	
-	cerr << "new player n° "<<players.size()<<" with color "<<color<< endl;
+	cout << "new player n° "<<players.size()<<" with color "<<color<< endl;
 
     return 1;
 }
@@ -182,7 +182,7 @@ unsigned int State::getWidthMap (std::string map_txt) {
 		return numberOfComas + 1;
     }
     else {
-		cout << "le frichier ne peut être lu" << endl;
+		cerr << "le frichier ne peut être lu" << endl;
 		return -1;
 	}
 }
@@ -195,8 +195,8 @@ Position State::robotLastVisitedCP (std::unique_ptr<Robot>& myRobot) {
 	// Recupérer la liste des checkpoints visités !!!!!!!!! pour definir les coords de sortie en fct du dernier visité
 
 	Position pos;
-	pos.setX(9);
-	pos.setY(9);
+	pos.setX(rand() % 9 + 1); // temporaire pour afficher plusieur robots
+	pos.setY(rand() % 9 + 1);
 
 	return pos;
 }

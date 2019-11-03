@@ -27,7 +27,7 @@ TileSet::TileSet(TileSetID newID){
 		cellHeight=64;
 		imageFile="../res/pawn.png";
 	} else if (id==COMMAND_TILESET){
-		cellWidth=42;
+		cellWidth=40;
 		cellHeight=40;
 		imageFile="../res/command.png";
 	}

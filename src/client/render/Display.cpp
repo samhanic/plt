@@ -48,40 +48,55 @@ bool Display::loadMap(state::State& stateLayer, sf::Texture& textureTileSet, sf:
     return true;
 }
 
-bool Display::loadCursor(state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
+bool Display::loadCommand(state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
 
-        /*m_tileset = textureTileSet; 
-        unsigned int width = stateLayer.getWidthMap("../res/map.txt");
-        unsigned int height = stateLayer.getHeightMap("../res/map.txt");
-		
-      	// on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
-	   	m_vertices.setPrimitiveType(sf::Quads);
-       	m_vertices.resize(width * height * 4);
-		
-	  	// on récupère le numéro de tuile courant
-		int tileNumber=stateLayer.getCurseur()->getCodeTuile();
-		
-	    // on en déduit sa position dans la texture du tileset
-	    int tu = tileNumber % (texture.getSize().x / tileSize.x);
-	    int tv = tileNumber / (texture.getSize().x / tileSize.x);
+    m_tileset = textureTileSet; 
+    unsigned int width = 4;
+    unsigned int height = 3;
 
-	    // on récupère un pointeur vers le quad à définir dans le tableau de vertex
-	    sf::Vertex* quad = &quads[0];
-		
-		// on définit ses quatre coins
-		quad[0].position = sf::Vector2f(etatLayer.getCurseur()->getPosition().getX() * tileSize.x, etatLayer.getCurseur()->getPosition().getY() * tileSize.y);
-		quad[1].position = sf::Vector2f((etatLayer.getCurseur()->getPosition().getX()+ 1) * tileSize.x, etatLayer.getCurseur()->getPosition().getY() * tileSize.y);
-		quad[2].position = sf::Vector2f((etatLayer.getCurseur()->getPosition().getX() + 1) * tileSize.x, (etatLayer.getCurseur()->getPosition().getY() + 1) * tileSize.y);
-		quad[3].position = sf::Vector2f(etatLayer.getCurseur()->getPosition().getX() * tileSize.x, (etatLayer.getCurseur()->getPosition().getY() + 1) * tileSize.y);
-		
-		// on définit ses quatre coordonnées de texture
-		quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-		quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-		quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
-		quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
-		
+    unsigned int widthMap = stateLayer.getWidthMap("../res/map.txt");
+    unsigned int offsetCommandX = 64 * widthMap + 50;
+    unsigned int offsetCommandY = 100;
+    
 
-		return true;*/
+    const int initTiles[] =
+    {
+        7, 0, 8, 14,
+        4, 6, 5, 14,
+        14, 1, 14, 14,
+    };
+
+    // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
+    m_vertices.setPrimitiveType(sf::Quads);
+    m_vertices.resize(width * height * 4);
+
+    // on remplit le tableau de vertex, avec un quad par tuile
+    for (unsigned int i = 0; i < width; ++i) {
+        for (unsigned int j = 0; j < height; ++j) {
+
+           int tileNumber = initTiles[i + j * width];
+
+            // find its position in the tileset texture
+            int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
+            int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
+
+            // get a pointer to the current tile's quad
+            sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
+
+            // define its 4 corners
+            quad[0].position = sf::Vector2f(i * tileSize.x + offsetCommandX, j * tileSize.y + offsetCommandY);
+            quad[1].position = sf::Vector2f((i + 1) * tileSize.x + offsetCommandX, j * tileSize.y + offsetCommandY);
+            quad[2].position = sf::Vector2f((i + 1) * tileSize.x + offsetCommandX, (j + 1) * tileSize.y + offsetCommandY);
+            quad[3].position = sf::Vector2f(i * tileSize.x + offsetCommandX, (j + 1) * tileSize.y + offsetCommandY);
+
+            // define its 4 texture coordinates
+            quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
+            quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
+            quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
+            quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+        }
+    }
+    return true;
 }
 
 bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
@@ -96,9 +111,6 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
     m_vertices.resize(width * height * 4);
 
     //cout << stateLayer.getPlayers()[0]->getTileCode() << endl;
-
-    // on remplit le tableau de vertex, avec un quad par tuile
-    
     
     for (unsigned int i = 0; i < stateLayer.getPlayers().size(); ++i){
         //On met a jour les tuiles des personnages en fonction de leur statut

@@ -40,9 +40,7 @@ int main(int argc,char* argv[])
 		MapFactory mapFactory;
 		state.initMap(MAP_FILE, mapFactory);
 		state.initRobot(BLUE);
-		state.initRobot(RED);
-		state.getPlayers()[0]->setTileCode(1);
-		state.getPlayers()[1]->setTileCode(2);
+
 
 		StateLayer statelay(state, window);
 		statelay.initSurface(state);

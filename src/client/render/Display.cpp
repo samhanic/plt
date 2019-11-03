@@ -106,8 +106,7 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
         // A FAIRE
         //updateTilesPersonnages(etatLayer);
         // on récupère le numéro de tuile courant
-		int tileNumber=stateLayer.getPlayers()[i]->getTileCode();
-		tileNumber = 1;		
+		int tileNumber=stateLayer.getPlayers()[i]->getTileCode();	
         // on en déduit sa position dans la texture du tileset
         int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
         int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);

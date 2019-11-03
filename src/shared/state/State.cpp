@@ -89,30 +89,26 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 }
 
 int State::initRobot (ColorStatus color) {
-    // Add parameter to choose wich robot to create 
-    // Robot blueRobot(players.size() + 1, BLUE);
-	// std::unique_ptr<Robot> ptrBR(new Robot(blueRobot));
-	// players.push_back(move(ptrBR));
-
-    // Robot yellowRobot(players.size() + 1, YELLOW);
-	// std::unique_ptr<Robot> ptrYR(new Robot(yellowRobot));
-	// players.push_back(move(ptrYR));
-
-    // Robot pinkRobot(players.size() + 1, PINK);
-	// std::unique_ptr<Robot> ptrPR(new Robot(pinkRobot));
-	// players.push_back(move(ptrPR));
-
-    // Robot orangeRobot(players.size() + 1, ORANGE);
-	// std::unique_ptr<Robot> ptrOR(new Robot(orangeRobot));
-	// players.push_back(move(ptrOR));
-
-    // Robot redRobot(players.size() + 1, RED);
-	// std::unique_ptr<Robot> ptrRR(new Robot(redRobot));
-	// players.push_back(move(ptrRR));
-
 	Robot robot(players.size(), color);
 	std::unique_ptr<Robot> ptrRR(new Robot(robot));
 	players.push_back(move(ptrRR));
+	
+	// Gives a color to the created robot
+	if (color == PINK) {
+		getPlayers()[players.size() - 1]->setTileCode(0);
+	} else if (color == BLUE) {
+		getPlayers()[players.size() - 1]->setTileCode(1);
+	} else if (color == YELLOW) {
+		getPlayers()[players.size() - 1]->setTileCode(2);
+	} else if (color == ORANGE) {
+		getPlayers()[players.size() - 1]->setTileCode(3);
+	} else if (color == RED) {
+		getPlayers()[players.size() - 1]->setTileCode(4);
+	}
+
+	// Gives coordinates to the robot in function of the firt CP of the map
+	getPlayers()[players.size() - 1]->setPosition(robotLastVisitedCP (getPlayers()[players.size() - 1]));
+	
 	cerr << "new player n° "<<players.size()<<" with color "<<color<< endl;
 
     return 1;
@@ -143,7 +139,7 @@ bool State::getEndGame () {
     return endGame;
 }
 
-void State::setEndGame (int result) {
+void State::setEndGame (int result) {Position robotLastVisitedCP (Robot& myRobot);
 	endGame = result;
 }
 
@@ -189,4 +185,18 @@ unsigned int State::getWidthMap (std::string map_txt) {
 		cout << "le frichier ne peut être lu" << endl;
 		return -1;
 	}
+}
+
+Position State::robotLastVisitedCP (std::unique_ptr<Robot>& myRobot) {
+	
+	int robotID = myRobot->getRobotId();
+
+	//cout << "hello" << myRobot->getVisitedCheckpoints() << endl;
+	// Recupérer la liste des checkpoints visités !!!!!!!!! pour definir les coords de sortie en fct du dernier visité
+
+	Position pos;
+	pos.setX(9);
+	pos.setY(9);
+
+	return pos;
 }

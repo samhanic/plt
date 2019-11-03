@@ -20,20 +20,26 @@ StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(
     tilesets.push_back(std::move(ptrPawnTileSet));
     std::unique_ptr<TileSet> ptrCommandTileSet(new TileSet(COMMAND_TILESET));
     tilesets.push_back(std::move(ptrCommandTileSet));
+    std::unique_ptr<TileSet> ptrSlotTileSet(new TileSet(COMMAND_TILESET));
+    tilesets.push_back(std::move(ptrSlotTileSet));
 }
 
 void StateLayer::initSurface (state::State& stateLayer){
     Display surfaceMap;
     Display surfacePlayers;
     Display surfaceCommand;
+    Display surfaceSlot;
 
     surfaceMap.loadMap(stateLayer, tilesets[0]->getTexture(), sf::Vector2u(tilesets[0]->getCellWidth(), tilesets[0]->getCellHeight()));
     surfacePlayers.loadPlayers(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()));
     surfaceCommand.loadCommand(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
+    surfaceSlot.loadSlot(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
+
 
     std::unique_ptr<Display> ptrMapDisplay (new Display(surfaceMap));
     std::unique_ptr<Display> ptrPlayersDisplay (new Display(surfacePlayers));
     std::unique_ptr<Display> ptrCommandDisplay (new Display(surfaceCommand));
+    std::unique_ptr<Display> ptrSlotDisplay (new Display(surfaceSlot));
 
     if (surfaces.size()!=0){
         while (surfaces.size()!=0){
@@ -44,6 +50,7 @@ void StateLayer::initSurface (state::State& stateLayer){
     surfaces.push_back(move(ptrMapDisplay));
     surfaces.push_back(move(ptrPlayersDisplay));
     surfaces.push_back(move(ptrCommandDisplay));
+    surfaces.push_back(move(ptrSlotDisplay));
 }
 
 void StateLayer::writeStatistics (state::State& stateLayer, sf::RenderWindow& window) {
@@ -85,6 +92,7 @@ void StateLayer::draw (state::State& stateLayer, sf::RenderWindow& window){
     window.draw(*surfaces[0]);
     window.draw(*surfaces[1]);
     window.draw(*surfaces[2]);
+    window.draw(*surfaces[3]);
     writeStatistics(stateLayer, window);
     window.display();
 }

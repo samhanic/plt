@@ -48,23 +48,16 @@ bool Display::loadMap(state::State& stateLayer, sf::Texture& textureTileSet, sf:
     return true;
 }
 
-bool Display::loadCommand(state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
+bool Display::loadCommand(sf::Texture& textureTileSet, sf::Vector2u tileSize, int tabCommand[]) {
 
     m_tileset = textureTileSet; 
     unsigned int width = 4;
     unsigned int height = 3;
 
-    unsigned int widthMap = stateLayer.getWidthMap("../res/map.txt");
+    unsigned int widthMap = 10; // A automatiser
     unsigned int offsetCommandX = 64 * widthMap + 50;
     unsigned int offsetCommandY = 100;
     
-
-    const int initTiles[] =
-    {
-        7, 0, 8, 14,
-        4, 6, 5, 14,
-        14, 1, 14, 14,
-    };
 
     // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
     m_vertices.setPrimitiveType(sf::Quads);
@@ -74,7 +67,7 @@ bool Display::loadCommand(state::State& stateLayer, sf::Texture& textureTileSet,
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
 
-           int tileNumber = initTiles[i + j * width];
+           int tileNumber = tabCommand[i + j * width];
 
             // find its position in the tileset texture
             int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
@@ -99,21 +92,15 @@ bool Display::loadCommand(state::State& stateLayer, sf::Texture& textureTileSet,
     return true;
 }
 
-bool Display::loadSlot(state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
-
+bool Display::loadSlot (sf::Texture& textureTileSet, sf::Vector2u tileSize, int tabSlot[]) {
     m_tileset = textureTileSet; 
     unsigned int width = 6;
     unsigned int height = 1;
 
-    unsigned int widthMap = stateLayer.getWidthMap("../res/map.txt");
+    unsigned int widthMap = 10; // A généraliser en fct de la map chargée
     unsigned int offsetCommandX = 64 * widthMap + 5;
     unsigned int offsetCommandY = 30;
     
-
-    const int initTiles[] =
-    {
-        14, 14, 14, 14, 14, 14,
-    };
 
     // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
     m_vertices.setPrimitiveType(sf::Quads);
@@ -123,7 +110,7 @@ bool Display::loadSlot(state::State& stateLayer, sf::Texture& textureTileSet, sf
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
 
-           int tileNumber = initTiles[i + j * width];
+           int tileNumber = tabSlot[i + j * width];
 
             // find its position in the tileset texture
             int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);

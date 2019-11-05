@@ -57,36 +57,149 @@ int main(int argc,char* argv[])
 				if (event.type == sf::Event::MouseButtonPressed) {
 					if (event.mouseButton.button == sf::Mouse::Left) {
 						int idCommandClicked = -1;
+						int slotPosition = 0; // Position du dernier slot vide
+						/* On recupère la position dans le slot */
+						std::array<int, 6> mySlot = statelay.getSlotTab();
+
 						
+						for (int i = 0 ; i < 6 ; i++) {
+							if (mySlot[i] == 0) {
+								slotPosition = i;
+								break;
+							}
+						}
+						if (mySlot[5] != 0) {
+							slotPosition = 6;
+							statelay.setCommandTab({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+						}
+						cout<<"Slot position deb : "<<slotPosition<<endl;
+						
+						/* Detection zones de clique (a remplacer par génération d'un tableau) */
 						if ((event.mouseButton.x > 690) && (event.mouseButton.x < 730)
 						&& (event.mouseButton.y > 100) && (event.mouseButton.y < 140)) {
 							idCommandClicked = 0;
+						} else if ((event.mouseButton.x > 730) && (event.mouseButton.x < 770)
+						&& (event.mouseButton.y > 100) && (event.mouseButton.y < 140)) {
+							idCommandClicked = 1;
+						} else if ((event.mouseButton.x > 770) && (event.mouseButton.x < 810)
+						&& (event.mouseButton.y > 100) && (event.mouseButton.y < 140)) {
+							idCommandClicked = 2;
+						} else if ((event.mouseButton.x > 810) && (event.mouseButton.x < 850)
+						&& (event.mouseButton.y > 100) && (event.mouseButton.y < 140)) {
+							idCommandClicked = 3;
+						} else if ((event.mouseButton.x > 690) && (event.mouseButton.x < 730)
+						&& (event.mouseButton.y > 140) && (event.mouseButton.y < 180)) {
+							idCommandClicked = 4;
+						} else if ((event.mouseButton.x > 730) && (event.mouseButton.x < 770)
+						&& (event.mouseButton.y > 140) && (event.mouseButton.y < 180)) {
+							idCommandClicked = 5;
+						} else if ((event.mouseButton.x > 770) && (event.mouseButton.x < 810)
+						&& (event.mouseButton.y > 140) && (event.mouseButton.y < 180)) {
+							idCommandClicked = 6;
+						} else if ((event.mouseButton.x > 810) && (event.mouseButton.x < 850)
+						&& (event.mouseButton.y > 140) && (event.mouseButton.y < 180)) {
+							idCommandClicked = 7;
+						} else if ((event.mouseButton.x > 690) && (event.mouseButton.x < 730)
+						&& (event.mouseButton.y > 180) && (event.mouseButton.y < 220)) {
+							idCommandClicked = 8;
+						} else if ((event.mouseButton.x > 730) && (event.mouseButton.x < 770)
+						&& (event.mouseButton.y > 180) && (event.mouseButton.y < 220)) {
+							idCommandClicked = 9;
+						} else if ((event.mouseButton.x > 770) && (event.mouseButton.x < 810)
+						&& (event.mouseButton.y > 180) && (event.mouseButton.y < 220)) {
+							idCommandClicked = 10;
+						} else if ((event.mouseButton.x > 810) && (event.mouseButton.x < 850)
+						&& (event.mouseButton.y > 180) && (event.mouseButton.y < 220)) {
+							idCommandClicked = 11;
 						}
-						
-						/* Une zone de commande a été cliquée */
-						if (idCommandClicked != -1) {
-							/* On regarde sur quel type de tuile le joueur a cliqué */
-							const std::array<int, 12> myCommand = statelay.getCommandTab();
-							cout<<myCommand[idCommandClicked]<<endl;
+						/* Détection d'un clique sur la slot barre */
+						else if ((event.mouseButton.x > 645) && (event.mouseButton.x < 685)
+						&& (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
+							idCommandClicked = 20;
+						} else if ((event.mouseButton.x > 685) && (event.mouseButton.x < 725)
+						&& (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
+							idCommandClicked = 21;
+						} else if ((event.mouseButton.x > 725) && (event.mouseButton.x < 765)
+						&& (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
+							idCommandClicked = 22;
+						} else if ((event.mouseButton.x > 765) && (event.mouseButton.x < 805)
+						&& (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
+							idCommandClicked = 23;
+						} else if ((event.mouseButton.x > 805) && (event.mouseButton.x < 845)
+						&& (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
+							idCommandClicked = 24;
+						} else if ((event.mouseButton.x > 845) && (event.mouseButton.x < 885)
+						&& (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
+							idCommandClicked = 25;
+						}
 
-							/* On analyse la lise d'action pré-existante */
-							std::array<int, 6> mySlot = statelay.getSlotTab();
+						/* La zone slot bar a été cliquée pour nettoyage des actions */
+						if (idCommandClicked >= 20 && idCommandClicked <= 25) {
+							slotPosition = idCommandClicked - 20;
+							for (int i = 5 ; i >= 0 ; i--) {
+								/* On supprime les actions derrière l'action cliquée */
+								if (i >= slotPosition) {
+									mySlot[i] = 0;
+								}
+							}					
+							statelay.setSlotTab(mySlot);
+						}
+
+						/* Une zone de commande a été cliquée */
+						if (idCommandClicked != -1 && idCommandClicked <= 11) {
+							/* On regarde sur quel type de tuile le joueur a cliqué */
+							std::array<int, 12> myCommand = statelay.getCommandTab();
+							if (slotPosition <= 5 ) {
+								slotPosition ++;
+							}
 
 							/* On cherche la dernière case vide (=0) pour ajouter l'action cliquée */
 							for (int i = 0 ; i < 6 ; i++) {
 								if(mySlot[i] == 0){
 									mySlot[i] = myCommand[idCommandClicked];
 									statelay.setSlotTab(mySlot);
-									/* Quitte la boucle après un ajout (peut faire plus propre) */
-									i = 6; 
+									statelay.refreshSlot();
+									/* Quitte la boucle après un ajout */
+									break; 
 								}
-							}
+								/* Affichage après supression de commande en fonction de la commande précédente */
+								if (slotPosition > 0) {
+									/* cas booster avant dernier */
+									if (mySlot[slotPosition] == 5 && slotPosition == 5) {
+										statelay.setCommandTab({0, 1, 0, 0, 3, 0, 4, 0, 0, 2, 0, 0});
+									} else if (mySlot[slotPosition] == 5) {
+										statelay.setCommandTab({0, 1, 0, 0, 3, 7, 4, 0, 0, 2, 0, 0});
+									} else if (mySlot[slotPosition] != 5) {
+										statelay.setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
+									}
+								} else {
+									statelay.setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
+								}
 
-							//statelay.setCommandTab({1, 1, 1, 1, 1, 1, 5, 14, 14, 1, 14, 14});
-							
-							statelay.refreshCommand();
-							statelay.refreshSlot();
+
+							}
+							/* Cas particulier du booster */
+							if (idCommandClicked == 5 ) {
+								/* Si avant derniere action on ne peut plus boost */
+								if (slotPosition <= 5 && mySlot[slotPosition ] != 5 ) {
+									statelay.setCommandTab({0, 1, 0, 0, 3, 7, 4, 0, 0, 2, 0, 0});
+								} else {
+									statelay.setCommandTab({8, 1, 9, 0, 5, 0, 6, 0, 0, 2, 0, 0});
+								}
+							} else {
+								statelay.setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
+							}						
 						}
+						if (mySlot[5] != 0) {
+							statelay.setButtonReadyToClick(1);						
+						} else {
+							statelay.setButtonReadyToClick(0);
+						}
+						
+						
+						cout<<"Slot position fin : "<<slotPosition<<endl;
+						statelay.refreshCommand();
+						statelay.refreshSlot();
 					}
 				}
 			}

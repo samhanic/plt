@@ -114,6 +114,13 @@ const std::array<int,6>& StateLayer::getSlotTab() const {
      return slotTab;
 }
 
+bool StateLayer::getButtonReadyToClick() const {
+    return buttonReadyToClick;
+}
+void StateLayer::setButtonReadyToClick(bool buttonReadyToClick){
+    this->buttonReadyToClick = buttonReadyToClick;
+}
+
 void StateLayer::writeStatistics (state::State& stateLayer, sf::RenderWindow& window) {
     
     sf::Font font;
@@ -148,12 +155,39 @@ void StateLayer::writeStatistics (state::State& stateLayer, sf::RenderWindow& wi
     }
 }
 
+void StateLayer::writeButton (sf::RenderWindow& window) {
+    sf::Font font;
+	if(!font.loadFromFile("../res/Roboto/Roboto-Regular.ttf")) {
+        cerr << "Fichier de police introuvable" <<  endl;
+    }
+    sf::RectangleShape rectangle;
+	rectangle.setSize(sf::Vector2f(80, 40));
+	rectangle.setPosition(730, 250);
+    if (buttonReadyToClick == 1) {
+        rectangle.setFillColor(sf::Color::Green);
+		window.draw(rectangle);
+
+    } else if (buttonReadyToClick == 0) {
+        rectangle.setFillColor(sf::Color::Red);
+		window.draw(rectangle);
+    }
+
+    /* Affiche le "Validate" du boutton d'action */
+    sf::Text text("Validate", font);
+    text.setCharacterSize(17);
+    text.setStyle(sf::Text::Bold);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(735, 260);
+    window.draw(text);
+}
+
 void StateLayer::draw (state::State& stateLayer, sf::RenderWindow& window){
     window.clear();
     window.draw(*surfaces[0]);
     window.draw(*surfaces[1]);
     window.draw(*surfaces[2]);
     window.draw(*surfaces[3]);
+    writeButton(window);
     writeStatistics(stateLayer, window);
     window.display();
 }

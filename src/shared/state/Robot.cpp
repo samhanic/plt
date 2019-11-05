@@ -39,6 +39,14 @@ const std::vector<int>& Robot::getVisitedCheckpoints() const{
 void Robot::setVisitedCheckpoints(const std::vector<int>& visitedCheckpoints){
     this->visitedCheckpoints = visitedCheckpoints;
 }
+    
+void Robot::setRobotActions(const std::array<Action, 6>& robotActions){
+    this -> robotActions = robotActions;
+}
+
+const std::array<Action, 6>& Robot::getRobotActions() const {
+    return robotActions;
+}
 
 int Robot::getLifePoints() const{
     return lifePoints;
@@ -127,7 +135,7 @@ void Robot::setBonusActivated(const std::array<bool,2>& bonusActivated){
 //     }
 //     if (action==LEFT){
 //         if (isBoosted!=0){
-//             if (orientation==NORTH){
+//             if (orientation==NORTH){const std::array<Action, 6>& getRobotActions() const;
 //                 position.setY(position.getY()-isBoosted);
 //                 isBoosted=0;
 //             }

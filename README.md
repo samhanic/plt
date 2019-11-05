@@ -27,12 +27,19 @@ Les joueurs obtiennent des bonus tels que des soins, des pièges ou des amélior
 
 ### Linux
 
-Procédure sous linux :
+Procédure de compilation :
 
 ```
+cd plt/build
 cmake -DBUILD_CODE_COVERAGE=OFF ..
 make
 ```
+Procédure d'exécution :
+
+```
+../bin/client <argument>
+```
+Les arguments sont : hello, state, render, ...
 
 ### Windows
 

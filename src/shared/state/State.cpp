@@ -30,7 +30,7 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 		cout << contenu << endl;
     }
     else {
-		cout << "le frichier ne peut être lu" << endl;
+		cout << "le fichier ne peut être lu" << endl;
 		return -1;
 	}
 

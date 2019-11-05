@@ -9,12 +9,14 @@
 
 #include "../../src/shared/state.h"
 #include "../../src/client/render.h"
+#include "../../src/shared/engine.h"
 
 #define MAP_FILE "../res/map.txt"
 
 using namespace std;
 using namespace render;
 using namespace state;
+using namespace engine;
 //using namespace render;
 
 int main(int argc,char* argv[])
@@ -29,6 +31,10 @@ int main(int argc,char* argv[])
 	} else if (entry == "state") {
 		system("make code-coverage");
 	}
+	else if (entry== "engine") {
+		Engine myEngine;
+		myEngine.initEngine();
+	}
 	else if (entry == "render") {
 		/* Creation of a State and Window */
 		State state;
@@ -36,6 +42,7 @@ int main(int argc,char* argv[])
         unsigned int height = state.getHeightMap(MAP_FILE);
 		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
 		window.setFramerateLimit(25);
+
 
 		MapFactory mapFactory;
 		state.initMap(MAP_FILE, mapFactory);

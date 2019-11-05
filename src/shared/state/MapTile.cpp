@@ -33,19 +33,6 @@ void MapTile::removeBomb(void){
     bombDropped=false;
 }
 
-int MapTile::isOccupied (State& state){
-	// std::vector<std::unique_ptr<Robot>> & listeRobots = state.getPlayers();
-	
-	// /* On compare la position de la case evaluee avec celles des robots pour
-    //     savoir si une unite est dessus */
-	// for(size_t i=0; i < listeRobots.size(); i++){
-	// 	if (position.equals(listeRobots[i]->getPosition())){
-	// 		return i;
-	// 	}
-	// }	
-	 return -1;
-}
-
 TypeId MapTile::getIdStatic() const{
     return idStatic;
 }

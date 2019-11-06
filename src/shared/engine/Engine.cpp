@@ -22,8 +22,11 @@ bool Engine::initEngine (){
 	state->initRobot(BLUE);
     std::shared_ptr<State> ptrState(state);
     this->myState = ptrState;
-    
-    executeAction(1);
+
+    std::array<Action, 6> initActionsRobot = {NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION};
+    myState->getPlayers()[0]->setRobotActions(initActionsRobot);
+
+    //executeAction(1);
     //this->myState=std::shared_ptr<state>;
     // int actionNumber = 1;
     // Command actualAction = Command((*state.getPlayers()[0]),actionNumber);
@@ -31,6 +34,11 @@ bool Engine::initEngine (){
     //std::copy(state, myState, state.begin());//myState = state;
 
     return true;
+}
+
+void Engine::endOfRound () {
+    std::array<Action, 6> initActionsRobot = {NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION};
+    myState->getPlayers()[0]->setRobotActions(initActionsRobot);
 }
 
 // void Engine::setMyState(const state::State& myState){
@@ -43,21 +51,23 @@ const std::shared_ptr<state::State>& Engine::getMyState() const{
 }
 
 void Engine::executeAction(int actionNumber){
-    //state::Robot& player = myState.getPlayers()[0];
-    std::vector<std::unique_ptr<Robot>>& players = myState->getPlayers();
-    // std::unique_ptr<Robot>& player = players[actionNumber];
-    Robot& playerTest = *players[actionNumber].get();
+    Action processedAction = myState->getPlayers()[0]->getRobotActions()[actionNumber];
+    cout<<processedAction<<endl;
+    if (processedAction == ROTATION_CLK) {
+        
+        int actionRobot = static_cast<Action>(processedAction);
+        Rotation myRotation(myState->getPlayers()[0]->getRobotId(), actionRobot);
+        myRotation.executeOrder(myState);
+    }
+}
 
-    cout << myState->getPlayers()[0]->getLifeNumber() <<" lifes" << endl;
-    cout << myState->getPlayers()[0]->getOrientation() <<" orientation" << endl;
-    //Command a besoin d'un state::Robot& player
-    Command *actualAction = new Command(playerTest,actionNumber);
-    delete actualAction;
-    //Rotation actualAction = new Rotation(myState->getPlayers()[0],actionNumber);
+bool Engine::checkRobotsActions () {
+    bool tempAction = 1;
+    for (int i =0 ; i < 6 ; i++) {
+        if (myState->getPlayers()[0]->getRobotActions()[0] == NO_ACTION) {
+            tempAction = 0;
+        }
+    }
+    return tempAction;
 
-    //vector<unique_ptr<Robot>> & refRobots = players;
-    //Robot test = (*myState).getPlayers()[0];
-    //Command actualAction = Command((*myState).getPlayers()[0]&,actionNumber);
-    // Command actualAction = Command(myState.getPlayers()[0],actionNumber);
-    // actualAction.executeOrder(myState);
 }

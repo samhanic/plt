@@ -5,18 +5,18 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-Rotation::Rotation(state::Robot& player, int actionNumberInRound) :Command (player, actionNumberInRound) {
-
+Rotation::Rotation (int robotNumber, int givenAction) {
+    robotNumber = robotNumber;
+    robotAction = givenAction;
 }
 
-bool Rotation::executeOrder(state::State& myState){
+
+bool Rotation::executeOrder(std::shared_ptr<state::State> theState){
     /*We gather the order to be executed and the actual rotation*/
-    Action order = player->getRobotActions()[actionNumberInRound];
-    DirectionStatus const orientation = player->getOrientation();
-    /*Execution*/
-    if (order == ROTATION_CLK){
+    
+    if (robotAction == 6){ // rotation clk
         if (orientation == NORTH){
-            player->setOrientation(EAST);
+            theState->getPlayers()[0]->setOrientation(EAST);
         }
         else if(orientation == EAST){
             player->setOrientation(SOUTH);
@@ -29,7 +29,7 @@ bool Rotation::executeOrder(state::State& myState){
             player->setOrientation(NORTH);
         }
     }
-    else if (order == ROTATION_CCLK){
+    else if (robotAction == 7){
         if (orientation == NORTH){
             player->setOrientation(WEST);
         }

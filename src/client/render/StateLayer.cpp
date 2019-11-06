@@ -99,6 +99,23 @@ void StateLayer::refreshSlot () {
     surfaces.at(3) = move(ptrSlotDisplay);
 }
 
+void StateLayer::refreshPlayers (state::State& stateLayer) {
+    Display surfacePlayers;
+
+    int inSlots[6];
+    for (int i = 0 ; i < 6 ; i++) {
+        inSlots[i] = slotTab[i];
+    }
+   
+    surfacePlayers.loadPlayers(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()));
+    
+    std::unique_ptr<Display> ptrPlayersDisplay (new Display(surfacePlayers));
+
+    /* Attention ! il faut appeler l'initialisation de la map avant refreshCommand sinon "surfaces" n'existe pas"*/
+    surfaces.at(1) = move(ptrPlayersDisplay);
+
+}
+
 void StateLayer::setCommandTab(const std::array<int,12>& commandTab) {
     this->commandTab = commandTab;
 }

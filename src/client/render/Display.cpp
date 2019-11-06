@@ -150,13 +150,11 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
     //cout << stateLayer.getPlayers()[0]->getTileCode() << endl;
     
     for (unsigned int i = 0; i < stateLayer.getPlayers().size(); ++i){
-        //On met a jour les tuiles des personnages en fonction de leur statut
+        // Add orientation render
         
-        // A FAIRE
-        //updateTilesPersonnages(etatLayer);
-        // on récupère le numéro de tuile courant
-		int tileNumber=stateLayer.getPlayers()[i]->getTileCode();	
-        // on en déduit sa position dans la texture du tileset
+		int tileNumber=stateLayer.getPlayers()[i]->getTileCode();
+
+
         int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
         int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
 

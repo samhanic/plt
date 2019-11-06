@@ -33,6 +33,7 @@ void StateLayer::initSurface (state::State& stateLayer){
 
     int inTiles[] = {8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0};
     int inSlot[] = {0, 0, 0, 0, 0, 0};
+    buttonReadyToClick = 0;
     
     for (int i = 0 ; i < 12 ; i++) {
         commandTab[i] = inTiles[i];

@@ -49,29 +49,29 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     
     	for (j = 0; j < longueur; j++){//itération sur les colonnes
     		
-			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//creation des convbelt
+			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//create convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
 				cout<<"Nouveau ConvBelt :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k] >= 27 && map_tuiles_code[k] <= 31){//Creation des bonus
+			else if (map_tuiles_code[k] >= 27 && map_tuiles_code[k] <= 31){//create bonus
 				Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
 				std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
 				cout<<"Nouveau Bonus :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k]>=32 && map_tuiles_code[k]<=33){//creation des rotator
+			else if (map_tuiles_code[k]>=32 && map_tuiles_code[k]<=33){//create rotator
 				Rotator newRotator(mapFactory.doConvertMapRotator()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<Rotator> ptr(new Rotator(newRotator));
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k]>=0 && map_tuiles_code[k]<=2){//creation des cases basiques
+			else if (map_tuiles_code[k]>=0 && map_tuiles_code[k]<=2){//create basics
 				Basic newBasic(mapFactory.doConvertMapBasic()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<Basic> ptr(new Basic(newBasic));
 				newLigne.push_back(move(ptr));
 			}
-			else if (map_tuiles_code[k]>=3 && map_tuiles_code[k]<=7){//creation des cases basiques
+			else if (map_tuiles_code[k]>=3 && map_tuiles_code[k]<=7){//create checkpoints
 				CheckPoint newCheckPoint(mapFactory.doConvertMapCheckPoint()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<CheckPoint> ptr(new CheckPoint(newCheckPoint));
 				newLigne.push_back(move(ptr));
@@ -93,7 +93,7 @@ int State::initRobot (ColorStatus color) {
 	std::unique_ptr<Robot> ptrRR(new Robot(robot));
 	players.push_back(move(ptrRR));
 	
-	// Gives a color to the created robot
+	/* Gives a color to the created robot */
 	if (color == PINK) {
 		getPlayers()[players.size() - 1]->setTileCode(0);
 	} else if (color == BLUE) {
@@ -106,7 +106,7 @@ int State::initRobot (ColorStatus color) {
 		getPlayers()[players.size() - 1]->setTileCode(4);
 	}
 
-	// Gives coordinates to the robot in function of the firt CP of the map
+	/* Gives coordinates to the robot in function of the firt CP of the map */
 	getPlayers()[players.size() - 1]->setPosition(robotLastVisitedCP (getPlayers()[players.size() - 1]));
 	
 	cout << "new player n° "<<players.size()<<" with color "<<color<< endl;
@@ -172,13 +172,13 @@ unsigned int State::getWidthMap (std::string map_txt) {
 	std::string line;
 	std::ifstream myfile(map_txt, ios::in);
 	if (myfile){
-		// Get first line
+		/* Get first line */
 		string sLine;
 		getline(myfile, sLine);
 		myfile.close();
-		// Count number of comas in the first line
+		/* Count number of comas in the first line */
 		numberOfComas = std::count(sLine.begin(), sLine.end(), ',');
-		// +1 because there is no coma at the end of a line
+		/* +1 because there is no coma at the end of a line */
 		return numberOfComas + 1;
     }
     else {

@@ -5,7 +5,8 @@
 #include <sstream>
 #include <memory>
 #include <vector>
-
+#include <chrono>
+#include <thread>
 
 #include "../../src/shared/state.h"
 #include "../../src/client/render.h"
@@ -88,11 +89,14 @@ int main(int argc,char* argv[])
 				statelay.clickManager(*ptrState, event);
 			}
 			window.clear();
+			
 			statelay.draw(*ptrState, window);
 			if (myEngine.checkRobotsActions()) {
 				for (int i = 0; i < 6 ; i++) {
 					myEngine.executeAction(i);
 					statelay.refreshPlayers(*ptrState);
+					statelay.draw(*ptrState, window);
+					sf::sleep(sf::seconds(0.5));
 				}
 				myEngine.endOfRound();
 			}

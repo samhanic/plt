@@ -1,10 +1,12 @@
 #include "../render.h"
+#include "../../shared/state.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
 
 using namespace std;
 using namespace render;
+using namespace state;
 #define esp_tile 0
 #define larg_tile 64
 
@@ -150,9 +152,23 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
     //cout << stateLayer.getPlayers()[0]->getTileCode() << endl;
     
     for (unsigned int i = 0; i < stateLayer.getPlayers().size(); ++i){
+        int tileNumber = 0;
         // Add orientation render
-        
-		int tileNumber=stateLayer.getPlayers()[i]->getTileCode();
+        if (stateLayer.getPlayers()[i]->getOrientation()== NORTH) {
+           tileNumber=stateLayer.getPlayers()[i]->getTileCode();
+           cout<<"vers nord"<<endl;
+        } else if (stateLayer.getPlayers()[i]->getOrientation()== EAST) {
+            tileNumber=stateLayer.getPlayers()[i]->getTileCode()+5;
+            cout<<"vers est"<<endl;
+        } else if (stateLayer.getPlayers()[i]->getOrientation()== WEST) {
+            tileNumber=stateLayer.getPlayers()[i]->getTileCode()+10;
+            cout<<"vers ouest"<<endl;
+        } else if (stateLayer.getPlayers()[i]->getOrientation()== SOUTH) {
+            tileNumber=stateLayer.getPlayers()[i]->getTileCode()+15;
+            cout<<"vers sud"<<endl;
+        }
+
+		
 
 
         int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);

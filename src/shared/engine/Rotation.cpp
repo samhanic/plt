@@ -1,5 +1,6 @@
 #include "Rotation.h"
 #include "../state.h"
+#include <iostream>
 
 using namespace engine;
 using namespace state;
@@ -13,35 +14,39 @@ Rotation::Rotation (int robotNumber, int givenAction) {
 
 bool Rotation::executeOrder(std::shared_ptr<state::State> theState){
     /*We gather the order to be executed and the actual rotation*/
-    
-    if (robotAction == 6){ // rotation clk
+    orientation = theState->getPlayers()[0]->getOrientation();
+    cout<<robotAction<<endl;
+    if (robotAction == 5){ // rotation clk
+        cout<<"rotation detected"<<endl;
         if (orientation == NORTH){
             theState->getPlayers()[0]->setOrientation(EAST);
         }
         else if(orientation == EAST){
-            player->setOrientation(SOUTH);
+            theState->getPlayers()[0]->setOrientation(SOUTH);
 
         }
         else if(orientation == SOUTH){
-            player->setOrientation(WEST);
+            theState->getPlayers()[0]->setOrientation(WEST);
         }
         else if (orientation == WEST){
-            player->setOrientation(NORTH);
+            theState->getPlayers()[0]->setOrientation(NORTH);
         }
     }
-    else if (robotAction == 7){
+    else if (robotAction == 6){
         if (orientation == NORTH){
-            player->setOrientation(WEST);
+            theState->getPlayers()[0]->setOrientation(WEST);
         }
         else if(orientation == EAST){
-            player->setOrientation(NORTH);
+            theState->getPlayers()[0]->setOrientation(NORTH);
 
         }
         else if(orientation == SOUTH){
-            player->setOrientation(EAST);
+            theState->getPlayers()[0]->setOrientation(EAST);
         }
         else if (orientation == WEST){
-            player->setOrientation(SOUTH);
+            theState->getPlayers()[0]->setOrientation(SOUTH);
         }
     }
+    cout<<"orientaytion apres fonction"<<theState->getPlayers()[0]->getOrientation()<<endl;
+    return 0;
 }

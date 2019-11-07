@@ -20,6 +20,9 @@ MapTile::MapTile (TypeId id, int newX, int newY, int newCodeTuile) : idStatic {i
     position.setX(newX);
     position.setY(newY);
     tileCode=newCodeTuile;
+    if (newCodeTuile==2){
+        isWall=true;
+    }
 }
 
 bool MapTile::isStatic(){

@@ -15,9 +15,10 @@ Rotation::Rotation (int robotNumber, int givenAction) {
 bool Rotation::executeOrder(std::shared_ptr<state::State> theState){
     /*We gather the order to be executed and the actual rotation*/
     orientation = theState->getPlayers()[0]->getOrientation();
-    cout<<robotAction<<endl;
+    cout<<"rotation detected : "<<robotAction<<". orientation avant :"<<theState->getPlayers()[0]->getOrientation()<<endl;
+    
     if (robotAction == 5){ // rotation clk
-        cout<<"rotation detected"<<endl;
+        
         if (orientation == NORTH){
             theState->getPlayers()[0]->setOrientation(EAST);
         }
@@ -32,13 +33,12 @@ bool Rotation::executeOrder(std::shared_ptr<state::State> theState){
             theState->getPlayers()[0]->setOrientation(NORTH);
         }
     }
-    else if (robotAction == 6){
+    else if (robotAction == 6){ // rotation cclk
         if (orientation == NORTH){
             theState->getPlayers()[0]->setOrientation(WEST);
         }
         else if(orientation == EAST){
             theState->getPlayers()[0]->setOrientation(NORTH);
-
         }
         else if(orientation == SOUTH){
             theState->getPlayers()[0]->setOrientation(EAST);

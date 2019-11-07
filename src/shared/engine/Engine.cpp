@@ -52,12 +52,16 @@ const std::shared_ptr<state::State>& Engine::getMyState() const{
 
 void Engine::executeAction(int actionNumber){
     Action processedAction = myState->getPlayers()[0]->getRobotActions()[actionNumber];
-    cout<<processedAction<<endl;
-    if (processedAction == ROTATION_CLK) {
-        
+    cout<<processedAction << " is executing" <<endl;
+    if (processedAction == ROTATION_CLK or processedAction == ROTATION_CCLK) {
         int actionRobot = static_cast<Action>(processedAction);
         Rotation myRotation(myState->getPlayers()[0]->getRobotId(), actionRobot);
         myRotation.executeOrder(myState);
+    }
+    else if(processedAction == FORWARD or processedAction == BACKWARD){
+        int actionRobot = static_cast<Action>(processedAction);
+        Move myMove(myState->getPlayers()[0]->getRobotId(), actionRobot);
+        myMove.executeOrder(myState);
     }
 }
 

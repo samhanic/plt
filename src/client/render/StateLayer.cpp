@@ -204,23 +204,20 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             int idCommandClicked = -1;
-            /* Position of last slot is empty */
-            int slotPosition = 0; 
-            /* Get the Position in the slot */
+            int slotPosition; 
             std::array<int, 6> mySlot = getSlotTab();
-                
+
             for (int i = 0 ; i < 6 ; i++) {
                 if (mySlot[i] == 0) {
                     slotPosition = i;
                     break;
+                } else {
+                    slotPosition = 6;
                 }
-            }
-            if (mySlot[5] != 0) {
-                slotPosition = 6;
-                setCommandTab({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
             }
             cout<<"Slot position deb : "<<slotPosition<<endl;
             
+            /* Tab with coordiantes will be generated to accept multiple sizes of maps */
             /* Clic in the command zone */
             if ((event.mouseButton.x > 690) && (event.mouseButton.x < 730)
             && (event.mouseButton.y > 100) && (event.mouseButton.y < 140)) {
@@ -279,13 +276,30 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
             && (event.mouseButton.y > 30) && (event.mouseButton.y < 70)) {
                 idCommandClicked = 25;
             }
-            /* Click in the button */
+            /* Click on the button */
             else if ((event.mouseButton.x > 730) && (event.mouseButton.x < 810)
             && (event.mouseButton.y > 250) && (event.mouseButton.y < 290)) {
                 idCommandClicked = 30;
             }
+            
+            /* A command has been clicked */
+            if (idCommandClicked >= 0 && idCommandClicked <= 11) {
+                /* Get command's disposition on the interface */
+                std::array<int, 12> myCommand = getCommandTab();
+                if (slotPosition <= 4 ) {
+                    slotPosition ++;
+                }
+                /* Get id of clicked command */              
+                for (int i = 0 ; i < 6 ; i++) {
+                    if(mySlot[i] == 0){
+                        mySlot[i] = myCommand[idCommandClicked];
+                        setSlotTab(mySlot);
+                        break; 
+                    }
+                }						
+            }
             /* Clean slot bar after click */
-            if (idCommandClicked >= 20 && idCommandClicked <= 25) {
+            else if (idCommandClicked >= 20 && idCommandClicked <= 25) {
                 slotPosition = idCommandClicked - 20;
                 for (int i = 5 ; i >= 0 ; i--) {
                     /* On supprime les actions derrière l'action cliquée */
@@ -295,49 +309,8 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                 }					
                 setSlotTab(mySlot);
             }
-            /* Une zone de commande a été cliquée */
-            if (idCommandClicked != -1 && idCommandClicked <= 11) {
-                /* On regarde sur quel type de tuile le joueur a cliqué */
-                std::array<int, 12> myCommand = getCommandTab();
-                if (slotPosition <= 5 ) {
-                    slotPosition ++;
-                }
-                /* On cherche la dernière case vide (=0) pour ajouter l'action cliquée */
-                for (int i = 0 ; i < 6 ; i++) {
-                    if(mySlot[i] == 0){
-                        mySlot[i] = myCommand[idCommandClicked];
-                        setSlotTab(mySlot);
-                        /* Quitte la boucle après un ajout */
-                        break; 
-                    }
-                }
-                /* Affichage après supression de commande en fonction de la commande précédente */
-                if (slotPosition > 0) {
-                    /* cas booster avant dernier */
-                    if (mySlot[slotPosition] == 5 && slotPosition == 5) {
-                        setCommandTab({0, 1, 0, 0, 3, 0, 4, 0, 0, 2, 0, 0});
-                    } else if (mySlot[slotPosition] == 5) {
-                        setCommandTab({0, 1, 0, 0, 3, 7, 4, 0, 0, 2, 0, 0});
-                    } else if (mySlot[slotPosition] != 5) {
-                        setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
-                    }
-                } else {
-                    setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
-                }
-                /* Cas particulier du booster */
-                if (idCommandClicked == 5 ) {
-                    /* Si avant derniere action on ne peut plus boost */
-                    if (slotPosition <= 5 && mySlot[slotPosition ] != 5 ) {
-                        setCommandTab({0, 1, 0, 0, 3, 7, 4, 0, 0, 2, 0, 0});
-                    } else {
-                        setCommandTab({8, 1, 9, 0, 5, 0, 6, 0, 0, 2, 0, 0});
-                    }
-                } else {
-                    setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
-                }						
-            }
-            /* Clique sur valider */
-            if (idCommandClicked == 30) {
+            /* Click on validate button */
+            else if (idCommandClicked == 30) {
                 std::array<Action, 6> actionSlotTab;
                 std::unique_ptr<Robot>& ptrRobot = state.getPlayers()[0];
                 
@@ -348,6 +321,32 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                 ptrRobot->setRobotActions(actionSlotTab);
                 cout<<"commandes envoyées"<<endl;
             }
+
+            /* Refreshing of the command pannel */
+            if (slotPosition == 6) {
+                /* Slot is full no need to display commands */
+                setCommandTab({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+            } else if (slotPosition == 5) {
+                if (mySlot[slotPosition - 1] == 7) {
+                    /* Basic cross arrow */
+                    setCommandTab({0, 1, 0, 0, 3, 0, 4, 0, 0, 2, 0, 0});
+                } else {
+                    /* Classical command without boost */
+                    setCommandTab({8, 1, 9, 0, 5, 0, 6, 0, 0, 2, 0, 0});
+                }   
+            } else if (slotPosition == 0) {
+                /* Classical display */ 
+                setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
+            } else {
+                if (mySlot[slotPosition - 1] == 7) {
+                    /* Basic cross arrow with boost */
+                    setCommandTab({0, 1, 0, 0, 3, 7, 4, 0, 0, 2, 0, 0});
+                } else {
+                    /* Classical display */ 
+                    setCommandTab({8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0});
+                }
+            }
+            /* Refresh validate button */
             if (mySlot[5] != 0) {
                 setButtonReadyToClick(1);						
             } else {

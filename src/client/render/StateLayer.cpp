@@ -286,17 +286,19 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
             if (idCommandClicked >= 0 && idCommandClicked <= 11) {
                 /* Get command's disposition on the interface */
                 std::array<int, 12> myCommand = getCommandTab();
-                if (slotPosition <= 4 ) {
+                if (slotPosition <= 5 ) {
                     slotPosition ++;
                 }
-                /* Get id of clicked command */              
-                for (int i = 0 ; i < 6 ; i++) {
-                    if(mySlot[i] == 0){
-                        mySlot[i] = myCommand[idCommandClicked];
-                        setSlotTab(mySlot);
-                        break; 
+                if (myCommand[idCommandClicked] != 0) {
+                    /* Put command in the last free space */              
+                    for (int i = 0 ; i < 6 ; i++) {
+                        if(mySlot[i] == 0){
+                            mySlot[i] = myCommand[idCommandClicked];
+                            setSlotTab(mySlot);
+                            break; 
+                        }
                     }
-                }						
+                }					
             }
             /* Clean slot bar after click */
             else if (idCommandClicked >= 20 && idCommandClicked <= 25) {
@@ -311,15 +313,16 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
             }
             /* Click on validate button */
             else if (idCommandClicked == 30) {
-                std::array<Action, 6> actionSlotTab;
-                std::unique_ptr<Robot>& ptrRobot = state.getPlayers()[0];
-                
-                /* On cast les entiers en type Action pour les envoyer */
-                for (int i = 0; i < 6 ; i++) {
-                    actionSlotTab[i] = static_cast<Action>(mySlot[i]);
-                }
-                ptrRobot->setRobotActions(actionSlotTab);
-                cout<<"commandes envoyées"<<endl;
+                /* Cast int to Actoion before sending them */
+                if (slotPosition == 6) {
+                    std::array<Action, 6> actionSlotTab;
+                    std::unique_ptr<Robot>& ptrRobot = state.getPlayers()[0];
+                    for (int i = 0; i < 6 ; i++) {
+                        actionSlotTab[i] = static_cast<Action>(mySlot[i]);
+                    }
+                    ptrRobot->setRobotActions(actionSlotTab);
+                    cout<<"commandes envoyées"<<endl;
+                }                
             }
 
             /* Refreshing of the command pannel */

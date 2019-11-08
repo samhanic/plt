@@ -11,6 +11,9 @@ Bonus::Bonus () {
 Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) :MapTile(BONUS, newX, newY, newTileCode){
 	position.setX(newX);
 	position.setY(newY);
+	this ->bonusOrNot = true;
+	this ->idStatic = BONUS;
+	this->bonusTypeId= bonusTypeId;
 }
 
 
@@ -39,4 +42,12 @@ bool Bonus::getBonusAvailability (int respawnTime) {
 	} else {
 		this->bonusOrNot = true;
 	}
+}
+
+int Bonus::getRespawnTime() const{
+	return respawnTime;
+}
+
+void Bonus::setRespawnTime(int respawnTime){
+	this->respawnTime = respawnTime;
 }

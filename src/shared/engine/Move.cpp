@@ -52,13 +52,26 @@ void Move::executeOrder (std::shared_ptr<state::State> theState){
 
     //apply bonuses if there are some in the tile
     //MapTile objective = *(theState->getMap()[pos.getX()][pos.getY()]);
-    MapTile *tile = theState->getMap()[pos.getX()][pos.getY()].get();
+    MapTile *tile = theState->getMap()[pos.getY()][pos.getX()].get();
+    cout<<"X  ="<<pos.getX()<< "and Y ="<<pos.getY()<<endl;
+    //cout<< "You arrived in a "<< tile->getIdStatic()<< " tile."<<endl;
     if (tile->getIdStatic() == BONUS){
         Bonus *objective = static_cast<Bonus*>(tile);
-        //cout<<theState->getMap()[pos.getX()][pos.getY()]->getBonusTypeId()<<endl;
-        // if (theState->getMap()[pos.getX()][pos.getY()]->getBonusAvailability()){
-        //     cout<<"Getting a bonus"<<endl;
-        // }
+        if (objective->getRespawnTime() == 0){
+            std::array<bool,5> bonusOwned = theState->getPlayers()[0]->getBonusOwned();
+            if (bonusOwned[objective->getBonusTypeId()]==false){
+                cout<<"Picking bonus"<<objective->getBonusTypeId()<<endl;
+                bonusOwned[objective->getBonusTypeId()]=true;
+                theState->getPlayers()[0]->setBonusOwned(bonusOwned);
+                objective->setRespawnTime(1);
+            }
+            else{
+                cout<<"Bonus is already owned!"<<endl;
+            }
+        }
+        else{
+            cout<<"Bonus is depleted!"<<endl;
+        }
     }
     
 }
@@ -66,7 +79,7 @@ void Move::executeOrder (std::shared_ptr<state::State> theState){
 
 bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desiredPosition){
     //Verify that the new position robot will occupy is not a wall and not occupied by a player
-    Position oldPos = theState->getPlayers()[0]->getPosition();
+    //Position oldPos = theState->getPlayers()[0]->getPosition();
     MapTile objective = *(theState->getMap()[desiredPosition.getX()][desiredPosition.getY()]);
 
     //checks if this is not a wall
@@ -74,7 +87,7 @@ bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desir
         return false;
     }
 
-    for (int i=0;i=(theState->getPlayers().size())>i;i++){
+    for (uint i=0;i<(theState->getPlayers().size());i++){
         // cout<<"verify that"<<theState->getPlayers()[i]->getPosition().getX()<<"is ok"<<endl;
         // if (theState->getPlayers()[i]->getPosition().getX()==objective.getPosition().getX()){
         //     if(theState->getPlayers()[i]->getPosition().getY()==objective.getPosition().getY()){

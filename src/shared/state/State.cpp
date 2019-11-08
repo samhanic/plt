@@ -192,19 +192,47 @@ void State::setMapWidth(int mapWidth) {
 Position State::robotLastVisitedCP (std::unique_ptr<Robot>& myRobot) {
 	
 	int robotID = myRobot->getRobotId();
+	std::vector<int> visitedPC = myRobot->getVisitedCheckpoints();
+	
+	Position positionOfLastCp;
+
+	/* Get value of last visited checkpoint */
+	int tempMaxCP = 0;
+	bool tempCpFound = 0;
+	for (int i = 0 ; i < visitedPC.size() ; i++) {
+		if (tempMaxCP <= visitedPC[i]) {
+			tempMaxCP = visitedPC[i];
+		}
+	}
+	cout<<"The temp max : "<<tempMaxCP<<endl;
+
+	cout<<"width : "<<mapWidth<<"height : "<<mapHeight<<endl;
+	/* Get coordinates of las visited checkpoints */
+	for (int i = 0 ; i < mapWidth ; i++){ 
+    	for (int j = 0 ; j < mapHeight ; j++){
+			//cout<<twoDTab[i][j]->getTileCode()<<endl;
+			if (twoDTab[i][j]->getTileCode() == (tempMaxCP + 2)) {
+				positionOfLastCp.setX(j);
+				positionOfLastCp.setY(i);	
+				tempCpFound = 1;			
+			}
+		}
+	}
+	/* if no cp found left up corner */
+	if (tempCpFound == 0) {
+		positionOfLastCp.setX(0);
+		positionOfLastCp.setY(0);
+	}
 
 	//cout << "hello" << myRobot->getVisitedCheckpoints() << endl;
-	// Recupérer la liste des checkpoints visités !!!!!!!!! pour definir les coords de sortie en fct du dernier visité
-
-	Position pos;
-	pos.setX(rand() % 9 + 1); // temporaire pour afficher plusieur robots
-	pos.setY(rand() % 9 + 1);
-
-	return pos;
+	//pos.setX(rand() % 9 + 1); // get random coordiantes to debug
+	//pos.setY(rand() % 9 + 1);
+	
+	return positionOfLastCp;
 }
 
 bool State::isOccupied (const Position &myPosition) const {
-	// std::vector<std::unique_ptr<Robot>> & listeRobots = state.getPlayers();
+	//std::vector<std::unique_ptr<Robot>> & listeRobots = getPlayers();
 	
 	// /* On compare la position de la case evaluee avec celles des robots pour
     //     savoir si une unite est dessus */

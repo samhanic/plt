@@ -168,8 +168,6 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
             cout<<"vers sud"<<endl;
         }
 
-		
-
 
         int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
         int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);

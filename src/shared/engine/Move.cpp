@@ -49,6 +49,17 @@ void Move::executeOrder (std::shared_ptr<state::State> theState){
             theState->getPlayers()[0]->setPosition(pos);
         }
     }
+
+    //apply bonuses if there are some in the tile
+    //MapTile objective = *(theState->getMap()[pos.getX()][pos.getY()]);
+    MapTile *tile = theState->getMap()[pos.getX()][pos.getY()].get();
+    if (tile->getIdStatic() == BONUS){
+        Bonus *objective = static_cast<Bonus*>(tile);
+        //cout<<theState->getMap()[pos.getX()][pos.getY()]->getBonusTypeId()<<endl;
+        // if (theState->getMap()[pos.getX()][pos.getY()]->getBonusAvailability()){
+        //     cout<<"Getting a bonus"<<endl;
+        // }
+    }
     
 }
 
@@ -63,13 +74,14 @@ bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desir
         return false;
     }
 
-    // for (int i=0;i=(theState->getPlayers().size());i++){
-    //     if (theState->getPlayers()[i]->getPosition().getX()==objective.getPosition().getX()){
-    //         if(theState->getPlayers()[i]->getPosition().getY()==objective.getPosition().getY()){
-    //             return false;
-    //         }
-    //     }
-    // }
+    for (int i=0;i=(theState->getPlayers().size())>i;i++){
+        // cout<<"verify that"<<theState->getPlayers()[i]->getPosition().getX()<<"is ok"<<endl;
+        // if (theState->getPlayers()[i]->getPosition().getX()==objective.getPosition().getX()){
+        //     if(theState->getPlayers()[i]->getPosition().getY()==objective.getPosition().getY()){
+        //         return false;
+        //     }
+        // }
+    }
     //To be applied, now it crashes because of objective.getPosition()
 
     return true;

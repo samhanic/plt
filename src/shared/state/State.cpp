@@ -117,9 +117,8 @@ int State::initRobot (ColorStatus color) {
 State::~State() {
 }
 
-std::vector<std::vector<std::unique_ptr<MapTile>>>& State::getMap () {
-    vector<vector<unique_ptr<MapTile>>> & refMap = twoDTab;
-	return refMap;
+const std::vector<std::vector<std::unique_ptr<MapTile>>>& State::getMap () const {
+	return twoDTab;
 }
 
 std::vector<std::unique_ptr<Robot>>& State::getPlayers () {

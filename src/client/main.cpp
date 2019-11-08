@@ -34,8 +34,8 @@ int main(int argc,char* argv[])
 	} else if (entry == "render") {
 		/* Creation of a State and Window */
 		State state;
-		unsigned int width = state.getWidthMap(MAP_FILE);
-        unsigned int height = state.getHeightMap(MAP_FILE);
+		int width = state.getMapWidth();
+    	int height = state.getMapHeight();
 		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
 		window.setFramerateLimit(25);
 
@@ -72,8 +72,8 @@ int main(int argc,char* argv[])
 		myEngine.executeAction(0);
 		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
-		unsigned int width = ptrState->getWidthMap(MAP_FILE);
-		unsigned int height = ptrState->getHeightMap(MAP_FILE);
+		unsigned int width = ptrState->getMapWidth();
+   		unsigned int height = ptrState->getMapHeight();
 
 		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
 		window.setFramerateLimit(25);

@@ -12,13 +12,39 @@ using namespace std;
 int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 
     // L'idéal serait de déterminer longueur et largeur à partir de la map en entrée.
-    int largeur = 10;
-    int longueur = 10;
+    int width;
+    int height;
+
+	unsigned int numberOfLines = 0;
+	unsigned int numberOfComas = 0;
+    std::string line;
+	std::string lineS;
+	std::ifstream myfile(map_txt, ios::in); 
+
+	if (myfile) {
+		/* Calculate width */
+		std::getline(myfile, lineS);
+		numberOfComas = std::count(lineS.begin(), lineS.end(), ',');
+		/* +1 because there is no coma at the end of a line */
+		height = numberOfComas + 1;
+
+		/* Calculate height */
+		while (std::getline(myfile, line)) {
+			++numberOfLines;
+		}
+		width = numberOfLines + 1;		
+		myfile.close();
+	} else {
+		cout << "Unable to read the file" << endl;
+		return 0;
+	}
+	this->mapHeight = height;
+	this->mapWidth = width;
 
     std::ifstream fichier(map_txt, ios::in);    
     std::string contenu, ligne, code_tuile;
     
-    int map_tuiles_code[largeur*longueur];
+    int map_tuiles_code[mapWidth * mapHeight];
     
     // Lecture Fichier
     if (fichier){
@@ -34,7 +60,7 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 		return -1;
 	}
 
-     // Conversion des codes des tuiles en int
+     /* Convert tiles into int*/
     std::stringstream contenuStream(contenu);
     int i = 0, j = 0, k = 0;
     
@@ -43,11 +69,11 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     	i++;
     }
 
-    // Remplissage de la grille de jeu avec les terrains
-    for (i = 0; i < largeur; i++){//itération sur les lignes
+    /* Fill the tab with diferent tiles */
+    for (i = 0; i < mapWidth; i++){
     	std::vector<std::unique_ptr<MapTile>> newLigne;
     
-    	for (j = 0; j < longueur; j++){//itération sur les colonnes
+    	for (j = 0; j < mapHeight; j++){
     		
 			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//create convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
@@ -150,40 +176,17 @@ void State::setEndRound (int result) {
 	endRound = result;
 }
 
-unsigned int State::getHeightMap (std::string map_txt) {
-	unsigned int numberOfLines = 0;
-    std::string line;
-	std::ifstream myfile(map_txt, ios::in); 
-	if (myfile) {
-		while (std::getline(myfile, line)) {
-			++numberOfLines;
-		}
-		myfile.close();
-		return numberOfLines;
-	} else {
-		cout << "le frichier ne peut être lu" << endl;
-		return 0;
-	}
+int State::getMapHeight() const {
+	return mapHeight;
 }
-
-unsigned int State::getWidthMap (std::string map_txt) {
-	unsigned int numberOfComas = 0;
-	std::string line;
-	std::ifstream myfile(map_txt, ios::in);
-	if (myfile){
-		/* Get first line */
-		string sLine;
-		getline(myfile, sLine);
-		myfile.close();
-		/* Count number of comas in the first line */
-		numberOfComas = std::count(sLine.begin(), sLine.end(), ',');
-		/* +1 because there is no coma at the end of a line */
-		return numberOfComas + 1;
-    }
-    else {
-		cerr << "le frichier ne peut être lu" << endl;
-		return -1;
-	}
+void State::setMapHeight(int mapHeight) {
+	this->mapHeight = mapHeight;
+}
+int State::getMapWidth() const {
+	return mapWidth;
+}
+void State::setMapWidth(int mapWidth) {
+	this->mapWidth = mapWidth;
 }
 
 Position State::robotLastVisitedCP (std::unique_ptr<Robot>& myRobot) {

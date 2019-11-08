@@ -13,8 +13,8 @@ using namespace state;
 bool Display::loadMap(state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
 
     m_tileset = textureTileSet; 
-    unsigned int width = stateLayer.getWidthMap("../res/map.txt");
-    unsigned int height = stateLayer.getHeightMap("../res/map.txt");
+    unsigned int width = stateLayer.getMapWidth();
+    unsigned int height = stateLayer.getMapHeight();
     // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4);
@@ -142,8 +142,8 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
 
     m_tileset = textureTileSet; 
 	
-    unsigned int width = stateLayer.getWidthMap("../res/map.txt");
-    unsigned int height = stateLayer.getHeightMap("../res/map.txt");
+    unsigned int width = stateLayer.getMapWidth();
+    unsigned int height = stateLayer.getMapHeight();
 
     // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
 	m_vertices.setPrimitiveType(sf::Quads);

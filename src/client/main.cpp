@@ -18,7 +18,6 @@ using namespace std;
 using namespace render;
 using namespace state;
 using namespace engine;
-//using namespace render;
 
 int main(int argc,char* argv[])
 {
@@ -61,27 +60,29 @@ int main(int argc,char* argv[])
 			}
 			window.clear();
 			statelay.draw(state, window);
-			window.display();			
-		} 	
+			window.display();
+		}
 		return 0;
 
 	} else if (entry== "engine") {
-		/* Create Engine that creates State */
+		/* Creates Engine that creates State */
 		Engine myEngine;
 		myEngine.initEngine();
 		myEngine.executeAction(0);
 		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
+		/* Displays a sf::Window with the correct size and frame rate */
 		unsigned int width = ptrState->getMapWidth();
    		unsigned int height = ptrState->getMapHeight();
-
 		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
 		window.setFramerateLimit(25);
 
+		/* Creates a StateLayer that will construct and display five sub-layers */
 		StateLayer statelay(*ptrState, window);
 		statelay.initSurface(*ptrState);
 
 		while (window.isOpen()){
+			/* Click management in loop */
 			sf::Event event;
 			while (window.pollEvent(event)){
 				if (event.type == sf::Event::Closed)
@@ -89,22 +90,21 @@ int main(int argc,char* argv[])
 				statelay.clickManager(*ptrState, event);
 			}
 			window.clear();
-			
 			statelay.draw(*ptrState, window);
+
+			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
-				for (int i = 0; i < 6 ; i++) {
+				for (int i = 0 ; i < 6 ; i++) {
 					myEngine.executeAction(i);
 					statelay.refreshPlayers(*ptrState);
 					statelay.draw(*ptrState, window);
 					sf::sleep(sf::seconds(0.5));
 				}
 				myEngine.endOfRound();
+				statelay.initSurface(*ptrState);
 			}
-			window.display();			
 		} 	
 		return 0;
-		
-
 	} else {
 		cout << "Fonction doesn't exist" << endl;
 	}

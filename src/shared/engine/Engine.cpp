@@ -41,32 +41,27 @@ void Engine::endOfRound () {
     myState->getPlayers()[0]->setRobotActions(initActionsRobot);
 }
 
-// void Engine::setMyState(const state::State& myState){
-//     this->myState = myState;
-// }
-//Finally we do not use a setter and directly create an engine with a state
-
 const std::shared_ptr<state::State>& Engine::getMyState() const{
     return myState;
 }
 
-void Engine::executeAction(int actionNumber){
+void Engine::executeAction(int actionNumber) {
     Action processedAction = myState->getPlayers()[0]->getRobotActions()[actionNumber];
-    cout<<"processed action :"<<processedAction << " is executing :"<<myState->getPlayers()[0]->getRobotActions()[actionNumber]<<endl;
-    cout<<"rotation cclk : "<<ROTATION_CCLK<<endl;
     if ((processedAction == ROTATION_CLK) || (processedAction == ROTATION_CCLK)) {
-        cout<<"entered in fiunction ccl clk"<<endl;
-        //int actionRobot = static_cast<Action>(processedAction);
         Rotation myRotation(myState->getPlayers()[0]->getRobotId(), processedAction);
         myRotation.executeOrder(myState);
     }
-    else if(processedAction == FORWARD or processedAction == BACKWARD){
-        //int actionRobot = static_cast<Action>(processedAction);
+    else if((processedAction == FORWARD) || (processedAction == BACKWARD)
+    || (processedAction == LEFT) || (processedAction == RIGHT)) {
         Move myMove(myState->getPlayers()[0]->getRobotId(), processedAction);
         myMove.executeOrder(myState);
+    } 
+    else if (processedAction == BOOSTER) {
+        myState->getPlayers()[0]->setIsBoosted(1); // A CHANGER
     }
 }
 
+/* Returns 1 if all actions are filled by players */
 bool Engine::checkRobotsActions () {
     bool tempAction = 1;
     for (int i =0 ; i < 6 ; i++) {
@@ -75,5 +70,4 @@ bool Engine::checkRobotsActions () {
         }
     }
     return tempAction;
-
 }

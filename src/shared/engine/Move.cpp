@@ -6,10 +6,9 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-
-Move::Move (int robotNumber, int givenAction){
+ Move::Move (int robotNumber, state::Action givenAction){
     robotNumber = robotNumber;
-    robotAction =givenAction;
+    robotAction = givenAction;
 }
 
 void Move::executeOrder (std::shared_ptr<state::State> theState){

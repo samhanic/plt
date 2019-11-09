@@ -52,15 +52,17 @@ const std::shared_ptr<state::State>& Engine::getMyState() const{
 
 void Engine::executeAction(int actionNumber){
     Action processedAction = myState->getPlayers()[0]->getRobotActions()[actionNumber];
-    cout<<processedAction << " is executing" <<endl;
-    if (processedAction == ROTATION_CLK || processedAction == ROTATION_CCLK) {
-        int actionRobot = static_cast<Action>(processedAction);
-        Rotation myRotation(myState->getPlayers()[0]->getRobotId(), actionRobot);
+    cout<<"processed action :"<<processedAction << " is executing :"<<myState->getPlayers()[0]->getRobotActions()[actionNumber]<<endl;
+    cout<<"rotation cclk : "<<ROTATION_CCLK<<endl;
+    if ((processedAction == ROTATION_CLK) || (processedAction == ROTATION_CCLK)) {
+        cout<<"entered in fiunction ccl clk"<<endl;
+        //int actionRobot = static_cast<Action>(processedAction);
+        Rotation myRotation(myState->getPlayers()[0]->getRobotId(), processedAction);
         myRotation.executeOrder(myState);
     }
     else if(processedAction == FORWARD or processedAction == BACKWARD){
-        int actionRobot = static_cast<Action>(processedAction);
-        Move myMove(myState->getPlayers()[0]->getRobotId(), actionRobot);
+        //int actionRobot = static_cast<Action>(processedAction);
+        Move myMove(myState->getPlayers()[0]->getRobotId(), processedAction);
         myMove.executeOrder(myState);
     }
 }

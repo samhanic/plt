@@ -171,7 +171,16 @@ void StateLayer::writeStatistics (state::State& stateLayer, sf::RenderWindow& wi
         text.setFillColor(sf::Color::White);
         text.setPosition(650, 320 + (20 * i));
         window.draw(text);
+    } 
+    if (stateLayer.getEndGame() == true) {
+        sf::Text text("end of THE GAME ;)", font);
+        text.setCharacterSize(30);
+        text.setStyle(sf::Text::Bold);
+        text.setFillColor(sf::Color::Red);
+        text.setPosition(180, 280);
+        window.draw(text);
     }
+
 }
 
 void StateLayer::writeButton (sf::RenderWindow& window) {

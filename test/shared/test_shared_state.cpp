@@ -21,8 +21,8 @@ BOOST_AUTO_TEST_CASE(TestState)
     //*(testState.getPlayers()[0]).getColor();
     //BOOST_CHECK(testBool);
 
-    testState.setEndGame(1);
-    BOOST_CHECK_EQUAL(testState.getEndGame(),1);
+    //testState.setEndGame(1);
+    //BOOST_CHECK_EQUAL(testState.getEndGame(),1);
 
     testState.setEndRound(1);
     BOOST_CHECK_EQUAL(testState.getEndRound(),1);

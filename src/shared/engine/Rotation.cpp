@@ -7,7 +7,7 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-Rotation::Rotation (int robotNumber, int givenAction) {
+Rotation::Rotation (int robotNumber, state::Action givenAction) {
     robotNumber = robotNumber;
     robotAction = givenAction;
 }
@@ -15,8 +15,10 @@ Rotation::Rotation (int robotNumber, int givenAction) {
 
 bool Rotation::executeOrder(std::shared_ptr<state::State> theState){
     /*We gather the order to be executed and the actual rotation*/
+
     orientation = theState->getPlayers()[0]->getOrientation();
-    if (robotAction == 6){ // rotation clk
+    /* Case of a clockwise rotation */
+    if (robotAction == 6){
         if (orientation == NORTH){
             theState->getPlayers()[0]->setOrientation(EAST);
         }
@@ -29,7 +31,9 @@ bool Rotation::executeOrder(std::shared_ptr<state::State> theState){
         else if (orientation == WEST){
             theState->getPlayers()[0]->setOrientation(NORTH);
         }
-    } else if (robotAction == 5){
+    }
+    /* Case of a counter clockwise rotation */
+    else if (robotAction == 5){
         if (orientation == NORTH){
             theState->getPlayers()[0]->setOrientation(WEST);
         }

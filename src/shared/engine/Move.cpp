@@ -15,16 +15,15 @@ void Move::executeOrder (std::shared_ptr<state::State> theState){
     cout<<"move order executing :"<<robotAction<<endl;
     Position pos = theState->getPlayers()[0]->getPosition();
     DirectionStatus direction = theState->getPlayers()[0]->getOrientation();
-
     int moveVector;
-    if (robotAction==1){//move forward
-        moveVector=1;
+    if (robotAction == 1) {//move forward
+        moveVector = 1;
     }
-    else if(robotAction==2){//move backward
-        moveVector =-1;
+    else if (robotAction == 2) {//move backward
+        moveVector =- 1;
     }
 
-    if (direction==NORTH){
+    if (direction == NORTH) {
         pos.setY(pos.getY()-moveVector);
         if (verifyPosition(theState,pos)){
             theState->getPlayers()[0]->setPosition(pos);

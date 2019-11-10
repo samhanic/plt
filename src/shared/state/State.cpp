@@ -9,6 +9,7 @@
 using namespace state;
 using namespace std;
 
+
 int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 
     // L'idéal serait de déterminer longueur et largeur à partir de la map en entrée.
@@ -72,7 +73,6 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     /* Fill the tab with diferent tiles */
     for (i = 0; i < mapWidth; i++){
     	std::vector<std::unique_ptr<MapTile>> newLigne;
-    
     	for (j = 0; j < mapHeight; j++){
     		
 			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//create convbelt
@@ -164,9 +164,32 @@ bool State::getEndGame () {
     return endGame;
 }
 
-void State::setEndGame (int result) {Position robotLastVisitedCP (Robot& myRobot);
-	endGame = result;
+void State::checkEndGame () {
+	/* Gets cp on the map */
+	std::vector<int> cpOnTheMap;
+	for (int i = 0 ; i < mapHeight ; i++) {
+		for (int j = 0 ; j < mapWidth ; j++) {
+			if (twoDTab[i][j]->getTileCode() >= 3 && twoDTab[i][j]->getTileCode() <= 7 ) {
+				cpOnTheMap.push_back(twoDTab[i][j]->getTileCode()-2);
+			}
+		}
+	}
+
+	/* Compares with cp validated by players */
+	for (unsigned int i = 0 ; i < players.size() ; i++) {
+		std::vector<int> cpOfPlayer = getPlayers()[i]->getVisitedCheckpoints();
+		std::sort(cpOfPlayer.begin(), cpOfPlayer.end());
+		std::sort(cpOnTheMap.begin(), cpOnTheMap.end());
+		if (cpOnTheMap == cpOfPlayer) {
+			this->endGame = true;
+		}
+		for (unsigned int i = 0; i < cpOnTheMap.size() ; i++) {
+			cout<<"CP MAP : "<<cpOnTheMap[i]<<" CP PLAYER : "<<cpOfPlayer[i]<<endl;
+		}
+	}
 }
+
+
 
 bool State::getEndRound () {
     return endRound;
@@ -199,7 +222,7 @@ Position State::robotLastVisitedCP (std::unique_ptr<Robot>& myRobot) {
 	/* Get value of last visited checkpoint */
 	int tempMaxCP = 0;
 	bool tempCpFound = 0;
-	for (int i = 0 ; i < visitedPC.size() ; i++) {
+	for (unsigned int i = 0 ; i < visitedPC.size() ; i++) {
 		if (tempMaxCP <= visitedPC[i]) {
 			tempMaxCP = visitedPC[i];
 		}

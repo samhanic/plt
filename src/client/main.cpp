@@ -100,6 +100,7 @@ int main(int argc,char* argv[])
 					statelay.draw(*ptrState, window);
 					sf::sleep(sf::seconds(0.5));
 				}
+				ptrState->checkEndGame();
 				myEngine.endOfRound();
 				statelay.initSurface(*ptrState);
 			}

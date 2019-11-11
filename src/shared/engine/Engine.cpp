@@ -59,10 +59,16 @@ void Engine::executeAction(int actionNumber) {
     else if (processedAction == BOOSTER) {
         //myState->getPlayers()[0]->setIsBoosted(1); // A CHANGER
     }
+    else{
+        cout<<"This action is not yet implemented"<<endl;
+    }
 
     /* Checks if in hole or passed a checkpoint */
     checkHole();
     checkCheckPoint ();
+    //EnvironmentMove environment = new EnvironmentMove();
+    // environment.grabEMType(myState);
+    //To be uncommented
 }
 
 /* Returns 1 if all actions are filled by players */

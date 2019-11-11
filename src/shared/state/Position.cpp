@@ -8,7 +8,7 @@ void Position::setX(int newX) {
 	if (newX >= 0) {
 		this->x=newX;
 	} else {
-		cout <<  "X is outside of the map";
+		cout <<  "X is outside of the map to the left"<<endl;
 	}
 }
 
@@ -16,7 +16,7 @@ void Position::setY(int newY) {
 	if (newY >= 0) {
 		this->y=newY;
 	} else {
-		cout <<  "Y is outside of the map";
+		cout <<  "Y is outside of the map to the high"<<endl;
 	}
 }
 

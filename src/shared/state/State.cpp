@@ -149,6 +149,7 @@ const std::vector<std::vector<std::unique_ptr<MapTile>>>& State::getMap () const
 
 std::vector<std::unique_ptr<Robot>>& State::getPlayers () {
     vector<unique_ptr<Robot>> & refRobots = players;
+	//cout<<(this->robotLastVisitedCP(refRobots[0])).getX()<<"robotlastvisited executed"<<endl;
 	return refRobots;
 }
 
@@ -264,5 +265,5 @@ bool State::isOccupied (const Position &myPosition) const {
 	// 		return i;
 	// 	}
 	// }	
-	return -1;
+	return false;
 }

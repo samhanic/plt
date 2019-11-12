@@ -11,18 +11,18 @@ MapFactory::MapFactory() {
 	convertMapBonus[30] = BONUS_CROSS_ATTACK;
 	convertMapBonus[31] = BONUS_BOMB;
 	
-	convertMapConvBelt[13] = CB_N_S;
-    convertMapConvBelt[14] = CB_E_W;
-    convertMapConvBelt[15] = CB_S_N;
-    convertMapConvBelt[16] = CB_W_E;
+	convertMapConvBelt[13] = CB_E_S;
+    convertMapConvBelt[14] = CB_W_S;
+    convertMapConvBelt[15] = CB_S_E;
+    convertMapConvBelt[16] = CB_S_W;
     convertMapConvBelt[17] = CB_N_E;
-    convertMapConvBelt[18] = CB_N_W;
+    convertMapConvBelt[18] = CB_W_N;
     convertMapConvBelt[19] = CB_E_N;
-    convertMapConvBelt[20] = CB_E_S;
-    convertMapConvBelt[21] = CB_S_E;
-    convertMapConvBelt[22] = CB_S_W;
-    convertMapConvBelt[23] = CB_W_N;
-    convertMapConvBelt[24] = CB_W_S;
+    convertMapConvBelt[20] = CB_N_W;
+    convertMapConvBelt[21] = CB_N_S;
+    convertMapConvBelt[22] = CB_S_N;
+    convertMapConvBelt[23] = CB_E_W;
+    convertMapConvBelt[24] = CB_W_E;
     convertMapConvBelt[25] = CB_NW_E;
     
     convertMapRotator[32] = ROT_CLK;

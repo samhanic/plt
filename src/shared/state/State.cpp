@@ -12,7 +12,7 @@ using namespace std;
 
 int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 
-    // L'idéal serait de déterminer longueur et largeur à partir de la map en entrée.
+	//Thhe height and width of map is determined by the file input
     int width;
     int height;
 
@@ -77,8 +77,9 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     		
 			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//create convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
+				cout<<newConvBelt.getConvBeltTypeId()<<endl;
 				std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
-				cout<<"Nouveau ConvBelt :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
+				cout<<"Nouveau ConvBelt :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k] >= 27 && map_tuiles_code[k] <= 31){//create bonus

@@ -40,32 +40,42 @@ bool EnvironmentMove::execute (std::shared_ptr<state::State> theState){
             environmentRotation->executeOrder(theState);
         }
     }
+
     if (tileRobot->getIdStatic()==CONVBELT){
         cout<<"A convbelt will move you"<<endl;
+        //Move the robot
         ConvBelt *tileRobotCB = static_cast<ConvBelt*>(tileRobot);
         Move *environmentMove = new Move (robotNumber,FORWARD);
         if ((tileRobotCB->getConvBeltTypeId()==CB_S_N) || (tileRobotCB->getConvBeltTypeId()==CB_E_N) || (tileRobotCB->getConvBeltTypeId()==CB_W_N)){
             environmentMove->setDirectionMove(NORTH);
-            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<"and will go to north"<<endl;
+            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<" and will go to north"<<endl;
         }
         else if((tileRobotCB ->getConvBeltTypeId()==CB_W_E) || (tileRobotCB->getConvBeltTypeId()==CB_N_E) || (tileRobotCB->getConvBeltTypeId()==CB_S_E)){
             environmentMove->setDirectionMove(EAST);
-            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<"and will go to east"<<endl;
+            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<" and will go to east"<<endl;
         }
         else if ((tileRobotCB->getConvBeltTypeId()==CB_N_S) || (tileRobotCB->getConvBeltTypeId()==CB_E_S) || (tileRobotCB->getConvBeltTypeId()==CB_W_S)){
             environmentMove->setDirectionMove(SOUTH);
-            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<"and will go to south"<<endl;
+            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<" and will go to south"<<endl;
         }
         else if ((tileRobotCB->getConvBeltTypeId()==CB_E_W) || (tileRobotCB->getConvBeltTypeId()==CB_S_W) || (tileRobotCB->getConvBeltTypeId()==CB_N_W)){
             environmentMove->setDirectionMove(WEST);
-            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<"and will go to west"<<endl;
+            cout<<"This convbelt is of type :"<<tileRobotCB->getConvBeltTypeId()<<" and will go to west"<<endl;
         }
         else{
             cout<<"This type of cb has not been yet implemented : "<<tileRobotCB->getConvBeltTypeId()<<endl;
             environmentMove->setDirectionMove(NONE);
         }
         environmentMove->executeOrder(theState);
-        //To be added : others directions
+        //Then rotate it
+        if ((tileRobotCB->getConvBeltTypeId()==CB_S_E) || (tileRobotCB->getConvBeltTypeId()==CB_W_S) || (tileRobotCB->getConvBeltTypeId()==CB_N_W) || (tileRobotCB->getConvBeltTypeId()==CB_E_N)){
+            Rotation *environmentalRotation = new Rotation(0,ROTATION_CLK);
+            environmentalRotation->executeOrder(theState);
+        }
+        else if((tileRobotCB->getConvBeltTypeId()==CB_S_W) || (tileRobotCB->getConvBeltTypeId()==CB_W_N) || (tileRobotCB->getConvBeltTypeId()==CB_N_E) || (tileRobotCB->getConvBeltTypeId()==CB_E_S)){
+            Rotation *environmentalRotation = new Rotation(0,ROTATION_CCLK);
+            environmentalRotation->executeOrder(theState);
+        }
     }
     return true;
 }

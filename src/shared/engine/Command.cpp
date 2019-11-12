@@ -41,24 +41,3 @@ bool Command::executeOrder (state::State& myState){
     //there is a problem because all executeOrders should be executed in subclasses
 }
 
-bool Command::deathRobot(state::Robot& player, state::State& myState){
-    //Return True if the robot is able to respawn, false if not
-    if (player.getLifeNumber()==0){
-        cout<<"You lost!"<<endl;
-        return false;
-    }
-    else{
-        cout<<"You loose one live"<<endl;
-        player.setLifeNumber(player.getLifeNumber()-1);
-        player.setLifePoints(5);
-        myState.getEndRound();
-        State *myStatetwo = &myState;
-        //std::unique_ptr<MyClass>( new MyClass(myObject) )
-        //Position posRespawn = myStatetwo->robotLastVisitedCP(std::unique_ptr<Robot>(new Robot(player)));
-        // player.setPosition(posRespawn);
-
-        //To be reviewed by professors
-    }
-
-    return true;
-}

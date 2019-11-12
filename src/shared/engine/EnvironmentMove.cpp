@@ -67,15 +67,20 @@ bool EnvironmentMove::execute (std::shared_ptr<state::State> theState){
             environmentMove->setDirectionMove(NONE);
         }
         environmentMove->executeOrder(theState);
-        //Then rotate it
-        if ((tileRobotCB->getConvBeltTypeId()==CB_S_E) || (tileRobotCB->getConvBeltTypeId()==CB_W_S) || (tileRobotCB->getConvBeltTypeId()==CB_N_W) || (tileRobotCB->getConvBeltTypeId()==CB_E_N)){
+        //Then rotate it if needed
+        MapTile *tileRobot = theState->getMap()[robot->getPosition().getY()][robot->getPosition().getX()].get();
+        if (tileRobot->getIdStatic()==CONVBELT){
+            ConvBelt *tileRobotCB = static_cast<ConvBelt*>(tileRobot);
+            if ((tileRobotCB->getConvBeltTypeId()==CB_S_E) || (tileRobotCB->getConvBeltTypeId()==CB_W_S) || (tileRobotCB->getConvBeltTypeId()==CB_N_W) ||(tileRobotCB->getConvBeltTypeId()==CB_E_N)){
             Rotation *environmentalRotation = new Rotation(0,ROTATION_CLK);
             environmentalRotation->executeOrder(theState);
+            }
+            else if((tileRobotCB->getConvBeltTypeId()==CB_S_W) || (tileRobotCB->getConvBeltTypeId()==CB_W_N) || (tileRobotCB->getConvBeltTypeId()==CB_N_E) || (tileRobotCB->getConvBeltTypeId()==CB_E_S)){
+                Rotation *environmentalRotation = new Rotation(0,ROTATION_CCLK);
+                environmentalRotation->executeOrder(theState);
+            }
         }
-        else if((tileRobotCB->getConvBeltTypeId()==CB_S_W) || (tileRobotCB->getConvBeltTypeId()==CB_W_N) || (tileRobotCB->getConvBeltTypeId()==CB_N_E) || (tileRobotCB->getConvBeltTypeId()==CB_E_S)){
-            Rotation *environmentalRotation = new Rotation(0,ROTATION_CCLK);
-            environmentalRotation->executeOrder(theState);
-        }
+        
     }
     return true;
 }

@@ -66,6 +66,7 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
         cout<<"You arrived in a basic tile : "<<objective->getBasicTypeId()<<endl;
         if (objective->getBasicTypeId()==BASIC_HOLE){
             cout<<"You arrived in a hole!"<<endl;
+            theState->deathRobot(*(theState->getPlayers()[0]));
         }
     } 
 

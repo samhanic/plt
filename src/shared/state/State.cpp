@@ -134,7 +134,7 @@ int State::initRobot (ColorStatus color) {
 	}
 
 	/* Gives coordinates to the robot in function of the firt CP of the map */
-	getPlayers()[players.size() - 1]->setPosition(robotLastVisitedCP (getPlayers()[players.size() - 1]));
+	getPlayers()[players.size() - 1]->setPosition(robotLastVisitedCP (*getPlayers()[players.size() - 1]));
 	
 	cout << "new player n° "<<players.size()<<" with color "<<color<< endl;
 
@@ -212,10 +212,10 @@ void State::setMapWidth(int mapWidth) {
 	this->mapWidth = mapWidth;
 }
 
-Position State::robotLastVisitedCP (std::unique_ptr<Robot>& myRobot) {
+Position State::robotLastVisitedCP (Robot& myRobot) {
 	
-	int robotID = myRobot->getRobotId();
-	std::vector<int> visitedPC = myRobot->getVisitedCheckpoints();
+	int robotID = myRobot.getRobotId();
+	std::vector<int> visitedPC = myRobot.getVisitedCheckpoints();
 	
 	Position positionOfLastCp;
 
@@ -265,4 +265,22 @@ bool State::isOccupied (const Position &myPosition) const {
 	// 	}
 	// }	
 	return false;
+}
+
+bool State::deathRobot (Robot& myRobot){
+    //Return True if the robot is able to respawn, false if not
+    if (myRobot.getLifeNumber()==0){
+        cout<<"You lost!"<<endl;
+        myRobot.setStatus(FINAL_DEAD);
+        return false;
+    }
+    else{
+        cout<<"You loose one live"<<endl;
+        myRobot.setLifeNumber(myRobot.getLifeNumber()-1);
+        myRobot.setLifePoints(5);
+        //this->getEndRound();
+        Position posRespawn = robotLastVisitedCP(myRobot);
+        myRobot.setPosition(posRespawn);
+        return true;
+    }
 }

@@ -95,12 +95,17 @@ int main(int argc,char* argv[])
 			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
 				for (int i = 0 ; i < 6 ; i++) {
-					myEngine.executeAction(i);
-					statelay.refreshPlayers(*ptrState);
-					statelay.draw(*ptrState, window);
-					sf::sleep(sf::seconds(0.5));
+					if (!ptrState->getEndGame()) {
+						myEngine.executeAction(i);
+						statelay.refreshPlayers(*ptrState);
+						
+						ptrState->checkEndGame();
+						
+						statelay.draw(*ptrState, window);
+						sf::sleep(sf::seconds(0.3));
+					}
 				}
-				ptrState->checkEndGame();
+				
 				myEngine.endOfRound();
 				statelay.initSurface(*ptrState);
 			}

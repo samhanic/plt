@@ -18,6 +18,8 @@ using namespace state;
 StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(window){
     std::unique_ptr<TileSet> ptrMapTileSet(new TileSet(MAP_TILESET));
     tilesets.push_back(std::move(ptrMapTileSet));
+    std::unique_ptr<TileSet> ptrEffectTileSet(new TileSet(MAP_TILESET));
+    tilesets.push_back(std::move(ptrEffectTileSet));
     std::unique_ptr<TileSet> ptrPawnTileSet(new TileSet(PAWN_TILESET));
     tilesets.push_back(std::move(ptrPawnTileSet));
     std::unique_ptr<TileSet> ptrCommandTileSet(new TileSet(COMMAND_TILESET));
@@ -28,6 +30,7 @@ StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(
 
 void StateLayer::initSurface (state::State& stateLayer){
     Display surfaceMap;
+    Display surfaceEffects;
     Display surfacePlayers;
     Display surfaceCommand;
     Display surfaceSlot;
@@ -45,12 +48,14 @@ void StateLayer::initSurface (state::State& stateLayer){
 
 
     surfaceMap.loadMap(stateLayer, tilesets[0]->getTexture(), sf::Vector2u(tilesets[0]->getCellWidth(), tilesets[0]->getCellHeight()));
-    surfacePlayers.loadPlayers(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()));
-    surfaceCommand.loadCommand(tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()), inTiles);
-    surfaceSlot.loadSlot(tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()), inSlot);
+    surfaceEffects.loadMap(stateLayer, tilesets[0]->getTexture(), sf::Vector2u(tilesets[0]->getCellWidth(), tilesets[0]->getCellHeight()));
+    surfacePlayers.loadPlayers(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
+    surfaceCommand.loadCommand(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inTiles);
+    surfaceSlot.loadSlot(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inSlot);
 
 
     std::unique_ptr<Display> ptrMapDisplay (new Display(surfaceMap));
+    std::unique_ptr<Display> ptrEffectsDisplay (new Display(surfaceEffects));
     std::unique_ptr<Display> ptrPlayersDisplay (new Display(surfacePlayers));
     std::unique_ptr<Display> ptrCommandDisplay (new Display(surfaceCommand));
     std::unique_ptr<Display> ptrSlotDisplay (new Display(surfaceSlot));
@@ -63,6 +68,7 @@ void StateLayer::initSurface (state::State& stateLayer){
     }
 
     surfaces.push_back(move(ptrMapDisplay));
+    surfaces.push_back(move(ptrEffectsDisplay));
     surfaces.push_back(move(ptrPlayersDisplay));
     surfaces.push_back(move(ptrCommandDisplay));
     surfaces.push_back(move(ptrSlotDisplay));
@@ -76,12 +82,12 @@ void StateLayer::refreshCommand () {
         inTiles[i] = commandTab[i];
     }
    
-    surfaceCommand.loadCommand(tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()), inTiles);
+    surfaceCommand.loadCommand(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inTiles);
     
     std::unique_ptr<Display> ptrCommandDisplay (new Display(surfaceCommand));
 
     /* Attention ! il faut appeler l'initialisation de la map avant refreshCommand sinon "surfaces" n'existe pas"*/
-    surfaces.at(2) = move(ptrCommandDisplay);
+    surfaces.at(3) = move(ptrCommandDisplay);
 }
 
 void StateLayer::refreshSlot () {
@@ -92,12 +98,12 @@ void StateLayer::refreshSlot () {
         inSlots[i] = slotTab[i];
     }
    
-    surfaceSlot.loadSlot(tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()), inSlots);
+    surfaceSlot.loadSlot(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inSlots);
     
     std::unique_ptr<Display> ptrSlotDisplay (new Display(surfaceSlot));
 
     /* Attention ! il faut appeler l'initialisation de la map avant refreshCommand sinon "surfaces" n'existe pas"*/
-    surfaces.at(3) = move(ptrSlotDisplay);
+    surfaces.at(4) = move(ptrSlotDisplay);
 }
 
 void StateLayer::refreshPlayers (state::State& stateLayer) {
@@ -108,12 +114,12 @@ void StateLayer::refreshPlayers (state::State& stateLayer) {
         inSlots[i] = slotTab[i];
     }
    
-    surfacePlayers.loadPlayers(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()));
+    surfacePlayers.loadPlayers(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
     
     std::unique_ptr<Display> ptrPlayersDisplay (new Display(surfacePlayers));
 
     /* Attention ! il faut appeler l'initialisation de la map avant refreshCommand sinon "surfaces" n'existe pas"*/
-    surfaces.at(1) = move(ptrPlayersDisplay);
+    surfaces.at(2) = move(ptrPlayersDisplay);
 
 }
 
@@ -171,16 +177,23 @@ void StateLayer::writeStatistics (state::State& stateLayer, sf::RenderWindow& wi
         text.setFillColor(sf::Color::White);
         text.setPosition(650, 320 + (20 * i));
         window.draw(text);
-    } 
-    if (stateLayer.getEndGame() == true) {
-        sf::Text text("end of THE GAME ;)", font);
-        text.setCharacterSize(30);
-        text.setStyle(sf::Text::Bold);
-        text.setFillColor(sf::Color::Red);
-        text.setPosition(180, 280);
-        window.draw(text);
     }
+}
 
+void StateLayer::writeEndGame (state::State& stateLayer, sf::RenderWindow& windows) {
+    
+    sf::Font font;
+	if(!font.loadFromFile("../res/Roboto/Roboto-Regular.ttf")) {
+        cerr << "Can't load font file" <<  endl;
+    }
+    if (stateLayer.getEndGame() == true) {
+            sf::Text text("end of THE GAME ;)", font);
+            text.setCharacterSize(30);
+            text.setStyle(sf::Text::Bold);
+            text.setFillColor(sf::Color::Red);
+            text.setPosition(180, 280);
+            window.draw(text);
+    }
 }
 
 void StateLayer::writeButton (sf::RenderWindow& window) {
@@ -377,7 +390,9 @@ void StateLayer::draw (state::State& stateLayer, sf::RenderWindow& window){
     window.draw(*surfaces[1]);
     window.draw(*surfaces[2]);
     window.draw(*surfaces[3]);
+    window.draw(*surfaces[4]);
     writeButton(window);
     writeStatistics(stateLayer, window);
+    writeEndGame(stateLayer, window);
     window.display();
 }

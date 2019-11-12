@@ -190,8 +190,6 @@ void State::checkEndGame () {
 	}
 }
 
-
-
 bool State::getEndRound () {
     return endRound;
 }

@@ -66,8 +66,10 @@ void Engine::executeAction(int actionNumber) {
     /* Checks if in hole or passed a checkpoint */
     checkHole();
     checkCheckPoint ();
-    //EnvironmentMove environment = new EnvironmentMove();
-    // environment.grabEMType(myState);
+    //Actions of the game on the robot
+    EnvironmentMove *environment = new EnvironmentMove(0);
+    environment->grabEMType(myState);
+    environment->execute(myState);
     //To be uncommented
 }
 

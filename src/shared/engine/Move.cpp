@@ -6,15 +6,19 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
- Move::Move (int robotNumber, state::Action givenAction){
+Move::Move (int robotNumber, state::Action givenAction){
     robotNumber = robotNumber;
     robotAction = givenAction;
+    this->directionMove = NONE;
 }
 
 bool Move::executeOrder (std::shared_ptr<state::State> theState){
     cout<<"move order executing :"<<robotAction<<endl;
     Position pos = theState->getPlayers()[0]->getPosition();
-    DirectionStatus direction = theState->getPlayers()[0]->getOrientation();
+    if (directionMove==NONE){
+        directionMove = theState->getPlayers()[0]->getOrientation();
+    }
+    
     int moveVector;
     if (robotAction == 1) {//move forward
         moveVector = 1;
@@ -22,29 +26,31 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
     else if (robotAction == 2) {//move backward
         moveVector =- 1;
     }
-
-    if (direction == NORTH) {
+    if (directionMove==NONE){
+        return false;
+    }
+    if (directionMove==NORTH) {
         pos.setY(pos.getY()-moveVector);
         if (verifyPosition(theState,pos)){
             theState->getPlayers()[0]->setPosition(pos);
         }
         else return false;
     }
-    else if (direction==EAST){
+    else if (directionMove==EAST){
         pos.setX(pos.getX()+moveVector);
         if (verifyPosition(theState,pos)){
             theState->getPlayers()[0]->setPosition(pos);
         }
         else return false;
     }
-    else if (direction==SOUTH){
+    else if (directionMove==SOUTH){
         pos.setY(pos.getY()+moveVector);
         if (verifyPosition(theState,pos)){
             theState->getPlayers()[0]->setPosition(pos);
         }
         else return false;
     }
-    else if (direction==WEST){
+    else if (directionMove==WEST){
         pos.setX(pos.getX()-moveVector);
         if (verifyPosition(theState,pos)){
             theState->getPlayers()[0]->setPosition(pos);
@@ -122,4 +128,9 @@ bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desir
     //To be applied, now it crashes because of objective.getPosition()
 
     return true;
+}
+
+void Move::setDirectionMove(const state::DirectionStatus& directionMove){
+    //Used for environment moves
+    this->directionMove = directionMove;
 }

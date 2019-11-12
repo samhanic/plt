@@ -8,7 +8,7 @@ Rotator::Rotator() {
 Rotator::Rotator (RotatorTypeId rotatorTypeId, int newX, int newY, int newTileCode):MapTile(ROTATOR, newX, newY, newTileCode) {
 	position.setX(newX);
 	position.setY(newY);
-	rotatorTypeId=rotatorTypeId;
+	this->rotatorTypeId=rotatorTypeId;
 	idStatic=ROTATOR;
 	bombDropped=false;
 }

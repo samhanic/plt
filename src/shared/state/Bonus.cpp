@@ -14,6 +14,7 @@ Bonus::Bonus (BonusTypeId bonusTypeId, int newX, int newY, int newTileCode) :Map
 	this ->bonusOrNot = true;
 	this ->idStatic = BONUS;
 	this->bonusTypeId= bonusTypeId;
+	bombDropped=false;
 }
 
 

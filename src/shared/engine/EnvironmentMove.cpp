@@ -29,15 +29,18 @@ bool EnvironmentMove::execute (std::shared_ptr<state::State> theState){
     MapTile *tileRobot = theState->getMap()[robot->getPosition().getY()][robot->getPosition().getX()].get();
     cout<<"Executing environments actions for tile"<<tileRobot->getIdStatic()<<"located in X="<<robot->getPosition().getX()<<"and Y="<<robot->getPosition().getY()<<endl;
     if (tileRobot->getIdStatic()==ROTATOR){
-        cout<<"A rotator will move you"<<endl;
         Rotator *tileRobotRotator = static_cast<Rotator*>(tileRobot);
+        cout<<"A rotator will move you. Its type is : "<<tileRobotRotator->getRotatorTypeId()<<endl;
         if (tileRobotRotator->getRotatorTypeId()==ROT_CLK){
             Rotation *environmentRotation = new Rotation(robotNumber,ROTATION_CLK);
             environmentRotation->executeOrder(theState);
         }
-        if (tileRobotRotator->getRotatorTypeId()==ROT_CCLK){
+        else if (tileRobotRotator->getRotatorTypeId()==ROT_CCLK){
             Rotation *environmentRotation = new Rotation(robotNumber,ROTATION_CCLK);
             environmentRotation->executeOrder(theState);
+        }
+        else{
+            cout<<"Error of rotatortypeid"<<endl;
         }
     }
 

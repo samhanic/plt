@@ -11,6 +11,7 @@ ConvBelt::ConvBelt(ConvBeltTypeId convBeltTypeId, int newX, int newY, int newTil
 	position.setX(newX);
 	position.setY(newY);
 	this->convBeltTypeId=convBeltTypeId;
+	bombDropped=false;
 }
 
 bool ConvBelt::getConvBeltSpeed(){

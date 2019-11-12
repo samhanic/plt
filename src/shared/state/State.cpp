@@ -77,20 +77,20 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
     		
 			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//create convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-				cout<<newConvBelt.getConvBeltTypeId()<<endl;
 				std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
-				cout<<"Nouveau ConvBelt :"<<mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;	
+				cout<<"Nouveau ConvBelt :"<<newConvBelt.getConvBeltTypeId()<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k] >= 27 && map_tuiles_code[k] <= 31){//create bonus
 				Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
 				std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
-				cout<<"Nouveau Bonus :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" -x : "<<i<<" -y : "<<j<<endl;	
+				cout<<"Nouveau Bonus :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k]>=32 && map_tuiles_code[k]<=33){//create rotator
 				Rotator newRotator(mapFactory.doConvertMapRotator()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
 				std::unique_ptr<Rotator> ptr(new Rotator(newRotator));
+				cout<<"Nouveau Rotator :"<<mapFactory.doConvertMapRotator()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k]>=0 && map_tuiles_code[k]<=2){//create basics

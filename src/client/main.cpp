@@ -96,11 +96,13 @@ int main(int argc,char* argv[])
 			if (myEngine.checkRobotsActions()) {
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {
+						/* Do action and check death */
 						myEngine.executeAction(i);
 						statelay.refreshPlayers(*ptrState);
-						
 						ptrState->checkEndGame();
+						statelay.refreshEffects(*ptrState, i, 0);
 						
+						/* Display */
 						statelay.draw(*ptrState, window);
 						sf::sleep(sf::seconds(0.5));
 					}

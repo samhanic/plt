@@ -20,8 +20,8 @@ bool Display::loadMap(state::State& stateLayer, sf::Texture& textureTileSet, sf:
     m_vertices.resize(width * height * 4);
 
     // on remplit le tableau de vertex, avec un quad par tuile
-    for (unsigned int i = 0; i < width; ++i) {
-        for (unsigned int j = 0; j < height; ++j) {
+    for (unsigned int i = 0 ; i < width ; ++i) {
+        for (unsigned int j = 0 ; j < height ; ++j) {
              
             // on récupère le numéro de tuile courant
             int tileNumber = stateLayer.getMap()[i][j]->getTileCode();
@@ -50,7 +50,7 @@ bool Display::loadMap(state::State& stateLayer, sf::Texture& textureTileSet, sf:
     return true;
 }
 
-bool Display::loadEffects (state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize) {
+bool Display::loadEffects (state::State& stateLayer, sf::Texture& textureTileSet, sf::Vector2u tileSize , std::vector<std::vector<int>>& myEffectTab) {
     m_tileset = textureTileSet; 
     unsigned int width = stateLayer.getMapWidth();
     unsigned int height = stateLayer.getMapHeight();
@@ -58,11 +58,11 @@ bool Display::loadEffects (state::State& stateLayer, sf::Texture& textureTileSet
     m_vertices.setPrimitiveType(sf::Quads);
     m_vertices.resize(width * height * 4);
     
-    int tileNumber;
     // on remplit le tableau de vertex, avec un quad par tuile
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
-            tileNumber = 34;
+            //cout<<"tab okkkk :"<<myEffectTab[i][j]<<endl;
+            int tileNumber = myEffectTab[i][j];
             // on récupère le numéro de tuile courant
            
             //int tileNumber = tiles[i + j * width];
@@ -109,7 +109,7 @@ bool Display::loadCommand(sf::Texture& textureTileSet, sf::Vector2u tileSize, in
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
 
-           int tileNumber = tabCommand[i + j * width];
+            int tileNumber = tabCommand[i + j * width];
 
             // find its position in the tileset texture
             int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
@@ -152,7 +152,7 @@ bool Display::loadSlot (sf::Texture& textureTileSet, sf::Vector2u tileSize, int 
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
 
-           int tileNumber = tabSlot[i + j * width];
+            int tileNumber = tabSlot[i + j * width];
 
             // find its position in the tileset texture
             int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);

@@ -37,6 +37,13 @@ void StateLayer::initSurface (state::State& stateLayer){
 
     int inTiles[] = {8, 1, 9, 0, 5, 7, 6, 0, 0, 2, 0, 0};
     int inSlot[] = {0, 0, 0, 0, 0, 0};
+
+    std::vector<int> efftTab(stateLayer.getMapHeight(), 37);
+    this->effectsTab.clear();
+    for (int i = 0; i < stateLayer.getMapWidth(); ++i) {
+        this->effectsTab.push_back(efftTab);
+    }
+
     buttonReadyToClick = 0;
     
     for (int i = 0 ; i < 12 ; i++) {
@@ -48,7 +55,7 @@ void StateLayer::initSurface (state::State& stateLayer){
 
 
     surfaceMap.loadMap(stateLayer, tilesets[0]->getTexture(), sf::Vector2u(tilesets[0]->getCellWidth(), tilesets[0]->getCellHeight()));
-    surfaceEffects.loadEffects(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()));
+    surfaceEffects.loadEffects(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()), effectsTab);
     surfacePlayers.loadPlayers(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
     surfaceCommand.loadCommand(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inTiles);
     surfaceSlot.loadSlot(tilesets[4]->getTexture(), sf::Vector2u(tilesets[4]->getCellWidth(), tilesets[4]->getCellHeight()), inSlot);
@@ -123,6 +130,34 @@ void StateLayer::refreshPlayers (state::State& stateLayer) {
 
 }
 
+void StateLayer::refreshEffects (state::State& stateLayer, int actionsInRound, int idMyClient) {
+    Display surfaceEffects;
+
+    /* Display visited cp of the client player with the good color */
+    std::vector<int> visitedCp = stateLayer.getPlayers()[idMyClient]->getVisitedCheckpoints();
+
+    for (unsigned int k = 0; k < visitedCp.size() ; k++) {
+        for (int i = 0 ; i < stateLayer.getMapWidth() ; i++) {
+            for (int j = 0 ; j < stateLayer.getMapHeight() ; j++) {
+                int isCp = stateLayer.getMap()[i][j]->getTileCode();
+                if ((isCp >= 3) && (isCp <= 7)) {
+                    this->effectsTab[i][j] = isCp + 5;
+                    cout<<"CP detected : "<<isCp<<endl;
+                }
+            }
+        }
+    }
+
+    /* Display blast or attack */
+    //stateLayer.getPlayers()[idMyClient]->getRobotActions()[actionsInRound];
+
+
+    surfaceEffects.loadEffects(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()), effectsTab);
+    std::unique_ptr<Display> ptrEffectsDisplay (new Display(surfaceEffects));
+
+    surfaces.at(1) = move(ptrEffectsDisplay);
+}
+
 void StateLayer::setCommandTab(const std::array<int,12>& commandTab) {
     this->commandTab = commandTab;
 }
@@ -137,6 +172,14 @@ void StateLayer::setSlotTab(const std::array<int,6>& slotTab) {
 
 const std::array<int,6>& StateLayer::getSlotTab() const {
      return slotTab;
+}
+
+void StateLayer::setEffectsTab(const std::vector<std::vector<int>>& effectsTab) {
+    this->effectsTab = effectsTab;
+}
+
+const std::vector<std::vector<int>>& StateLayer::getEffectsTab() const {
+     return effectsTab;
 }
 
 bool StateLayer::getButtonReadyToClick() const {

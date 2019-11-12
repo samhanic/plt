@@ -48,10 +48,10 @@ void StateLayer::initSurface (state::State& stateLayer){
 
 
     surfaceMap.loadMap(stateLayer, tilesets[0]->getTexture(), sf::Vector2u(tilesets[0]->getCellWidth(), tilesets[0]->getCellHeight()));
-    surfaceEffects.loadMap(stateLayer, tilesets[0]->getTexture(), sf::Vector2u(tilesets[0]->getCellWidth(), tilesets[0]->getCellHeight()));
+    surfaceEffects.loadEffects(stateLayer, tilesets[1]->getTexture(), sf::Vector2u(tilesets[1]->getCellWidth(), tilesets[1]->getCellHeight()));
     surfacePlayers.loadPlayers(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
     surfaceCommand.loadCommand(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inTiles);
-    surfaceSlot.loadSlot(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inSlot);
+    surfaceSlot.loadSlot(tilesets[4]->getTexture(), sf::Vector2u(tilesets[4]->getCellWidth(), tilesets[4]->getCellHeight()), inSlot);
 
 
     std::unique_ptr<Display> ptrMapDisplay (new Display(surfaceMap));
@@ -98,7 +98,7 @@ void StateLayer::refreshSlot () {
         inSlots[i] = slotTab[i];
     }
    
-    surfaceSlot.loadSlot(tilesets[3]->getTexture(), sf::Vector2u(tilesets[3]->getCellWidth(), tilesets[3]->getCellHeight()), inSlots);
+    surfaceSlot.loadSlot(tilesets[4]->getTexture(), sf::Vector2u(tilesets[4]->getCellWidth(), tilesets[4]->getCellHeight()), inSlots);
     
     std::unique_ptr<Display> ptrSlotDisplay (new Display(surfaceSlot));
 

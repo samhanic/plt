@@ -59,17 +59,13 @@ bool Display::loadEffects (state::State& stateLayer, sf::Texture& textureTileSet
     m_vertices.resize(width * height * 4);
     
     int tileNumber;
-    
     // on remplit le tableau de vertex, avec un quad par tuile
     for (unsigned int i = 0; i < width; ++i) {
         for (unsigned int j = 0; j < height; ++j) {
-            
-            tileNumber = effectsTab [i][j];
-
+            tileNumber = 34;
             // on récupère le numéro de tuile courant
-            //int tileNumber = stateLayer.getMap()[i][j]->getTileCode();
+           
             //int tileNumber = tiles[i + j * width];
-            
 
             // on en déduit sa position dans la texture du tileset
             int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);

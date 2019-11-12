@@ -102,7 +102,7 @@ int main(int argc,char* argv[])
 						ptrState->checkEndGame();
 						
 						statelay.draw(*ptrState, window);
-						sf::sleep(sf::seconds(0.3));
+						sf::sleep(sf::seconds(0.5));
 					}
 				}
 				

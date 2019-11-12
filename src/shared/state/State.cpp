@@ -270,7 +270,7 @@ bool State::isOccupied (const Position &myPosition) const {
 bool State::deathRobot (Robot& myRobot){
     //Return True if the robot is able to respawn, false if not
 	std::array<Action, 6> actionSlotTab;
-	for (int i=0 ; i++ ; i<6) {
+	for (int i=0 ; i<6 ; i++) {
 		actionSlotTab[i] = ACTION_FORBIDDEN;
 	}
 	myRobot.setRobotActions(actionSlotTab);
@@ -284,6 +284,7 @@ bool State::deathRobot (Robot& myRobot){
         cout<<"You loose one live"<<endl;
         myRobot.setLifeNumber(myRobot.getLifeNumber()-1);
         myRobot.setLifePoints(5);
+		myRobot.setOrientation(NORTH);
         Position posRespawn = robotLastVisitedCP(myRobot);
         myRobot.setPosition(posRespawn);
         return true;

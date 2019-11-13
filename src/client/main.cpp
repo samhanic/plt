@@ -32,7 +32,7 @@ int main(int argc,char* argv[])
 		system("make code-coverage");
 	} else if (entry == "render") {
 		/* Creation of a State and Window */
-		State state;
+		/*State state;
 		int width = state.getMapWidth();
     	int height = state.getMapHeight();
 		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
@@ -62,9 +62,10 @@ int main(int argc,char* argv[])
 			statelay.draw(state, window);
 			window.display();
 		}
-		return 0;
+		return 0;*/
 
 	} else if (entry== "engine") {
+		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
 		myEngine.initEngine();
@@ -80,6 +81,20 @@ int main(int argc,char* argv[])
 		/* Creates a StateLayer that will construct and display five sub-layers */
 		StateLayer statelay(*ptrState, window);
 		statelay.initSurface(*ptrState);
+
+
+		/* PROCESSING */
+		/* Render notifies Engine that a command has been sent */
+
+
+		/* Engine waits to get notifications/commands from all the players before starting the round */
+
+		
+		/* State notifies Render that a command made changes and tells which layer to refresh */
+
+
+
+
 
 		while (window.isOpen()){
 			/* Click management in loop */

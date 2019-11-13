@@ -140,7 +140,7 @@ void StateLayer::refreshEffects (state::State& stateLayer, int actionsInRound, i
         for (int i = 0 ; i < stateLayer.getMapWidth() ; i++) {
             for (int j = 0 ; j < stateLayer.getMapHeight() ; j++) {
                 int isCp = stateLayer.getMap()[i][j]->getTileCode();
-                if ((isCp >= 3) && (isCp <= 7)) {
+                if ((isCp >= 3) && (isCp <= 7) && (isCp-2) == visitedCp[k]) {
                     this->effectsTab[i][j] = isCp + 5;
                     cout<<"CP detected : "<<isCp<<endl;
                 }
@@ -387,6 +387,10 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                     }
                     ptrRobot->setRobotActions(actionSlotTab);
                     cout<<"commandes envoyées"<<endl;
+                    
+                    /* Let's send a notification */
+                    StateEvent stateEvent(ALL_CHANGED);
+                    state.notifyObservers(stateEvent, state);
                 }                
             }
 

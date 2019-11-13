@@ -9,7 +9,7 @@ using namespace render;
 using namespace state;
 
 
-void Observator::registerObservator (IObservator* observator){
+void Observator::registerObservator (Observator* observator){
 	observers.push_back(observator);
 }
 
@@ -17,6 +17,6 @@ void Observator::notifyObservators (state::Robot& myRobot, bool rollback){
 	
 	for(auto observer : observers){
 		
-		observer->actionsChanged(myRobot,rollback);
+		//observer->actionsChanged(myRobot,rollback);
 	}
 }

@@ -9,20 +9,81 @@ using namespace render;
 
 BOOST_AUTO_TEST_CASE(TestEngine) {
     Engine engine;
-    engine.initEngine();
+    engine.initEngine("justIfEnableReadFile");
+    engine.initEngine("../../../res/map.txt");
     engine.checkRobotsActions();
     const std::shared_ptr<state::State> ptrState = engine.getMyState();
     unsigned int width = ptrState->getMapWidth();
    	unsigned int height = ptrState->getMapHeight();
 
+    //First round
     std::array<Action,6> robactions;
     robactions[0]=FORWARD;
     robactions[1]=BACKWARD;
     robactions[2]=ROTATION_CCLK;
-    robactions[3]=ROTATION_CLK;
-    robactions[4]=ACTION_FORBIDDEN;
-    robactions[5]=NO_ACTION;
+    robactions[3]=ROTATION_CCLK;
+    robactions[4]=ROTATION_CCLK;
+    robactions[5]=ROTATION_CCLK;
     ptrState->getPlayers()[0]->setRobotActions(robactions);
-    //engine.executeAction(0);
-    //engine.checkHole();
+    for (int i=0; i<6; i++) {
+        engine.executeAction(i);
+        ptrState->checkEndGame();
+    }
+    engine.endOfRound();    
+
+    //Second one
+    robactions[0]=FORWARD;
+    robactions[1]=ROTATION_CLK;
+    robactions[2]=ROTATION_CLK;
+    robactions[3]=ROTATION_CLK;
+    robactions[4]=ROTATION_CLK;
+    robactions[5]=FORWARD;
+    ptrState->getPlayers()[0]->setRobotActions(robactions);
+    for (int i=0; i<6; i++) {
+        engine.executeAction(i);
+        ptrState->checkEndGame();
+    }
+    engine.endOfRound();  
+
+    //Third one : Going to the bonus
+    robactions[0]=FORWARD;
+    robactions[1]=ROTATION_CLK;
+    robactions[2]=ROTATION_CLK;
+    robactions[3]=ROTATION_CLK;
+    robactions[4]=ROTATION_CLK;
+    robactions[5]=ROTATION_CLK;
+    ptrState->getPlayers()[0]->setRobotActions(robactions);
+    for (int i=0; i<6; i++) {
+        engine.executeAction(i);
+        ptrState->checkEndGame();
+    }
+    engine.endOfRound();
+
+    //Fourth one : Grabbing the bonus, 
+    robactions[0]=BACKWARD;
+    robactions[1]=BACKWARD;
+    robactions[2]=BACKWARD;
+    robactions[3]=ROTATION_CCLK;
+    robactions[4]=FORWARD;
+    robactions[5]=ROTATION_CLK;
+    ptrState->getPlayers()[0]->setRobotActions(robactions);
+    for (int i=0; i<6; i++) {
+        engine.executeAction(i);
+        ptrState->checkEndGame();
+    }
+    engine.endOfRound();
+
+    //Fifth one : verify out of bound and 
+    robactions[0]=BACKWARD;
+    robactions[1]=FORWARD;
+    robactions[2]=ROTATION_CCLK;
+    robactions[3]=FORWARD;
+    robactions[4]=ROTATION_CCLK;
+    robactions[5]=BACKWARD;
+    ptrState->getPlayers()[0]->setRobotActions(robactions);
+    for (int i=0; i<6; i++) {
+        engine.executeAction(i);
+        ptrState->checkEndGame();
+    }
+    engine.endOfRound();
 }

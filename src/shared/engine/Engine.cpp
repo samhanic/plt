@@ -15,11 +15,11 @@ Engine::Engine() {
 
 }
 
-bool Engine::initEngine (){
+bool Engine::initEngine (std::string mapFileLocation){
     /* Creates a State and init map with MapFactory */
     State *state = new State();
     MapFactory mapFactory;
-	state->initMap("../res/map.txt", mapFactory);
+	state->initMap(mapFileLocation, mapFactory);
 	std::shared_ptr<State> ptrState(state);
     this->myState = ptrState;
     

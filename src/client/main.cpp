@@ -69,7 +69,6 @@ int main(int argc,char* argv[])
 		/* Creates Engine that creates State */
 		Engine myEngine;
 		myEngine.initEngine();
-		myEngine.executeAction(0);
 		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
 		/* Displays a sf::Window with the correct size and frame rate */

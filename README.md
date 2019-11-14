@@ -1,8 +1,8 @@
-[![License](https://img.shields.io/badge/license-CC0-blue.svg)](https://github.com/samhanic/plt/master/LICENSE.txt)
+[![License](res/license-CC0-blue.svg)](https://github.com/samhanic/plt/master/LICENSE.txt)
 
 # Projet IS : "RobotIS"
 
-Principalement inspiré du jeu en ligne multijoueurs [Robostrike](http://www.robostrike.com/)(2001) lui même imaginé à partir du jeu de société [RoboRally](https://fr.wikipedia.org/wiki/RoboRally/)(1994), RobotIS permet d'alier action et stratégie.
+Principalement inspiré du jeu en ligne multijoueurs [Robostrike](http://www.robostrike.com/) (2001) lui même imaginé à partir du jeu de société [RoboRally](https://fr.wikipedia.org/wiki/RoboRally/) (1994), RobotIS permet d'alier action et stratégie.
 
 ## Règles du jeu
 
@@ -23,7 +23,7 @@ Chaque joueur commence la partie avec cinq points de vie et toute attaque entra�
 Les joueurs obtiennent des bonus tels que des soins, des pièges ou des améliorations d’attaque en passant sur des cases bonus.
 
 
-## Instalation
+## Installation
 
 ### Linux
 
@@ -39,7 +39,8 @@ Procédure d'exécution :
 ```
 ../bin/client <argument>
 ```
-Les arguments sont : hello, state, render, ...
+Les arguments sont : hello, state, render, engine
+Le plus récent (et donc celui à utiliser au stade actuel) est engine.
 
 ### Windows
 

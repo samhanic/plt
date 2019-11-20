@@ -18,14 +18,18 @@ RandomAI::RandomAI(int nbRobot){
     this->nbRobot=nbRobot;
 }
 
-void RandomAI::run(engine::Engine& engine){
+bool RandomAI::run(engine::Engine& engine){
     // L'IA effectue ces actions uniquement si c'est son tour
-    //if(engine.getActiveRobot()==nbRobot){
-        /*Action random entre tourner et avancer*/
-        cout<<"Random action will be drawed"<<endl;
+    if(engine.getActiveRobot()==nbRobot){
+        /*Verify that the robot is still alive*/
+        if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
+        if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;
+
+        cout<<"Choosing 6 actions randomly to run"<<endl;
         std::array<Action, 6> actions;
         int randomNumber;
-        for (int i=0 ; i<6 ; ++i){
+        for (int i=0;i<6;++i){
+            /*Action random entre tourner et avancer*/
             randomNumber=std::experimental::randint(0,3);
             if(randomNumber==0){
                 actions[i]=FORWARD;
@@ -39,7 +43,13 @@ void RandomAI::run(engine::Engine& engine){
             else if (randomNumber==3){
                 actions[i]=ROTATION_CLK;
             }
+            else {
+                cout <<"Problems choosing action"<<endl;
+            }
         }
-        engine.getMyState()->getPlayers()[1]->setRobotActions(actions);
-    //}
+        engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);
+        return true;
+    }
+
+    else return false;
 }

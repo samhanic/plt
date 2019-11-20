@@ -6,6 +6,6 @@ src/*/*.h
 src/*/*/*.h
 .idea
 
-src/shared/engine/.vscode/
+.vscode/
 
 src/extern/dia2code/CMakeFiles/dia2code.dir/src/

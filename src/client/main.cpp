@@ -29,9 +29,11 @@ int main(int argc,char* argv[])
 	string entry = argv[1];
 	if (entry == "hello") {
 		cout << "Hello world" << endl;
-	} else if (entry == "state") {
+	}
+	else if (entry == "state") {
 		system("make code-coverage");
-	} else if (entry == "render") {
+	}
+	else if (entry == "render") {
 		/* Creation of a State and Window */
 		/*State state;
 		int width = state.getMapWidth();
@@ -65,7 +67,8 @@ int main(int argc,char* argv[])
 		}
 		return 0;*/
 
-	} else if (entry== "engine") {
+	}
+	else if (entry== "engine") {
 		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
@@ -128,7 +131,45 @@ int main(int argc,char* argv[])
 			}
 		} 	
 		return 0;
-	} else {
+	}
+
+	else if(entry== "AI"){
+		/* INITIALIZATION */
+		/* Creates Engine that creates State */
+		Engine myEngine;
+		myEngine.initEngine(MAP_FILE);
+		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
+
+		/* Displays a sf::Window with the correct size and frame rate */
+		unsigned int width = ptrState->getMapWidth();
+   		unsigned int height = ptrState->getMapHeight();
+		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
+		window.setFramerateLimit(25);
+
+		/* Creates a StateLayer that will construct and display five sub-layers */
+		StateLayer statelay(*ptrState, window);
+		statelay.initSurface(*ptrState);
+
+		ai::RandomAI aiRobot(0);
+		for (int i=0;i<2;i++){
+			cout<<"The AI will be drawed"<<endl;
+			aiRobot.run(myEngine);
+			for (int i = 0 ; i < 6 ; i++) {
+					if (!ptrState->getEndGame()) {
+						/* Do action and check death */
+						myEngine.executeAction(i);
+						statelay.refreshPlayers(*ptrState);
+						ptrState->checkEndGame();
+						statelay.refreshEffects(*ptrState, i, 0);
+						
+						/* Display */
+						statelay.draw(*ptrState, window);
+						sf::sleep(sf::seconds(0.5));
+					}
+				}
+		}
+	}
+	else {
 		cout << "Fonction doesn't exist" << endl;
 	}
 	return 0;

@@ -39,8 +39,9 @@ Procédure d'exécution :
 ```
 ../bin/client <argument>
 ```
-Les arguments sont : hello, state, render, engine
-Le plus récent (et donc celui à utiliser au stade actuel) est engine.
+Les arguments sont : hello, state, render, engine, AI
+Pour jouer (en solo) : utiliser l'argument "engine".
+Pour observer un robot jouer tout seul : utiliser l'argument "AI".
 
 ### Windows
 

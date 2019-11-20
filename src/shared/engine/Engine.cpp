@@ -43,7 +43,7 @@ const std::shared_ptr<state::State>& Engine::getMyState() const{
 
 void Engine::executeAction(int actionNumber) {
     // ADD Robot SELECTOR
-
+    activeRobot=0;
 
     Action processedAction = myState->getPlayers()[0]->getRobotActions()[actionNumber];
 
@@ -60,7 +60,7 @@ void Engine::executeAction(int actionNumber) {
         //myState->getPlayers()[0]->setIsBoosted(1); // A CHANGER
     }
     else{
-        cout<<"This action is not yet implemented"<<endl;
+        cout<<"This action ("<<processedAction<<") is not yet implemented"<<endl;
     }
 
     /* Checks if in hole or passed a checkpoint */
@@ -117,4 +117,8 @@ void Engine::checkCheckPoint () {
         //     myState->getPlayers()[0]->setVisitedCheckpoints(visitedCp);
         // }
     }
+}
+
+int Engine::getActiveRobot() const{
+    return activeRobot;
 }

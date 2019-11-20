@@ -11,6 +11,7 @@
 #include "../../src/shared/state.h"
 #include "../../src/client/render.h"
 #include "../../src/shared/engine.h"
+#include "../../src/shared/ai.h"
 
 #define MAP_FILE "../res/map.txt"
 
@@ -68,7 +69,7 @@ int main(int argc,char* argv[])
 		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
-		myEngine.initEngine("../res/map.txt");
+		myEngine.initEngine(MAP_FILE);
 		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
 		/* Displays a sf::Window with the correct size and frame rate */

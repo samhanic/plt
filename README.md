@@ -1,4 +1,4 @@
-[![License](res/license-CC0-blue.svg)](https://github.com/samhanic/plt/master/LICENSE.txt)
+[![License](res/license-CC0-blue.svg)](LICENSE.txt)
 
 # Projet IS : "RobotIS"
 

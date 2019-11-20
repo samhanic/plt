@@ -39,7 +39,7 @@ Procédure d'exécution :
 ```
 ../bin/client <argument>
 ```
-Les arguments sont : hello, state, render, engine, AI
+Les arguments sont : hello, state, render, engine, random_ai
 Pour jouer (en solo) : utiliser l'argument "engine".
 Pour observer un robot jouer tout seul : utiliser l'argument "AI".
 

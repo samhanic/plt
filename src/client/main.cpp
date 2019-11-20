@@ -133,8 +133,7 @@ int main(int argc,char* argv[])
 		return 0;
 	}
 
-	else if(entry== "AI"){
-		
+	else if(entry== "random_ai"){		
 		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
@@ -150,7 +149,9 @@ int main(int argc,char* argv[])
 		/* Creates a StateLayer that will construct and display five sub-layers */
 		StateLayer statelay(*ptrState, window);
 		statelay.initSurface(*ptrState);
-
+		
+		/* IA will be the second Robot */
+		ai::RandomAI aiRobot(1);
 		ptrState->initRobot(ORANGE);
 
 		while (window.isOpen()){
@@ -166,14 +167,10 @@ int main(int argc,char* argv[])
 
 			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
-				ai::RandomAI aiRobot(1);
 				aiRobot.run(myEngine);
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {
 						/* Do action and check death */
-						cout<<"action robot 1 : "<<ptrState->getPlayers()[0]->getRobotActions()[i] <<endl;
-						cout<<"action robot 2 : "<<ptrState->getPlayers()[1]->getRobotActions()[i] <<endl;
-
 						myEngine.executeAction(i);
 						statelay.refreshPlayers(*ptrState);
 						ptrState->checkEndGame();

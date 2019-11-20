@@ -20,12 +20,12 @@ RandomAI::RandomAI(int nbRobot){
 
 void RandomAI::run(engine::Engine& engine){
     // L'IA effectue ces actions uniquement si c'est son tour
-    if(engine.getActiveRobot()==nbRobot){
+    //if(engine.getActiveRobot()==nbRobot){
         /*Action random entre tourner et avancer*/
         cout<<"Random action will be drawed"<<endl;
         std::array<Action, 6> actions;
         int randomNumber;
-        for (int i=0;i<6;++i){
+        for (int i=0 ; i<6 ; ++i){
             randomNumber=std::experimental::randint(0,3);
             if(randomNumber==0){
                 actions[i]=FORWARD;
@@ -36,11 +36,10 @@ void RandomAI::run(engine::Engine& engine){
             else if (randomNumber==2){
                 actions[i]=ROTATION_CCLK;
             }
-            else if (randomNumber=3){
+            else if (randomNumber==3){
                 actions[i]=ROTATION_CLK;
             }
         }
-        engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);
-
-    }
+        engine.getMyState()->getPlayers()[1]->setRobotActions(actions);
+    //}
 }

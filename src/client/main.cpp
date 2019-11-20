@@ -134,6 +134,7 @@ int main(int argc,char* argv[])
 	}
 
 	else if(entry== "AI"){
+		
 		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
@@ -150,13 +151,29 @@ int main(int argc,char* argv[])
 		StateLayer statelay(*ptrState, window);
 		statelay.initSurface(*ptrState);
 
-		ai::RandomAI aiRobot(0);
-		for (int i=0;i<2;i++){
-			cout<<"The AI will be drawed"<<endl;
-			aiRobot.run(myEngine);
-			for (int i = 0 ; i < 6 ; i++) {
+		ptrState->initRobot(ORANGE);
+
+		while (window.isOpen()){
+			/* Click management in loop */
+			sf::Event event;
+			while (window.pollEvent(event)){
+				if (event.type == sf::Event::Closed)
+					window.close();
+				statelay.clickManager(*ptrState, event);
+			}
+			window.clear();
+			statelay.draw(*ptrState, window);
+
+			/* Actions processed when all players have selected their actions */
+			if (myEngine.checkRobotsActions()) {
+				ai::RandomAI aiRobot(1);
+				aiRobot.run(myEngine);
+				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {
 						/* Do action and check death */
+						cout<<"action robot 1 : "<<ptrState->getPlayers()[0]->getRobotActions()[i] <<endl;
+						cout<<"action robot 2 : "<<ptrState->getPlayers()[1]->getRobotActions()[i] <<endl;
+
 						myEngine.executeAction(i);
 						statelay.refreshPlayers(*ptrState);
 						ptrState->checkEndGame();
@@ -167,7 +184,12 @@ int main(int argc,char* argv[])
 						sf::sleep(sf::seconds(0.5));
 					}
 				}
-		}
+				
+				myEngine.endOfRound();
+				statelay.initSurface(*ptrState);
+			}
+		} 	
+		return 0;
 	}
 	else {
 		cout << "Fonction doesn't exist" << endl;

@@ -43,34 +43,36 @@ const std::shared_ptr<state::State>& Engine::getMyState() const{
 
 void Engine::executeAction(int actionNumber) {
     // ADD Robot SELECTOR
-    activeRobot=0;
+    //activeRobot=0;
+    for(unsigned int i = 0 ; i <= 1 ; i++) {
+        //int i = 0;
+        Action processedAction = myState->getPlayers()[i]->getRobotActions()[actionNumber];
 
-    Action processedAction = myState->getPlayers()[0]->getRobotActions()[actionNumber];
-
-    if ((processedAction == ROTATION_CLK) || (processedAction == ROTATION_CCLK)) {
-        Rotation myRotation(myState->getPlayers()[0]->getRobotId(), processedAction);
-        myRotation.executeOrder(myState);
+        if ((processedAction == ROTATION_CLK) || (processedAction == ROTATION_CCLK)) {
+            Rotation myRotation(myState->getPlayers()[i]->getRobotId(), processedAction);
+            myRotation.executeOrder(myState);
+        }
+        else if((processedAction == FORWARD) || (processedAction == BACKWARD)
+        || (processedAction == LEFT) || (processedAction == RIGHT)) {
+            Move myMove(myState->getPlayers()[i]->getRobotId(), processedAction);
+            myMove.executeOrder(myState);
+        } 
+        else if (processedAction == BOOSTER) {
+            //myState->getPlayers()[0]->setIsBoosted(1); // A CHANGER
+        }
+        else{
+            cout<<"This action ("<<processedAction<<") is not yet implemented"<<endl;
+        }
+        /* Checks if in hole or passed a checkpoint */
+        checkHole();
+        checkCheckPoint ();
+        //Actions of the game on the robot
+        EnvironmentMove *environment = new EnvironmentMove(0);
+        environment->grabEMType(myState);
+        environment->execute(myState);
+        cout<<"action : "<<myState->getPlayers()[i]->getRobotActions()[actionNumber]<< "du robot : "<<i<<endl;
     }
-    else if((processedAction == FORWARD) || (processedAction == BACKWARD)
-    || (processedAction == LEFT) || (processedAction == RIGHT)) {
-        Move myMove(myState->getPlayers()[0]->getRobotId(), processedAction);
-        myMove.executeOrder(myState);
-    } 
-    else if (processedAction == BOOSTER) {
-        //myState->getPlayers()[0]->setIsBoosted(1); // A CHANGER
-    }
-    else{
-        cout<<"This action ("<<processedAction<<") is not yet implemented"<<endl;
-    }
-
-    /* Checks if in hole or passed a checkpoint */
-    checkHole();
-    checkCheckPoint ();
-    //Actions of the game on the robot
-    EnvironmentMove *environment = new EnvironmentMove(0);
-    environment->grabEMType(myState);
-    environment->execute(myState);
-    //To be uncommented
+ 
 }
 
 /* Returns 1 if all actions are filled by players */

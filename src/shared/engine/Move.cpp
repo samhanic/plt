@@ -7,16 +7,17 @@ using namespace state;
 using namespace std;
 
 Move::Move (int robotNumber, state::Action givenAction){
-    robotNumber = robotNumber;
-    robotAction = givenAction;
+    this->robotNumber = robotNumber;
+    this->robotAction = givenAction;
     this->directionMove = NONE;
 }
 
 bool Move::executeOrder (std::shared_ptr<state::State> theState){
     cout<<"move order executing :"<<robotAction<<endl;
-    Position pos = theState->getPlayers()[0]->getPosition();
+    cout<<"ROBOTNUMBER :"<<robotNumber<<endl;
+    Position pos = theState->getPlayers()[robotNumber]->getPosition();
     if (directionMove==NONE){
-        directionMove = theState->getPlayers()[0]->getOrientation();
+        directionMove = theState->getPlayers()[robotNumber]->getOrientation();
     }
     
     int moveVector;
@@ -32,28 +33,28 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
     if (directionMove==NORTH) {
         pos.setY(pos.getY()-moveVector);
         if (verifyPosition(theState,pos)){
-            theState->getPlayers()[0]->setPosition(pos);
+            theState->getPlayers()[robotNumber]->setPosition(pos);
         }
         else return false;
     }
     else if (directionMove==EAST){
         pos.setX(pos.getX()+moveVector);
         if (verifyPosition(theState,pos)){
-            theState->getPlayers()[0]->setPosition(pos);
+            theState->getPlayers()[robotNumber]->setPosition(pos);
         }
         else return false;
     }
     else if (directionMove==SOUTH){
         pos.setY(pos.getY()+moveVector);
         if (verifyPosition(theState,pos)){
-            theState->getPlayers()[0]->setPosition(pos);
+            theState->getPlayers()[robotNumber]->setPosition(pos);
         }
         else return false;
     }
     else if (directionMove==WEST){
         pos.setX(pos.getX()-moveVector);
         if (verifyPosition(theState,pos)){
-            theState->getPlayers()[0]->setPosition(pos);
+            theState->getPlayers()[robotNumber]->setPosition(pos);
         }
         else return false;
     }
@@ -66,7 +67,7 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
         cout<<"You arrived in a basic tile : "<<objective->getBasicTypeId()<<endl;
         if (objective->getBasicTypeId()==BASIC_HOLE){
             cout<<"You arrived in a hole!"<<endl;
-            theState->deathRobot(*(theState->getPlayers()[0]));
+            theState->deathRobot(*(theState->getPlayers()[robotNumber]));
         }
     } 
 
@@ -74,11 +75,11 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
     if (tile->getIdStatic() == BONUS){
         Bonus *objective = static_cast<Bonus*>(tile);
         if (objective->getRespawnTime() == 0){
-            std::array<bool,5> bonusOwned = theState->getPlayers()[0]->getBonusOwned();
+            std::array<bool,5> bonusOwned = theState->getPlayers()[robotNumber]->getBonusOwned();
             if (bonusOwned[objective->getBonusTypeId()]==false){
                 cout<<"Picking bonus"<<objective->getBonusTypeId()<<endl;
                 bonusOwned[objective->getBonusTypeId()]=true;
-                theState->getPlayers()[0]->setBonusOwned(bonusOwned);
+                theState->getPlayers()[robotNumber]->setBonusOwned(bonusOwned);
                 objective->setRespawnTime(1);
             }
             else{

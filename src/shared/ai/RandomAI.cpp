@@ -7,7 +7,6 @@
 #include <sstream>
 #include <memory>
 #include <vector>
-#include <experimental/random>
 
 using namespace ai;
 using namespace engine;
@@ -28,7 +27,7 @@ bool RandomAI::run(engine::Engine& engine){
     int randomNumber;
     for (int i=0;i<6;++i){
         /*Action random entre tourner et avancer*/
-        randomNumber=std::experimental::randint(0,3);
+        randomNumber=rand()%4;
         if(randomNumber==0){
             actions[i]=FORWARD;
         }

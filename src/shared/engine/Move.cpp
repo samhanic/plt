@@ -22,10 +22,25 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
     
     int moveVector;
     if (robotAction == 1) {//move forward
-        moveVector = 1;
+        moveVector = 1+theState->getPlayers()[robotNumber]->getIsBoosted();
+        theState->getPlayers()[robotNumber]->setIsBoosted(0);
     }
     else if (robotAction == 2) {//move backward
-        moveVector =- 1;
+        moveVector = -1-theState->getPlayers()[robotNumber]->getIsBoosted();
+        theState->getPlayers()[robotNumber]->setIsBoosted(0);
+    }
+    else if ((robotAction == 3)/*boosted move left*/ ||(robotAction == 4) /*boosted move right*/){
+        /*determines position*/
+        if (directionMove==NORTH) directionMove = WEST;
+        else if (directionMove==WEST) directionMove = SOUTH;
+        else if (directionMove==SOUTH) directionMove =EAST;
+        else if (directionMove==EAST) directionMove =NORTH;
+        else cout<<"Error of boosted move"<<endl;
+        /*Move*/
+        if (robotAction==3) moveVector = 1+theState->getPlayers()[robotNumber]->getIsBoosted();
+        else moveVector = -1-theState->getPlayers()[robotNumber]->getIsBoosted();
+        /*Reset the boost*/
+        theState->getPlayers()[robotNumber]->setIsBoosted(0);
     }
     if (directionMove==NONE){
         return false;
@@ -59,9 +74,8 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
         else return false;
     }
 
-    MapTile *tile = theState->getMap()[pos.getY()][pos.getX()].get();
-    //cout<<"X  ="<<pos.getX()<< "and Y ="<<pos.getY()<<endl;
     //If the tile is a hole, make the robot fall into.
+    MapTile *tile = theState->getMap()[pos.getY()][pos.getX()].get();
     if (tile->getIdStatic() == BASIC){
         Basic *objective = static_cast<Basic*>(tile);
         cout<<"You arrived in a basic tile : "<<objective->getBasicTypeId()<<endl;

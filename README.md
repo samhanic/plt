@@ -27,21 +27,22 @@ Les joueurs obtiennent des bonus tels que des soins, des pièges ou des amélior
 
 ### Linux
 
-Procédure de compilation :
+Procédure de compilation  :
 
 ```
 cd plt/build
 cmake -DBUILD_CODE_COVERAGE=OFF ..
-make
+make -j5
 ```
 Procédure d'exécution :
 
 ```
 ../bin/client <argument>
 ```
-Les arguments sont : hello, state, render, engine, random_ai
+Les arguments sont : hello, state, render, engine, random_ai, AI
 Pour jouer (en solo) : utiliser l'argument "engine".
 Pour observer un robot jouer tout seul : utiliser l'argument "AI".
+Pour jouer contre une IA : utiliser l'argument "random_ai".
 
 ### Windows
 

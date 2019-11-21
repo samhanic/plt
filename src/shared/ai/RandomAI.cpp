@@ -19,37 +19,49 @@ RandomAI::RandomAI(int nbRobot){
 }
 
 bool RandomAI::run(engine::Engine& engine){
-    // L'IA effectue ces actions uniquement si c'est son tour
-    if(engine.getActiveRobot()==nbRobot){
-        /*Verify that the robot is still alive*/
-        if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
-        if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;
+    /*Verify that the robot is still alive*/
+    if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
+    if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;
 
-        cout<<"Choosing 6 actions randomly to run"<<endl;
-        std::array<Action, 6> actions;
-        int randomNumber;
-        for (int i=0;i<6;++i){
-            /*Action random entre tourner et avancer*/
-            randomNumber=std::experimental::randint(0,3);
-            if(randomNumber==0){
-                actions[i]=FORWARD;
-            }
-            else if (randomNumber==1){
-                actions[i]=BACKWARD;
-            }
-            else if (randomNumber==2){
-                actions[i]=ROTATION_CCLK;
-            }
-            else if (randomNumber==3){
-                actions[i]=ROTATION_CLK;
-            }
-            else {
-                cout <<"Problems choosing action"<<endl;
-            }
+    cout<<"Choosing 6 actions randomly to run"<<endl;
+    std::array<Action, 6> actions;
+    int randomNumber;
+    for (int i=0;i<6;++i){
+        /*Action random entre tourner et avancer*/
+        randomNumber=std::experimental::randint(0,3);
+        if(randomNumber==0){
+            actions[i]=FORWARD;
         }
-        engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);
-        return true;
+        else if (randomNumber==1){
+            actions[i]=BACKWARD;
+        }
+        else if (randomNumber==2){
+            actions[i]=ROTATION_CCLK;
+        }
+        else if (randomNumber==3){
+            actions[i]=ROTATION_CLK;
+        }
+        else {
+            cout <<"Problems choosing action"<<endl;
+        }
     }
-
-    else return false;
+    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);    
 }
+
+/*To be implemented
+        if (engine.getMyState()->getPlayers()[nbRobot]->getIsBoosted()==0){ //The robot isn't boosted
+            if(randomNumber==0) actions[i]=FORWARD;
+            else if (randomNumber==1) actions[i]=BACKWARD;
+            else if (randomNumber==2) actions[i]=ROTATION_CCLK;
+            else if (randomNumber==3) actions[i]=ROTATION_CLK;
+            else if (randomNumber==4) actions[i]=BOOSTER;
+            else cout <<"Problems choosing action"<<endl;
+        }
+        else{
+            if(randomNumber==0) actions[i]=FORWARD;
+            else if (randomNumber==1) actions[i]=BACKWARD;
+            else if(randomNumber==2) actions[i]=LEFT;
+            else if (randomNumber==3) actions[i]=RIGHT;
+            else if (randomNumber==4) actions[i]=BOOSTER;
+            else cout <<"Problems choosing action"<<endl;
+            */

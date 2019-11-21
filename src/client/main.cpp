@@ -133,6 +133,43 @@ int main(int argc,char* argv[])
 		return 0;
 	}
 
+	else if(entry== "AI"){/*Mode featuring a single IA playing (for debug)*/
+		/* INITIALIZATION */
+		/* Creates Engine that creates State */
+		Engine myEngine;
+		myEngine.initEngine(MAP_FILE);
+		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
+
+		/* Displays a sf::Window with the correct size and frame rate */
+		unsigned int width = ptrState->getMapWidth();
+   		unsigned int height = ptrState->getMapHeight();
+		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
+		window.setFramerateLimit(25);
+
+		/* Creates a StateLayer that will construct and display five sub-layers */
+		StateLayer statelay(*ptrState, window);
+		statelay.initSurface(*ptrState);
+
+		ai::RandomAI aiRobot(0);
+		for (int i=0;i<2;i++){
+			cout<<"The AI will be drawed"<<endl;
+			aiRobot.run(myEngine);
+			for (int i = 0 ; i < 6 ; i++) {
+					if (!ptrState->getEndGame()) {
+						/* Do action and check death */
+						myEngine.executeAction(i);
+						statelay.refreshPlayers(*ptrState);
+						ptrState->checkEndGame();
+						statelay.refreshEffects(*ptrState, i, 0);
+						
+						/* Display */
+						statelay.draw(*ptrState, window);
+						sf::sleep(sf::seconds(0.5));
+					}
+				}
+		}
+	}
+	
 	else if(entry== "random_ai"){		
 		/* INITIALIZATION */
 		/* Creates Engine that creates State */

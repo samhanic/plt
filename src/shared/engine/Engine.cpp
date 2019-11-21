@@ -58,7 +58,8 @@ void Engine::executeAction(int actionNumber) {
             myMove.executeOrder(myState);
         } 
         else if (processedAction == BOOSTER) {
-            //myState->getPlayers()[0]->setIsBoosted(1); // A CHANGER
+            Boost myBoost (myState->getPlayers()[i]->getRobotId());
+            myBoost.executeOrder(myState);
         }
         else{
             cout<<"This action ("<<processedAction<<") is not yet implemented"<<endl;

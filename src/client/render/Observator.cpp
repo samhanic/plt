@@ -2,21 +2,25 @@
 #include "../../shared/state.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <string>
 #include <iostream>
+#include <fstream>
+#include <memory>
+#include <sstream>
 
 using namespace std;
 using namespace render;
 using namespace state;
 
 
-void Observator::registerObservator (Observator* observator){
-	observers.push_back(observator);
+void Observator::registerObservator (Observator* observer){
+	observers.push_back(observer);
 }
 
-void Observator::notifyObservators (state::Robot& myRobot, bool rollback){
+void Observator::notifyObservators (int robotId, bool rollback){
 	
-	for(auto observer : observers){
-		
-		//observer->actionsChanged(myRobot,rollback);
+	for(auto observer : observers){		
+		observer->notifyObservators(robotId, rollback);
+		cout<<"Engine notified"<<endl;
 	}
 }

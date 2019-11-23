@@ -265,6 +265,19 @@ void StateLayer::writeButton (sf::RenderWindow& window) {
     window.draw(text);
 }
 
+void StateLayer::eventManager (const std::shared_ptr<state::State> ptrMyState, sf::RenderWindow& myWindow, StateLayer& myStateLayer) {
+    /* Click management in loop */
+	sf::Event event;
+	while (myWindow.pollEvent(event)){
+		if (event.type == sf::Event::Closed)
+			window.close();
+		myStateLayer.clickManager(*ptrMyState, event);
+	}
+	window.clear();
+	myStateLayer.draw(*ptrMyState, myWindow);
+}
+
+
 void StateLayer::clickManager (state::State& state, sf::Event& event) {
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
@@ -388,7 +401,11 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                     ptrRobot->setRobotActions(actionSlotTab);
                     cout<<"commandes envoyées"<<endl;
                     
-                    /* Let's send a notification */
+                    /* Player has choosen his actions, it sends a notification to Engine */
+                    notifyObservators(0, 1);
+
+
+
                     StateEvent stateEvent(ALL_CHANGED);
                     state.notifyObservers(stateEvent, state);
                 }                

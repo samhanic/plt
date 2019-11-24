@@ -1,5 +1,6 @@
 #include "../render.h"
 #include "../../shared/state.h"
+#include "../../shared/engine.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <string>
@@ -11,6 +12,7 @@
 using namespace std;
 using namespace render;
 using namespace state;
+using namespace engine;
 
 
 void Observator::registerObservator (Observator* observer){
@@ -20,6 +22,7 @@ void Observator::registerObservator (Observator* observer){
 void Observator::notifyObservators (int robotId, bool rollback){
 	
 	for(auto observer : observers){		
+		//observer->clickOnValidate(robotId, rollback);
 		observer->notifyObservators(robotId, rollback);
 		cout<<"Engine notified"<<endl;
 	}

@@ -147,6 +147,10 @@ int main(int argc,char* argv[])
 		/* Prepares Observator to notifiy Engine if a player clicks on validate button */
 		Observator renderObservator;
 		statelay.registerObservator(&renderObservator);
+
+		Observable stateObservator;
+		
+
 		
 		/* IA will be the second Robot */
 		ai::RandomAI aiRobot(1);
@@ -157,10 +161,10 @@ int main(int argc,char* argv[])
 		while (window.isOpen()){
 			statelay.eventManager(ptrState, window, statelay);
 
-
 			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
 				aiRobot.run(myEngine);
+
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {
 						/* Do action and check death */
@@ -179,6 +183,7 @@ int main(int argc,char* argv[])
 
 				statelay.initSurface(*ptrState);
 				statelay.refreshEffects(*ptrState, 0, 0);
+				statelay.draw(*ptrState, window);
 			}
 		} 	
 		return 0;

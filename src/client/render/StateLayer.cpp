@@ -10,10 +10,13 @@
 #include <SFML/Window.hpp>
 #include <array> 
 #include "../../shared/state.h"
+#include "../../shared/engine.h"
 
 using namespace std;
 using namespace render;
 using namespace state;
+using namespace engine;
+
 
 StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(window){
     std::unique_ptr<TileSet> ptrMapTileSet(new TileSet(MAP_TILESET));

@@ -1,5 +1,6 @@
 #include "../engine.h"
 #include "../state.h"
+#include "../client/render.h"
 
 #include <iostream>
 #include <fstream>
@@ -8,6 +9,7 @@
 #include <vector>
 
 using namespace engine;
+using namespace render;
 using namespace state;
 using namespace std;
 
@@ -29,6 +31,10 @@ bool Engine::initEngine (std::string mapFileLocation){
     myState->getPlayers()[0]->setRobotActions(initActionsRobot);
 
     return true;
+}
+
+void Engine::clickOnValidate (int robotId, bool rollback) {
+
 }
 
 /* Empties actions of the Robot at the end of the round */

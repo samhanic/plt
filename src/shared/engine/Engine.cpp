@@ -67,6 +67,11 @@ void Engine::executeAction(int actionNumber) {
             Boost myBoost (myState->getPlayers()[i]->getRobotId());
             myBoost.executeOrder(myState);
         }
+        else if (processedAction == ATTACK){
+            Attack myAttack (myState->getPlayers()[i]->getRobotId());
+            cout<<"Attacking robot"<<endl;
+            myAttack.executeOrder(myState);
+        }
         else{
             cout<<"This action ("<<processedAction<<") is not yet implemented"<<endl;
         }

@@ -28,41 +28,25 @@ bool RandomAI::run(engine::Engine& engine){
     std::array<Action, 6> actions;
     int randomNumber;
     for (int i=0;i<6;++i){
-        /*Action random entre tourner et avancer*/
-        randomNumber=rand()%4;
-        if(randomNumber==0){
-            actions[i]=FORWARD;
-        }
-        else if (randomNumber==1){
-            actions[i]=BACKWARD;
-        }
-        else if (randomNumber==2){
-            actions[i]=ROTATION_CCLK;
-        }
-        else if (randomNumber==3){
-            actions[i]=ROTATION_CLK;
+        randomNumber=rand()%5; //randomNumber in [0,4]
+        if(randomNumber==0) actions[i]=FORWARD;
+        else if (randomNumber==1) actions[i]=BACKWARD;
+        else if (randomNumber==2) actions[i]=BOOSTER;
+        else if (randomNumber==3 or randomNumber==4){//randomnumber = 3 or 4
+            if (engine.getMyState()->getPlayers()[nbRobot]->getIsBoosted()==0){ //The robot isn't boosted
+                if (randomNumber==3) actions[i]=ROTATION_CLK;
+                else if (randomNumber==4) actions[i]=ROTATION_CCLK;
+            }
+            else {//The robot is boosted
+                if (randomNumber==3) actions[i]=LEFT;
+                else if (randomNumber==4) actions[i]=RIGHT;
+            }
         }
         else {
             cout <<"Problems choosing action"<<endl;
+            return false;
         }
     }
-    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);    
+    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
+    return true;
 }
-
-/*To be implemented
-        if (engine.getMyState()->getPlayers()[nbRobot]->getIsBoosted()==0){ //The robot isn't boosted
-            if(randomNumber==0) actions[i]=FORWARD;
-            else if (randomNumber==1) actions[i]=BACKWARD;
-            else if (randomNumber==2) actions[i]=ROTATION_CCLK;
-            else if (randomNumber==3) actions[i]=ROTATION_CLK;
-            else if (randomNumber==4) actions[i]=BOOSTER;
-            else cout <<"Problems choosing action"<<endl;
-        }
-        else{
-            if(randomNumber==0) actions[i]=FORWARD;
-            else if (randomNumber==1) actions[i]=BACKWARD;
-            else if(randomNumber==2) actions[i]=LEFT;
-            else if (randomNumber==3) actions[i]=RIGHT;
-            else if (randomNumber==4) actions[i]=BOOSTER;
-            else cout <<"Problems choosing action"<<endl;
-            */

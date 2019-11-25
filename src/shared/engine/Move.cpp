@@ -36,9 +36,9 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
         else if (directionMove==SOUTH) directionMove =EAST;
         else if (directionMove==EAST) directionMove =NORTH;
         else cout<<"Error of boosted move"<<endl;
-        /*Move*/
-        if (robotAction==3) moveVector = 1+theState->getPlayers()[robotNumber]->getIsBoosted();
-        else moveVector = -1-theState->getPlayers()[robotNumber]->getIsBoosted();
+        /*Define the move vector*/
+        if (robotAction==3) moveVector = 1+theState->getPlayers()[robotNumber]->getIsBoosted(); //move right : vector is positive
+        else moveVector = -1-theState->getPlayers()[robotNumber]->getIsBoosted(); //move left : vector is negative
         /*Reset the boost*/
         theState->getPlayers()[robotNumber]->setIsBoosted(0);
     }

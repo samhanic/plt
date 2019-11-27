@@ -104,6 +104,13 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
             cout<<"Bonus is depleted!"<<endl;
         }
     }
+    //Validate the checkpoint if the tile is one
+    if (tile->getIdStatic() == CHECKPOINT){
+        CheckPoint *objective = static_cast<CheckPoint*>(tile);
+        std::vector<int> newVC = theState->getPlayers()[robotNumber]->getVisitedCheckpoints();
+        newVC.insert(newVC.end(),objective->getCheckPointFigure());
+        theState->getPlayers()[robotNumber]->setVisitedCheckpoints(newVC);
+    }
     return true;
     
 }

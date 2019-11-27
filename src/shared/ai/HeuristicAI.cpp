@@ -24,27 +24,18 @@ bool HeuristicAI::run(engine::Engine& engine){
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;
 
-    cout<<"Choosing 6 actions randomly to run"<<endl;
-    std::array<Action, 6> actions;
+    cout<<"Choosing 6 actions go to the next checkpoint"<<endl;
     int randomNumber;
     
-    for (int i=0 ; i<6 ; ++i) {
-        actions[i] = FORWARD;
-    }
-    
-    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
+    MapPathFinder mpf;
+    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(mpf.pathToNearestCp(*engine.getMyState(),nbRobot));  
     return true;
 }
 
 void HeuristicAI::processPlayersStats(engine::Engine& engine){
     
-    cout<<"Choosing 6 actions randomly to run"<<endl;
-    std::array<Action, 6> actions;
-    int randomNumber;
+    cout<<"Choosing 6 actions"<<endl;
+    MapPathFinder mpf;
     
-    for (int i=0 ; i<6 ; ++i) {
-        actions[i] = FORWARD;
-    }
-    
-    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
+    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(mpf.pathToNearestCp(*engine.getMyState(),nbRobot));  
 }

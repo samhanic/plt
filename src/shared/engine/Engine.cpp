@@ -75,6 +75,7 @@ void Engine::executeAction(int actionNumber) {
         else{
             cout<<"This action ("<<processedAction<<") is not yet implemented"<<endl;
         }
+        if (actionNumber==5) myState->getPlayers()[i]->setIsBoosted(0); 
         /* Checks if in hole or passed a checkpoint */
         checkHole();
         checkCheckPoint ();

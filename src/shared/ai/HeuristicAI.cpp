@@ -26,8 +26,12 @@ bool HeuristicAI::run(engine::Engine& engine){
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED)
         return false;
 
-    std::array<Action, 6> actions;
+    
 
+    MapPathFinder pathFinder;
+    pathFinder.nearestCP(engine);
+    
+    std::array<Action, 6> actions;
     /* Let's check if a player is close to victory */
     for (unsigned int i = 0 ; i < playersWinProb.size() ; i++) {
         /* If player in the range, IA shoots */

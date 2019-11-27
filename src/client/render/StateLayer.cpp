@@ -405,12 +405,10 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                     cout<<"commandes envoyées"<<endl;
                     
                     /* Player has choosen his actions, it sends a notification to Engine */
-                    notifyObservators(0, 1);
+                    //notifyObservators(0, 1);
 
-
-
-                    StateEvent stateEvent(ALL_CHANGED);
-                    state.notifyObservers(stateEvent, state);
+                    // StateEvent stateEvent(ALL_CHANGED);
+                    // state.notifyObservers(stateEvent, state);
                 }                
             }
 

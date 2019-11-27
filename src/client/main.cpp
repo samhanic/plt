@@ -209,7 +209,8 @@ int main(int argc,char* argv[])
 		// Observable stateObservator;
 				
 		/* IA will be the second Robot */
-		ai::RandomAI aiRobot(1);
+		ai::HeuristicAI aiRobot(1);
+		
 		ptrState->initRobot(ORANGE);
 
 

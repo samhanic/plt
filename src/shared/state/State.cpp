@@ -214,7 +214,7 @@ void State::setMapWidth(int mapWidth) {
 
 Position State::robotLastVisitedCP (Robot& myRobot) {
 	
-	int robotID = myRobot.getRobotId();
+	//int robotID = myRobot.getRobotId();
 	std::vector<int> visitedPC = myRobot.getVisitedCheckpoints();
 	
 	Position positionOfLastCp;

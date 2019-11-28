@@ -48,7 +48,6 @@ const std::shared_ptr<state::State>& Engine::getMyState() const{
 }
 
 void Engine::executeAction(int actionNumber) {
-    // ADD Robot SELECTOR
     //activeRobot=0;
     for(unsigned int i = 0 ; i <= 1 ; i++) {
         //int i = 0;
@@ -67,7 +66,7 @@ void Engine::executeAction(int actionNumber) {
             Boost myBoost (myState->getPlayers()[i]->getRobotId());
             myBoost.executeOrder(myState);
         }
-        else if (processedAction == ATTACK){
+        else if (processedAction == state::ATTACK){
             Attack myAttack (myState->getPlayers()[i]->getRobotId());
             cout<<"Attacking robot"<<endl;
             myAttack.executeOrder(myState);

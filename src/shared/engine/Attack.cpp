@@ -11,7 +11,7 @@ Attack::Attack(int robotNumber){
 }
 
 bool Attack::executeOrder(std::shared_ptr<state::State> theState) {
-    int distance =0;
+    //int distance =0;
     bool ableAttack=true;
     int x = theState->getPlayers()[robotNumber]->getPosition().getX();
     int y = theState->getPlayers()[robotNumber]->getPosition().getY();
@@ -28,14 +28,17 @@ bool Attack::executeOrder(std::shared_ptr<state::State> theState) {
         if (x<0 || x> theState->getMapWidth() || y<0 || y>theState->getMapHeight()){
             cout << "You attacked but nobody was in this direction !"<<endl;
             ableAttack=false;
+            return false;
         }
         //search for robot in this position
-        for (int i=0; i<theState->getPlayers().size(); ++i){
+        for (size_t i=0; i<theState->getPlayers().size(); ++i){
             if (theState->getPlayers()[i]->getPosition().getX()==x && theState->getPlayers()[i]->getPosition().getY()==y){
                 ableAttack=false;
                 theState->getPlayers()[i]->setLifePoints(theState->getPlayers()[i]->getLifePoints()-1);
                 cout<<"You correctly attacked the robot no "<<i<<". Congrats !"<<endl;
+                return true;
             }
         }
     }
+    return false;
 }

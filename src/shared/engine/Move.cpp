@@ -127,7 +127,7 @@ bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desir
         return false;
     }
 
-    MapTile objective = *(theState->getMap()[desiredPosition.getX()][desiredPosition.getY()]);
+    //MapTile objective = *(theState->getMap()[desiredPosition.getX()][desiredPosition.getY()]);
 
     //Verify that the new position robot will occupy is not a wall
     MapTile *tile = theState->getMap()[desiredPosition.getY()][desiredPosition.getX()].get();

@@ -119,10 +119,10 @@ void StateLayer::refreshSlot () {
 void StateLayer::refreshPlayers (state::State& stateLayer) {
     Display surfacePlayers;
 
-    int inSlots[6];
-    for (int i = 0 ; i < 6 ; i++) {
-        inSlots[i] = slotTab[i];
-    }
+    // int inSlots[6];
+    // for (int i = 0 ; i < 6 ; i++) {
+    //     inSlots[i] = slotTab[i];
+    // }
    
     surfacePlayers.loadPlayers(stateLayer, tilesets[2]->getTexture(), sf::Vector2u(tilesets[2]->getCellWidth(), tilesets[2]->getCellHeight()));
     

@@ -59,7 +59,7 @@ std::array<state::Action, 6> MapPathFinder::pathToNearestCp (state::State& mySta
     int y = myState.getPlayers()[robotNumber]->getPosition().getX();
     int x = myState.getPlayers()[robotNumber]->getPosition().getY();
     cout<<"Now the robot is located in "<<x<<" "<<y<<endl;
-    state::DirectionStatus dir = myState.getPlayers()[robotNumber]->getOrientation();
+    //state::DirectionStatus dir = myState.getPlayers()[robotNumber]->getOrientation();
 
     int nbboost=1;
     for (int i=0;i<6;i++){

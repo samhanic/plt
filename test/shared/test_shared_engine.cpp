@@ -13,8 +13,6 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     engine.initEngine("../../../res/map.txt");
     engine.checkRobotsActions();
     const std::shared_ptr<state::State> ptrState = engine.getMyState();
-    unsigned int width = ptrState->getMapWidth();
-   	unsigned int height = ptrState->getMapHeight();
 
     //First round
     std::array<Action,6> robactions;

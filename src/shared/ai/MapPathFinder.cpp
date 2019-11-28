@@ -42,7 +42,7 @@ state::Position MapPathFinder::nearestCP (state::State& myState, int robotNumber
         distance += abs(posCP[i].getX()-myState.getPlayers()[robotNumber]->getPosition().getY());
         distance += abs(posCP[i].getY()-myState.getPlayers()[robotNumber]->getPosition().getX());
         cout<<"Distance for checkpoint nb "<<nbCP[i]<<" is "<<distance<<endl;
-        if (distance<distanceNearestCP & distance!=0){
+        if (distance<distanceNearestCP && distance!=0){
             nearestCP=static_cast<int>(i);
             distanceNearestCP=distance;
         }
@@ -79,7 +79,7 @@ std::array<state::Action, 6> MapPathFinder::pathToNearestCp (state::State& mySta
             solution[i+1]=FORWARD;
             i++;
         }
-        else if (abs(objective.getY()-y)!=nbboost & i!=5){
+        else if (abs(objective.getY()-y)!=nbboost && i!=5){
             solution[i]=BOOSTER;
             cout<<"Solution : boost for action nb "<<i<<endl;
             nbboost++;
@@ -96,7 +96,7 @@ std::array<state::Action, 6> MapPathFinder::pathToNearestCp (state::State& mySta
             nbboost=1;
             cout<<"Solution : left for action nb "<<i<<endl;
         }
-        else if (x==objective.getX() & y==objective.getY()) {
+        else if (x==objective.getX() && y==objective.getY()) {
             cout<<"Solution : check the next cp for action nb "<<i<<endl;
             objective = nearestCP(myState,robotNumber);
             solution[i]=NO_ACTION;

@@ -15,14 +15,16 @@ using namespace state;
 using namespace render;
 using namespace std;
 
-HeuristicAI::HeuristicAI(int nbRobot){
-    this->nbRobot=nbRobot;
+HeuristicAI::HeuristicAI(int nbRobot) {
+    this->nbRobot = nbRobot;
 }
 
 bool HeuristicAI::run(engine::Engine& engine){
     /*Verify that the robot is still alive*/
-    if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
-    if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;
+    if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD)
+        return false;
+    if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED)
+        return false;
 
     cout<<"Choosing 6 actions go to the next checkpoint"<<endl;
     int randomNumber;

@@ -221,6 +221,7 @@ int main(int argc,char* argv[])
 			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
 				aiRobot.run(myEngine);
+				aiRobot.processPlayersStats(myEngine);
 
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {

@@ -106,3 +106,20 @@ std::array<state::Action, 6> MapPathFinder::pathToNearestCp (state::State& mySta
     cout<<"The actions for this turn have been fixed : "<<solution[0]<<solution[1]<<solution[2]<<solution[3]<<solution[4]<<solution[5]<<endl;
     return solution;
 }
+
+std::vector<state::Action> dijkstra (state::State& myState, int robotNumber){
+    std::vector<state::Action> sol;
+    
+    struct datastates{
+        std::unique_ptr<state::State> st;
+        int x;
+        int y;
+        int nbActions;
+
+    };
+    std::vector<datastates> states;
+    int i = 0;
+
+    //states[0].st=myState;
+    //std::unique_ptr<state::State> st = std::make_unique<myState>;
+}

@@ -9,6 +9,10 @@
 #include <memory>
 #include <vector>
 
+#define GETX getPlayers()[robotNumber]->getPosition().getX()
+#define GETY getPlayers()[robotNumber]->getPosition().getY()
+#define GETORIENTATION getPlayers()[robotNumber]->getOrientation()
+
 using namespace ai;
 using namespace engine;
 using namespace state;
@@ -107,19 +111,101 @@ std::array<state::Action, 6> MapPathFinder::pathToNearestCp (state::State& mySta
     return solution;
 }
 
-std::vector<state::Action> dijkstra (state::State& myState, int robotNumber){
-    std::vector<state::Action> sol;
+std::vector<state::Action> dijkstra (state::State& myState, int robotNumber, int wantedX, int wantedY){
+    //std::unique_ptr<state::State> tempState = make_unique<state::State>(myState); Does not works because of cpp version 11
+    //std::unique_ptr<Robot>& ptrRobot = state.getPlayers()[0];
+    //State *state = new State();
+    //std::shared_ptr<State> ptrState(state);
+    // state::State *tempState = new State();
+    // std::shared_ptr<State> ptrState
+
+    // std::shared_ptr<state::State> tempState;
+    // tempState = std::make_shared<state::State> (myState);
     
-    struct datastates{
-        std::unique_ptr<state::State> st;
-        int x;
-        int y;
-        int nbActions;
+    // struct datastates{
+    //     std::unique_ptr<state::State> st;
+    //     int x;
+    //     int y;
+    //     int nbActions;
+    //     int rotation;
+    //     bool modified;
+    //     std::vector<state::Action> sol;
+    // };
+    // //Initialization
+    // std::vector<std::vector<datastates[4]>> states;
+    // for (int i=0; i<myState.getMapHeight();++i){
+    //     for (int j=0;j<myState.getMapWidth();++j){
+    //         for (int k=0;k<4;++k){
+    //             states[i][j][k].x=i;
+    //             states[i][j][k].y=j;
+    //             states[i][j][k].nbActions=100;
+    //             states[i][j][k].modified=false;
+    //         }
+    //     }
+    // }
 
-    };
-    std::vector<datastates> states;
-    int i = 0;
+    // //states[myState.GETX][myState.GETY][myState.GETORIENTATION].st=std::make_unique<state::State>(myState);
+    // states[myState.GETX][myState.GETY][myState.GETORIENTATION].st=std::unique_ptr<state::State>(new state::State(myState));
+    // states[myState.GETX][myState.GETY][myState.GETORIENTATION].modified=true;
+    // states[myState.GETX][myState.GETY][myState.GETORIENTATION].nbActions=0;
+    
+    // int i,j,k,rotProv;
+    // bool notfinished;
+    // //Loop
+    // do{
+    //     notfinished=true;
+    //     for (i=0; i<myState.getMapHeight();++i){
+    //         for (j=0;j<myState.getMapWidth();++j){
+    //             for (k=0; k<4; ++k){
+    //                 if (states[i][j][k].modified){
+    //                     notfinished=false;
+    //                     states[i][j][k].modified=false;
 
-    //states[0].st=myState;
-    //std::unique_ptr<state::State> st = std::make_unique<myState>;
+
+    //                     // //Forward
+    //                     // engine::Move action (robotNumber,FORWARD);
+    //                     // tempState=std::make_shared<state::State>(states[i][j][k].st);
+    //                     // action.executeOrder(tempState);
+    //                     // if (states[tempState->GETX][tempState->GETY][k].nbActions>states[i][j][k].nbActions+1){
+    //                     //     states[tempState->GETX][tempState->GETY][k].st=std::make_unique<state::State>(tempState);
+    //                     //     states[tempState->GETX][tempState->GETY][k].sol.push_back(FORWARD);
+    //                     // }
+    //                     // //Backward
+    //                     // engine::Move action (robotNumber,BACKWARD);
+    //                     // tempState=std::make_shared<state::State>(states[i][j][k].st);
+    //                     // action.executeOrder(tempState);
+    //                     // if (states[tempState->GETX][tempState->GETY][k].nbActions>states[i][j][k].nbActions+1){
+    //                     //     states[tempState->GETX][tempState->GETY][k].st=std::make_unique<state::State>(tempState);
+    //                     //     states[tempState->GETX][tempState->GETY][k].sol.push_back(BACKWARD);
+    //                     // }
+    //                     // //Rotation clk
+    //                     // engine::Rotation action (robotNumber,ROTATION_CLK);
+    //                     // tempState=std::make_shared<state::State>(states[i][j][k].st);
+    //                     // action.executeOrder(tempState);
+    //                     // rotProv=k+1;
+    //                     // if (rotProv==5) rotProv = 1;
+    //                     // if (states[i][j][k].nbActions>states[i][j][rotProv].nbActions+1){
+    //                     //     states[tempState->GETX][tempState->GETY][k].st=std::make_unique<state::State>(tempState);
+    //                     //     states[tempState->GETX][tempState->GETY][k].sol.push_back(BACKWARD);
+                        
+    //             }
+    //         }
+    //     }
+    // }
+    // } while (notfinished);
+
+    // int miniActions=1000;
+    // for (k=0;k<4;k++){
+    //     if (states[wantedX][wantedY][k].nbActions<miniActions){
+    //         miniActions=states[wantedX][wantedY][k].nbActions;
+    //     }
+    // }
+    // for (k=0;k<4;k++){
+    //     if (states[wantedX][wantedY][k].nbActions==miniActions){
+    //         return states[wantedX][wantedY][k].sol;
+    //     }
+    // }
+    cout<<"Path not found!"<<endl;
+    std::vector<state::Action> facticeSol;
+    return facticeSol;
 }

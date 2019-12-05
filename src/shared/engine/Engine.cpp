@@ -17,6 +17,10 @@ Engine::Engine() {
 
 }
 
+Engine::Engine(std::shared_ptr<state::State> myState){
+    this->myState=myState;
+}
+
 bool Engine::initEngine (std::string mapFileLocation){
     /* Creates a State and init map with MapFactory */
     State *state = new State();
@@ -40,6 +44,7 @@ void Engine::clickOnValidate (int robotId, bool rollback) {
 /* Empties actions of the Robot at the end of the round */
 void Engine::endOfRound () {
     std::array<Action, 6> initActionsRobot = {NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION};
+    myState->nbRound++;
     myState->getPlayers()[0]->setRobotActions(initActionsRobot);
 }
 

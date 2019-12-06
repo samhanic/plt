@@ -20,6 +20,8 @@ RandomAI::RandomAI(int nbRobot){
 }
 
 bool RandomAI::run(engine::Engine& engine){
+    /*Verify that the game is not ended*/
+    if (engine.getMyState()->getEndGame()) return false;
     /*Verify that the robot is still alive*/
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;

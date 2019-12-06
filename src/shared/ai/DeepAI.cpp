@@ -19,7 +19,9 @@ DeepAI::DeepAI (int nbRobot){
     this->nbRobot=nbRobot;
 }
 
-bool DeepAI::run (engine::Engine& moteur){
+bool DeepAI::run (engine::Engine& engine){
+    /*Verify that the game is not ended*/
+    if (engine.getMyState()->getEndGame()) return false;
     return true;
 }
 

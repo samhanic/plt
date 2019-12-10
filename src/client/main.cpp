@@ -14,6 +14,7 @@
 #include "../../src/shared/ai.h"
 
 #define MAP_FILE "../res/map.txt"
+#define FILE_NAME "state.txt"
 
 using namespace std;
 using namespace render;
@@ -34,100 +35,18 @@ int main(int argc,char* argv[])
 		system("make code-coverage");
 	}
 	else if (entry == "render") {
-		/* Creation of a State and Window */
-		/*State state;
-		int width = state.getMapWidth();
-    	int height = state.getMapHeight();
-		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
-		window.setFramerateLimit(25);
-
-
-		MapFactory mapFactory;
-		state.initMap(MAP_FILE, mapFactory);
-		state.initRobot(BLUE);
-		state.initRobot(YELLOW);
-		state.initRobot(RED);
-		state.initRobot(PINK);
-		state.initRobot(ORANGE);
-
-
-		StateLayer statelay(state, window);
-		statelay.initSurface(state);
-
-		while (window.isOpen()){
-			sf::Event event;
-			while (window.pollEvent(event)){
-				if (event.type == sf::Event::Closed)
-					window.close();
-				statelay.clickManager(state, event);
-			}
-			window.clear();
-			statelay.draw(state, window);
-			window.display();
-		}
-		return 0;*/
-
+		cout << "use command 'deep_ai' to execute 'render'" << endl;
 	}
 	else if (entry== "engine") {
-		// /* INITIALIZATION */
-		// /* Creates Engine that creates State */
-		// Engine myEngine;
-		// myEngine.initEngine(MAP_FILE);
-		// const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
-
-		// /* Displays a sf::Window with the correct size and frame rate */
-		// unsigned int width = ptrState->getMapWidth();
-   		// unsigned int height = ptrState->getMapHeight();
-		// sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
-		// window.setFramerateLimit(25);
-
-		// /* Creates a StateLayer that will construct and display five sub-layers */
-		// StateLayer statelay(*ptrState, window);
-		// statelay.initSurface(*ptrState);
-
-
-		// /* PROCESSING */
-		// /* Render notifies Engine that a command has been sent */
-
-
-		// /* Engine waits to get notifications/commands from all the players before starting the round */
-
-		
-		// /* State notifies Render that a command made changes and tells which layer to refresh */
-
-		// while (window.isOpen()){
-		// 	/* Click management in loop */
-		// 	sf::Event event;
-		// 	while (window.pollEvent(event)){
-		// 		if (event.type == sf::Event::Closed)
-		// 			window.close();
-		// 		statelay.clickManager(*ptrState, event);
-		// 	}
-		// 	window.clear();
-		// 	statelay.draw(*ptrState, window);
-
-		// 	/* Actions processed when all players have selected their actions */
-		// 	if (myEngine.checkRobotsActions()) {
-		// 		for (int i = 0 ; i < 6 ; i++) {
-		// 			if (!ptrState->getEndGame()) {
-		// 				/* Do action and check death */
-		// 				myEngine.executeAction(i);
-		// 				statelay.refreshPlayers(*ptrState);
-		// 				ptrState->checkEndGame();
-		// 				statelay.refreshEffects(*ptrState, i, 0);
-						
-		// 				/* Display */
-		// 				statelay.draw(*ptrState, window);
-		// 				sf::sleep(sf::seconds(0.5));
-		// 			}
-		// 		}
-				
-		// 		myEngine.endOfRound();
-		// 		statelay.initSurface(*ptrState);
-		// 	}
-		// } 	
-		// return 0;
-	} else if(entry== "random_ai"){		
+		cout << "use command 'deep_ai' to execute 'engine'" << endl;
+	}
+	else if(entry== "random_ai"){		
+		cout << "use command 'deep_ai' to execute 'random_ai'" << endl;
+	}
+	else if(entry== "heuristic_ai"){		
+		cout << "use command 'deep_ai' to execute 'heuristic_ai'" << endl;
+	}
+	else if(entry== "rollback"){		
 		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
@@ -149,124 +68,10 @@ int main(int argc,char* argv[])
 		myEngine.registerObservator(&renderObservator);
 
 		// Observable stateObservator;
-				
-		/* IA will be the second Robot */
-		ai::RandomAI aiRobot(1);
-		ptrState->initRobot(ORANGE);
 
-
-
-		while (window.isOpen()){
-			statelay.eventManager(ptrState, window, statelay);
-
-			/* Actions processed when all players have selected their actions */
-			if (myEngine.checkRobotsActions()) {
-				aiRobot.run(myEngine);
-
-				for (int i = 0 ; i < 6 ; i++) {
-					if (!ptrState->getEndGame()) {
-						/* Do action and check death */
-						myEngine.executeAction(i);
-						ptrState->checkEndGame();
-						
-						/* Refresh and display what needs to be */
-						statelay.refreshPlayers(*ptrState);
-						statelay.refreshEffects(*ptrState, i, 0);			
-						statelay.draw(*ptrState, window);
-						
-						sf::sleep(sf::seconds(0.5));
-					}
-				}
-				myEngine.endOfRound();
-
-				statelay.initSurface(*ptrState);
-				statelay.refreshEffects(*ptrState, 0, 0);
-				statelay.draw(*ptrState, window);
-			}
-		} 	
-		return 0;
-	} else if(entry== "heuristic_ai"){		
-		/* INITIALIZATION */
-		/* Creates Engine that creates State */
-		Engine myEngine;
-		myEngine.initEngine(MAP_FILE);
-		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
-
-		/* Displays a sf::Window with the correct size and frame rate */
-		unsigned int width = ptrState->getMapWidth();
-   		unsigned int height = ptrState->getMapHeight();
-		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
-		window.setFramerateLimit(25);
-
-		/* Creates a StateLayer that will construct and display five sub-layers */
-		StateLayer statelay(*ptrState, window);
-		statelay.initSurface(*ptrState);
-		
-		/* Prepares Observator to notifiy Engine if a player clicks on validate button */
-		Observator renderObservator;
-		myEngine.registerObservator(&renderObservator);
-
-		// Observable stateObservator;
-				
-		/* IA will be the second Robot */
-		ai::HeuristicAI aiRobot(1);
-		
-		ptrState->initRobot(ORANGE);
-
-
-
-		while (window.isOpen()){
-			statelay.eventManager(ptrState, window, statelay);
-
-			/* Actions processed when all players have selected their actions */
-			if (myEngine.checkRobotsActions()) {
-				aiRobot.run(myEngine);
-				aiRobot.processPlayersStats(myEngine);
-
-				for (int i = 0 ; i < 6 ; i++) {
-					if (!ptrState->getEndGame()) {
-						/* Do action and check death */
-						myEngine.executeAction(i);
-						ptrState->checkEndGame();
-						
-						/* Refresh and display what needs to be */
-						statelay.refreshPlayers(*ptrState);
-						statelay.refreshEffects(*ptrState, i, 0);			
-						statelay.draw(*ptrState, window);
-						
-						sf::sleep(sf::seconds(0.5));
-					}
-				}
-				myEngine.endOfRound();
-
-				statelay.initSurface(*ptrState);
-				statelay.refreshEffects(*ptrState, 0, 0);
-				statelay.draw(*ptrState, window);
-			}
-		} 	
-		return 0;
-	} else if(entry== "rollback"){		
-		/* INITIALIZATION */
-		/* Creates Engine that creates State */
-		Engine myEngine;
-		myEngine.initEngine(MAP_FILE);
-		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
-
-		/* Displays a sf::Window with the correct size and frame rate */
-		unsigned int width = ptrState->getMapWidth();
-   		unsigned int height = ptrState->getMapHeight();
-		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
-		window.setFramerateLimit(25);
-
-		/* Creates a StateLayer that will construct and display five sub-layers */
-		StateLayer statelay(*ptrState, window);
-		statelay.initSurface(*ptrState);
-		
-		/* Prepares Observator to notifiy Engine if a player clicks on validate button */
-		Observator renderObservator;
-		myEngine.registerObservator(&renderObservator);
-
-		// Observable stateObservator;
+		std::ofstream ofs;
+		ofs.open(FILE_NAME, std::ofstream::out | std::ofstream::trunc);
+		ofs.close();
 				
 		/* IA will be the second Robot */
 		ai::HeuristicAI aiRobot(1);
@@ -276,9 +81,18 @@ int main(int argc,char* argv[])
 		sf::Clock clock;
 
 		while (window.isOpen()){
+			/* Rollback auto after 30 seconds */
 			const unsigned int seconds = static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
-			if(seconds > 15) {
+			if(seconds > 40) {
 				cout<<"Let's rollback"<<endl;
+				while(myEngine.doRollback()) {
+					cout<<"DO MOVE ACTION"<<endl;
+					statelay.refreshPlayers(*ptrState);
+					statelay.refreshEffects(*ptrState, 1, 0);			
+					statelay.draw(*ptrState, window);
+					sf::sleep(sf::seconds(2));
+				}
+				sf::sleep(sf::seconds(500));
 			}
 
 

@@ -24,7 +24,7 @@ bool DeepAI::run (engine::Engine& engine){
     if (engine.getMyState()->getEndGame()) return false;
     return true;
 }
-
+/*
 int evaluation (engine::Engine& engine){
     int eval;
     if (engine.getMyState()->getEndGame()){
@@ -49,7 +49,7 @@ int DeepAI::min (engine::Engine& engine, int depth){
         std::vector<state::Action> listActions;
         
     }
-}
+}*/
 
 int DeepAI::max (engine::Engine& engine, int depth){
     return 0;

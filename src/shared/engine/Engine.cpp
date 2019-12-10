@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <memory>
 #include <vector>
 
@@ -12,6 +13,8 @@ using namespace engine;
 using namespace render;
 using namespace state;
 using namespace std;
+
+#define FILE_NAME "state.txt"
 
 Engine::Engine() {
 
@@ -44,9 +47,72 @@ void Engine::clickOnValidate (int robotId, bool rollback) {
 /* Empties actions of the Robot at the end of the round */
 void Engine::endOfRound () {
     std::array<Action, 6> initActionsRobot = {NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION};
-    myState->nbRound++;
     myState->getPlayers()[0]->setRobotActions(initActionsRobot);
+    
+    /* Increments of round number and saves State for rollbacks */
+    myState->roundNumber++;
+
+    ofstream file; 
+    file.open(FILE_NAME, ios::app);
+    LightRollbackSave lightRBSave;
+
+    for(unsigned int i = 0 ; i < myState->players.size() ; i++) {
+        lightRBSave.rsRoundNumber = myState->roundNumber;
+        lightRBSave.rsRobotId = myState->players[i]->getRobotId();
+        lightRBSave.rsX = myState->players[i]->getPosition().getX();
+        lightRBSave.rsY = myState->players[i]->getPosition().getY();
+        lightRBSave.rsOrientation = myState->players[i]->getOrientation();
+        lightRBSave.rsLifeNumber = myState->players[i]->getLifeNumber();
+        lightRBSave.rsLifePoints = myState->players[i]->getLifePoints();
+
+        file.write((char*)&lightRBSave, sizeof(lightRBSave));
+    }
+    file.close();
 }
+
+bool Engine::doRollback () {
+    
+    LightRollbackSave lightRBSave;
+
+    ifstream file_obj; 
+    file_obj.open(FILE_NAME, ios::in); 
+    
+    file_obj.read((char*)&lightRBSave, sizeof(lightRBSave));
+
+    while (!file_obj.eof()) { 
+        if ((lightRBSave.rsRoundNumber == myState->roundNumber) && (lightRBSave.rsRobotId == 0)) {
+            cout<<"ROUND NUMBER : "<<lightRBSave.rsRoundNumber<<endl;
+            cout<<"ROBOTID : "<<lightRBSave.rsRobotId<<endl;
+            cout<<"X : "<<lightRBSave.rsX<<endl;
+            cout<<"Y : "<<lightRBSave.rsY<<endl;
+            cout<<"ORIENTATION : "<<lightRBSave.rsOrientation<<endl;
+            cout<<"LIFENUMBER : "<<lightRBSave.rsLifeNumber<<endl;
+            cout<<"LIFEPOINTS : "<<lightRBSave.rsLifePoints<<endl;
+
+            if (myState->roundNumber > 1 ) {
+                myState->roundNumber --;
+            } else {
+                return 0;
+            }
+
+            state::Position tempPos;
+            tempPos.setX(lightRBSave.rsX);
+            tempPos.setY(lightRBSave.rsY);
+
+            myState->players[0]->setPosition(tempPos);
+            myState->players[0]->setOrientation(lightRBSave.rsOrientation);
+            myState->players[0]->setLifeNumber(lightRBSave.rsLifeNumber);
+            myState->players[0]->setLifePoints(lightRBSave.rsLifePoints);
+            cout<<"POISTION ACTUALIZED"<<endl;
+
+            return 1;
+        }
+        file_obj.read((char*)&lightRBSave, sizeof(lightRBSave));
+    }
+    file_obj.close();
+    return 1;
+}
+
 
 const std::shared_ptr<state::State>& Engine::getMyState() const{
     return myState;

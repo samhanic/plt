@@ -69,6 +69,7 @@ int main(int argc,char* argv[])
 
 		// Observable stateObservator;
 
+		/* Clean temp file to keep State history for rollback */
 		std::ofstream ofs;
 		ofs.open(FILE_NAME, std::ofstream::out | std::ofstream::trunc);
 		ofs.close();
@@ -83,15 +84,14 @@ int main(int argc,char* argv[])
 		while (window.isOpen()){
 			/* Rollback auto after 30 seconds */
 			const unsigned int seconds = static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
-			if(seconds > 40) {
-				cout<<"Let's rollback"<<endl;
+			if(seconds > 30) {
 				while(myEngine.doRollback()) {
-					cout<<"DO MOVE ACTION"<<endl;
-					statelay.refreshPlayers(*ptrState);
-					statelay.refreshEffects(*ptrState, 1, 0);			
+					statelay.refreshPlayers(*ptrState);		
 					statelay.draw(*ptrState, window);
 					sf::sleep(sf::seconds(2));
 				}
+				statelay.refreshPlayers(*ptrState);		
+				statelay.draw(*ptrState, window);
 				sf::sleep(sf::seconds(500));
 			}
 
@@ -100,6 +100,8 @@ int main(int argc,char* argv[])
 
 			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
+
+				myEngine.saveInfoRollback();
 				aiRobot.run(myEngine);
 				aiRobot.processPlayersStats(myEngine);
 

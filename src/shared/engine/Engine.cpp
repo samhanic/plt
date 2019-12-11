@@ -51,12 +51,17 @@ void Engine::endOfRound () {
     
     /* Increments of round number and saves State for rollbacks */
     myState->roundNumber++;
+}
 
-    ofstream file; 
+/* Before rounds starts, saves history of State in a file */
+void Engine::saveInfoRollback () {
+    
+    ofstream file;
     file.open(FILE_NAME, ios::app);
     LightRollbackSave lightRBSave;
+    
+    for(unsigned int i = 0 ; i < myState->getPlayers().size() ; i++) {
 
-    for(unsigned int i = 0 ; i < myState->players.size() ; i++) {
         lightRBSave.rsRoundNumber = myState->roundNumber;
         lightRBSave.rsRobotId = myState->players[i]->getRobotId();
         lightRBSave.rsX = myState->players[i]->getPosition().getX();
@@ -65,51 +70,45 @@ void Engine::endOfRound () {
         lightRBSave.rsLifeNumber = myState->players[i]->getLifeNumber();
         lightRBSave.rsLifePoints = myState->players[i]->getLifePoints();
 
-        file.write((char*)&lightRBSave, sizeof(lightRBSave));
+        file.write((char*)&lightRBSave, sizeof(lightRBSave));      
     }
     file.close();
 }
 
+/* Do a rollback to the start of the previous round */
+/* Returns 1 if rollback correctely or 0 if no rollback to do (already first round) */
 bool Engine::doRollback () {
     
     LightRollbackSave lightRBSave;
-
-    ifstream file_obj; 
-    file_obj.open(FILE_NAME, ios::in); 
+    ifstream file_obj;
     
-    file_obj.read((char*)&lightRBSave, sizeof(lightRBSave));
-
-    while (!file_obj.eof()) { 
-        if ((lightRBSave.rsRoundNumber == myState->roundNumber) && (lightRBSave.rsRobotId == 0)) {
-            cout<<"ROUND NUMBER : "<<lightRBSave.rsRoundNumber<<endl;
-            cout<<"ROBOTID : "<<lightRBSave.rsRobotId<<endl;
-            cout<<"X : "<<lightRBSave.rsX<<endl;
-            cout<<"Y : "<<lightRBSave.rsY<<endl;
-            cout<<"ORIENTATION : "<<lightRBSave.rsOrientation<<endl;
-            cout<<"LIFENUMBER : "<<lightRBSave.rsLifeNumber<<endl;
-            cout<<"LIFEPOINTS : "<<lightRBSave.rsLifePoints<<endl;
-
-            if (myState->roundNumber > 1 ) {
-                myState->roundNumber --;
-            } else {
-                return 0;
-            }
-
-            state::Position tempPos;
-            tempPos.setX(lightRBSave.rsX);
-            tempPos.setY(lightRBSave.rsY);
-
-            myState->players[0]->setPosition(tempPos);
-            myState->players[0]->setOrientation(lightRBSave.rsOrientation);
-            myState->players[0]->setLifeNumber(lightRBSave.rsLifeNumber);
-            myState->players[0]->setLifePoints(lightRBSave.rsLifePoints);
-            cout<<"POISTION ACTUALIZED"<<endl;
-
-            return 1;
-        }
+    for(unsigned int i = 0 ; i < myState->getPlayers().size() ; i++) {
+    
+        file_obj.open(FILE_NAME, ios::in); 
         file_obj.read((char*)&lightRBSave, sizeof(lightRBSave));
+        
+        while (!file_obj.eof()) {
+            if ((lightRBSave.rsRoundNumber == myState->roundNumber - 1) && (lightRBSave.rsRobotId == i)) {
+                if ((myState->roundNumber >= 1) && (i+1 == myState->getPlayers().size())) {
+                    myState->roundNumber --;
+                }
+
+                state::Position tempPos;
+                tempPos.setX(lightRBSave.rsX);
+                tempPos.setY(lightRBSave.rsY);
+                myState->players[i]->setPosition(tempPos);
+                myState->players[i]->setOrientation(lightRBSave.rsOrientation);
+                myState->players[i]->setLifeNumber(lightRBSave.rsLifeNumber);
+                myState->players[i]->setLifePoints(lightRBSave.rsLifePoints);
+                    
+                if ((myState->roundNumber == 0) && (i+1 == myState->getPlayers().size())){
+                    return 0;
+                }
+            }
+            file_obj.read((char*)&lightRBSave, sizeof(lightRBSave));
+        }
+        file_obj.close();
     }
-    file_obj.close();
     return 1;
 }
 

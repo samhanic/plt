@@ -50,7 +50,3 @@ int DeepAI::min (engine::Engine& engine, int depth){
         
     }
 }*/
-
-int DeepAI::max (engine::Engine& engine, int depth){
-    return 0;
-}

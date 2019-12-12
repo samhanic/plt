@@ -76,7 +76,6 @@ int main(int argc,char* argv[])
 				
 		/* IA will be the second Robot */
 		ai::HeuristicAI aiRobot(1);
-		
 		ptrState->initRobot(ORANGE);
 
 		sf::Clock clock;
@@ -96,6 +95,76 @@ int main(int argc,char* argv[])
 			}
 
 
+			statelay.eventManager(ptrState, window, statelay);
+
+			/* Actions processed when all players have selected their actions */
+			if (myEngine.checkRobotsActions()) {
+
+				myEngine.saveInfoRollback();
+				aiRobot.run(myEngine);
+				aiRobot.processPlayersStats(myEngine);
+
+				for (int i = 0 ; i < 6 ; i++) {
+					if (!ptrState->getEndGame()) {
+						/* Do action and check death */
+						myEngine.executeAction(i);
+						ptrState->checkEndGame();
+						
+						/* Refresh and display what needs to be */
+						statelay.refreshPlayers(*ptrState);
+						statelay.refreshEffects(*ptrState, i, 0);			
+						statelay.draw(*ptrState, window);
+						
+						sf::sleep(sf::seconds(0.5));
+					}
+				}
+				myEngine.endOfRound();
+
+				statelay.initSurface(*ptrState);
+				statelay.refreshEffects(*ptrState, 0, 0);
+				statelay.draw(*ptrState, window);
+			}
+		} 	
+		return 0;
+	}
+	else if(entry== "deep_ai"){		
+		/* INITIALIZATION */
+		/* Creates Engine that creates State */
+		Engine myEngine;
+		myEngine.initEngine(MAP_FILE);
+		const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
+
+		/* Displays a sf::Window with the correct size and frame rate */
+		unsigned int width = ptrState->getMapWidth();
+   		unsigned int height = ptrState->getMapHeight();
+		sf::RenderWindow window(sf::VideoMode(width * 64 + 250, height * 64), "RobotIS");
+		window.setFramerateLimit(25);
+
+		/* Creates a StateLayer that will construct and display five sub-layers */
+		StateLayer statelay(*ptrState, window);
+		statelay.initSurface(*ptrState);
+		
+		/* Prepares Observator to notifiy Engine if a player clicks on validate button */
+		Observator renderObservator;
+		myEngine.registerObservator(&renderObservator);
+
+		// Observable stateObservator;
+
+		/* Clean temp file to keep State history for rollback */
+		std::ofstream ofs;
+		ofs.open(FILE_NAME, std::ofstream::out | std::ofstream::trunc);
+		ofs.close();
+				
+		/* IA will be the second Robot */
+		ai::HeuristicAI aiRobot(1);
+		ptrState->initRobot(ORANGE);
+
+		sf::Clock clock;
+
+		while (window.isOpen()){
+
+			//myEngine.doRollback();
+	
 			statelay.eventManager(ptrState, window, statelay);
 
 			/* Actions processed when all players have selected their actions */

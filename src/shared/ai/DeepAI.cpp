@@ -9,6 +9,9 @@
 #include <memory>
 #include <vector>
 #include <cmath>
+#include <list>
+#include <string>
+#include <algorithm>
 
 using namespace ai;
 using namespace engine;
@@ -28,6 +31,7 @@ bool DeepAI::run (engine::Engine& engine){
     evaluatePopulation(engine);
 
     std::array<Action, 6> actions = tabPopulation[0].individual;
+    
     for (int i = 0 ; i < 6 ; i++) {
         
         //tabPopulation[0].individual[i] = state::FORWARD;
@@ -35,9 +39,8 @@ bool DeepAI::run (engine::Engine& engine){
         cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
     }
     
-
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
-    
+
     return true;
 }
 
@@ -57,36 +60,53 @@ void DeepAI::generatePopulation() {
             tempIndiv.individual[i * 2] = val;
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
             tempIndiv.individual[i * 2 + 1] = val;
+            tempIndiv.fitnessScore = rand() % 1000;
         }
-        tabPopulation[k]=tempIndiv;
-    }
-}
-/*
-int evaluation (engine::Engine& engine){
-    int eval;
-    if (engine.getMyState()->getEndGame()){
-        if (engine.getMyState()->getPlayers()[1]->getVisitedCheckpoints().size()==5){
-            return 1000-20*engine.getMyState()->nbRound;
-        }
-        else return -1000+20*engine.getMyState()->nbRound;
-    }
-    else{
-        return engine.getMyState()->getPlayers()[1]->getVisitedCheckpoints().size()*100;
-        //To be refind maybe
+        tabPopulation[k]  = tempIndiv;
     }
 }
 
-int DeepAI::min (engine::Engine& engine, int depth){
-    cout<<"min calculus with depth"<<depth<<endl;
-    int minValue = 10000;
-    if (depth==0 || engine.getMyState()->getEndGame()==true){
-        return evaluation(engine);
+bool DeepAI::fusionActions () {
+    return false;
+}
+
+
+/* Put the three best individuals at the top of population's tab */
+bool DeepAI::sortTabPopulation() {
+    IndividualAI firstIndiv , secondIndiv, thirdIndiv;
+
+    for (int k = 0 ; k < 10 ; k++) {
+        if (tabPopulation[k].fitnessScore > thirdIndiv.fitnessScore) {
+            if (tabPopulation[k].fitnessScore > secondIndiv.fitnessScore) {
+                if (tabPopulation[k].fitnessScore > firstIndiv.fitnessScore) {
+                    thirdIndiv.fitnessScore = secondIndiv.fitnessScore;
+                    thirdIndiv.individual = secondIndiv.individual;
+
+                    secondIndiv.fitnessScore = firstIndiv.fitnessScore;
+                    secondIndiv.individual = firstIndiv.individual;
+
+                    firstIndiv.fitnessScore = tabPopulation[k].fitnessScore;
+                    firstIndiv.individual = tabPopulation[k].individual;
+                } else {
+                    thirdIndiv.fitnessScore = secondIndiv.fitnessScore;
+                    thirdIndiv.individual = secondIndiv.individual;
+
+                    secondIndiv.fitnessScore = tabPopulation[k].fitnessScore;
+                    secondIndiv.individual = tabPopulation[k].individual;
+                }
+            } else {
+                thirdIndiv.fitnessScore = tabPopulation[k].fitnessScore;
+                thirdIndiv.individual = tabPopulation[k].individual;
+            }
+        }  
     }
-    else{
-        std::vector<state::Action> listActions;
-        
-    }
-}*/
+
+    tabPopulation[0] = firstIndiv;
+    tabPopulation[1] = secondIndiv;
+    tabPopulation[2] = thirdIndiv;
+
+    return 1;
+}
 
 int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     uint evaluatedRobot;

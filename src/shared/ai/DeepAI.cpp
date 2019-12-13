@@ -25,11 +25,14 @@ bool DeepAI::run (engine::Engine& engine){
     if (engine.getMyState()->getEndGame()) return false;    
 
     generatePopulation();
+    evaluatePopulation(engine);
+
     std::array<Action, 6> actions = tabPopulation[0].individual;
     for (int i = 0 ; i < 6 ; i++) {
         
-        tabPopulation[0].individual[i] = state::FORWARD;
-        cout<<"ACTION : "<<tabPopulation[0].individual[i]<<endl;
+        //tabPopulation[0].individual[i] = state::FORWARD;
+        cout<<"1st action : "<<tabPopulation[0].individual[i]<<endl;
+        cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
     }
     
 
@@ -89,7 +92,7 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     uint evaluatedRobot;
     if (nbRobotTest!=-1) evaluatedRobot=(uint) nbRobotTest;
     else evaluatedRobot=(uint) nbRobot;
-    int eval=0;
+    int eval=1000;
     if (engine.getMyState()->getEndGame()){
         if (engine.getMyState()->checkEndGame() == (int) evaluatedRobot){
             return 10000; //You won!
@@ -114,14 +117,15 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()*1000;
     eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifePoints()*200;
 
-    if (nbRobotTest!=-1){
-        uint robots = engine.getMyState()->getPlayers().size();
-        for (size_t i=0; i<robots; ++i){
-            if (i!=evaluatedRobot){
-                eval -= evaluateRobot(engine,i)/(2*robots);
-            }
-        }
-    }
+    // if (nbRobotTest!=-1){
+    //     uint robots = engine.getMyState()->getPlayers().size();
+    //     for (size_t i=0; i<robots; ++i){
+    //         if (i!=evaluatedRobot){
+    //             eval -= evaluateRobot(engine,i)/(2*robots);
+    //         }
+    //     }
+    // }
+    cout<<"Evaluation at"<<eval<<"points."<<endl;
     return eval;
 }
 
@@ -131,4 +135,37 @@ bool DeepAI::fusionActions (){
 
 bool DeepAI::sortTabPopulation (){
     return false;
+}
+
+bool DeepAI::evaluatePopulation (engine::Engine& engine){
+    //for (size_t i=0;i<tabPopulation.size();++i){
+        int i=0;
+        //1. Save the state
+        std::shared_ptr<state::State> savedstate = engine.getMyState();
+        //engine.saveInfoRollback();
+        //2. Fill the player actions
+        engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[i].individual);
+        //3. Fill the others players actions
+        for (size_t j=0;j<engine.getMyState()->getPlayers().size();++j){
+            if (nbRobot!=(int) j){
+                ai::HeuristicAI aiRobot(j);
+                aiRobot.run(engine);
+            }
+        }
+        //4. Execute the 6 actions
+        for (size_t j = 0 ; j < 6 ; ++j) {
+            if (!engine.getMyState()->getEndGame()) {
+                /* Do action and check death */
+                engine.executeAction(j);
+                engine.getMyState()->checkEndGame();
+            }
+        }
+        //5. Evaluate the robot
+        tabPopulation[i].fitnessScore=evaluateRobot(engine, nbRobot);
+        //6. Rollback
+        engine.setMyState(savedstate);
+        //engine.doRollback();
+
+    //}
+    return true;
 }

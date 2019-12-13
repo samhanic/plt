@@ -127,8 +127,8 @@ int main(int argc,char* argv[])
 		} 	
 		return 0;
 	}
-	else if(entry== "deep_ai"){		
-		/* INITIALIZATION */
+	else if(entry== "deep_ai"){
+/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
 		myEngine.initEngine(MAP_FILE);
@@ -162,9 +162,6 @@ int main(int argc,char* argv[])
 		sf::Clock clock;
 
 		while (window.isOpen()){
-
-			//myEngine.doRollback();
-	
 			statelay.eventManager(ptrState, window, statelay);
 
 			/* Actions processed when all players have selected their actions */
@@ -172,11 +169,12 @@ int main(int argc,char* argv[])
 
 				myEngine.saveInfoRollback();
 				aiRobot.run(myEngine);
-				//aiRobot.processPlayersStats(myEngine);
-				//aiRobot.generatePopulation();
 
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {
+						cout<<"ROBOT 0 : "<<myEngine.getMyState()->getPlayers()[0]->getRobotActions()[i]<<endl;  
+						cout<<"ROBOT 1 : "<<myEngine.getMyState()->getPlayers()[1]->getRobotActions()[i]<<endl;  
+
 						/* Do action and check death */
 						myEngine.executeAction(i);
 						ptrState->checkEndGame();

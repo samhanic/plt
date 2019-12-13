@@ -29,9 +29,10 @@ bool DeepAI::run (engine::Engine& engine){
 
     generatePopulation();
     std::array<Action, 6> actions = tabPopulation[0].individual;
-    
+
     for (int i = 0 ; i < 6 ; i++) {
         cout<<"ACTION : "<<tabPopulation[0].individual[i]<<endl;
+        //tabPopulation[0].individual[i] = state::FORWARD;
     }
     
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
@@ -42,27 +43,30 @@ bool DeepAI::run (engine::Engine& engine){
 void DeepAI::generatePopulation() {
     
     /* Must add bonus in the generation list if available */
-    int choiceMatrix[5][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}};
+    int choiceMatrix[7][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}, {6,1}, {5, 1}};
 
     Action val;
     IndividualAI tempIndiv;
 
     for(int k = 0 ; k < 10 ; k++) {
         for(int i = 0 ; i < 3 ; i++) {
-            int randomChoice = rand() % 4;
+            int randomChoice = rand() % 6;
 
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2]);            
             tempIndiv.individual[i * 2] = val;
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
             tempIndiv.individual[i * 2 + 1] = val;
-            tempIndiv.fitnessScore = rand() % 1000;
+            //tempIndiv.fitnessScore = rand() % 1000;
         }
         tabPopulation[k]  = tempIndiv;
     }
 }
 
+/* Fusion genes of two individuals to improve result */
 bool DeepAI::fusionActions () {
-    return false;
+
+
+    return 1;
 }
 
 

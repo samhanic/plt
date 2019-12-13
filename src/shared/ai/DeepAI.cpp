@@ -21,10 +21,19 @@ DeepAI::DeepAI (int nbRobot){
 
 bool DeepAI::run (engine::Engine& engine){
     /*Verify that the game is not ended*/
-    if (engine.getMyState()->getEndGame()) return false;
+    if (engine.getMyState()->getEndGame()) return false;    
 
+    generatePopulation();
+    std::array<Action, 6> actions = tabPopulation[0].individual;
+    for (int i = 0 ; i < 6 ; i++) {
+        
+        tabPopulation[0].individual[i] = state::FORWARD;
+        cout<<"ACTION : "<<tabPopulation[0].individual[i]<<endl;
+    }
     
-    //engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[0]);  
+
+    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
+    
     return true;
 }
 
@@ -35,16 +44,13 @@ void DeepAI::generatePopulation() {
 
 
     for(int k = 0 ; k < 10 ; k++) {
-        IndividualAI tempIndiv;
-        this->tabPopulation[k] = tempIndiv;
-//        tempIndiv = this->tabPopulation[k];
-
+        IndividualAI tempIndiv;      
         for(int i = 0 ; i < 3 ; i++) {
             int randomChoice = rand() % 4;
             tempIndiv.individual[i * 2] = state::FORWARD;
             tempIndiv.individual[i * 2 + 1] = state::FORWARD;
-            tempIndiv.fitnessScore = 0;
         }
+        tabPopulation[k]=tempIndiv;
     }
 }
 /*

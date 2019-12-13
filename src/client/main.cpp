@@ -173,7 +173,7 @@ int main(int argc,char* argv[])
 				myEngine.saveInfoRollback();
 				aiRobot.run(myEngine);
 				//aiRobot.processPlayersStats(myEngine);
-				aiRobot.generatePopulation();
+				//aiRobot.generatePopulation();
 
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {

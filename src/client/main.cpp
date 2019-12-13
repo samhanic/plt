@@ -156,7 +156,7 @@ int main(int argc,char* argv[])
 		ofs.close();
 				
 		/* IA will be the second Robot */
-		ai::HeuristicAI aiRobot(1);
+		ai::DeepAI aiRobot(1);
 		ptrState->initRobot(ORANGE);
 
 		sf::Clock clock;
@@ -172,7 +172,8 @@ int main(int argc,char* argv[])
 
 				myEngine.saveInfoRollback();
 				aiRobot.run(myEngine);
-				aiRobot.processPlayersStats(myEngine);
+				//aiRobot.processPlayersStats(myEngine);
+				aiRobot.generatePopulation();
 
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {

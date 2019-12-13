@@ -23,7 +23,30 @@ DeepAI::DeepAI (int nbRobot){
 bool DeepAI::run (engine::Engine& engine){
     /*Verify that the game is not ended*/
     if (engine.getMyState()->getEndGame()) return false;
+
+    
+    //engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[0]);  
     return true;
+}
+
+void DeepAI::generatePopulation() {
+    
+    /* Must add bonus in the generation list if available */
+    int choiceMatrix[5][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}};
+
+
+    for(int k = 0 ; k < 10 ; k++) {
+        IndividualAI tempIndiv;
+        this->tabPopulation[k] = tempIndiv;
+//        tempIndiv = this->tabPopulation[k];
+
+        for(int i = 0 ; i < 3 ; i++) {
+            int randomChoice = rand() % 4;
+            tempIndiv.individual[i * 2] = state::FORWARD;
+            tempIndiv.individual[i * 2 + 1] = state::FORWARD;
+            tempIndiv.fitnessScore = 0;
+        }
+    }
 }
 /*
 int evaluation (engine::Engine& engine){

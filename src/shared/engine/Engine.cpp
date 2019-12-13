@@ -88,7 +88,7 @@ bool Engine::doRollback () {
         file_obj.read((char*)&lightRBSave, sizeof(lightRBSave));
         
         while (!file_obj.eof()) {
-            if ((lightRBSave.rsRoundNumber == myState->roundNumber - 1) && (lightRBSave.rsRobotId == i)) {
+            if ((lightRBSave.rsRoundNumber == myState->roundNumber - 1) && ((uint) lightRBSave.rsRobotId == i)) {
                 if ((myState->roundNumber >= 1) && (i+1 == myState->getPlayers().size())) {
                     myState->roundNumber --;
                 }

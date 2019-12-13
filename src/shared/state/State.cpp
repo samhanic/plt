@@ -72,35 +72,35 @@ int State::initMap (std::string map_txt, MapFactory& mapFactory) {
 
     /* Fill the tab with diferent tiles */
     for (i = 0; i < mapWidth; i++){
-    	std::vector<std::unique_ptr<MapTile>> newLigne;
+    	std::vector<std::shared_ptr<MapTile>> newLigne;
     	for (j = 0; j < mapHeight; j++){
     		
 			if (map_tuiles_code[k]>=13 && map_tuiles_code[k]<=25){//create convbelt
 				ConvBelt newConvBelt(mapFactory.doConvertMapConvBelt()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-				std::unique_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
+				std::shared_ptr<ConvBelt> ptr(new ConvBelt(newConvBelt));
 				cout<<"Nouveau ConvBelt :"<<newConvBelt.getConvBeltTypeId()<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k] >= 27 && map_tuiles_code[k] <= 31){//create bonus
 				Bonus newBonus(mapFactory.doConvertMapBonus()[map_tuiles_code[k]], i, j, map_tuiles_code[k]);
-				std::unique_ptr<Bonus> ptr(new Bonus(newBonus)) ;
+				std::shared_ptr<Bonus> ptr(new Bonus(newBonus)) ;
 				cout<<"Nouveau Bonus :"<<mapFactory.doConvertMapBonus()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;	
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k]>=32 && map_tuiles_code[k]<=33){//create rotator
 				Rotator newRotator(mapFactory.doConvertMapRotator()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-				std::unique_ptr<Rotator> ptr(new Rotator(newRotator));
+				std::shared_ptr<Rotator> ptr(new Rotator(newRotator));
 				cout<<"Nouveau Rotator :"<<mapFactory.doConvertMapRotator()[map_tuiles_code[k]]<<'\t'<<"New tile Code: "<<map_tuiles_code[k]<<" with x : "<<i<<" and y : "<<j<<endl;
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k]>=0 && map_tuiles_code[k]<=2){//create basics
 				Basic newBasic(mapFactory.doConvertMapBasic()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-				std::unique_ptr<Basic> ptr(new Basic(newBasic));
+				std::shared_ptr<Basic> ptr(new Basic(newBasic));
 				newLigne.push_back(move(ptr));
 			}
 			else if (map_tuiles_code[k]>=3 && map_tuiles_code[k]<=7){//create checkpoints
 				CheckPoint newCheckPoint(mapFactory.doConvertMapCheckPoint()[map_tuiles_code[k]],i,j,map_tuiles_code[k]);
-				std::unique_ptr<CheckPoint> ptr(new CheckPoint(newCheckPoint));
+				std::shared_ptr<CheckPoint> ptr(new CheckPoint(newCheckPoint));
 				newLigne.push_back(move(ptr));
 			}
     		else{
@@ -144,12 +144,12 @@ int State::initRobot (ColorStatus color) {
 State::~State() {
 }
 
-const std::vector<std::vector<std::unique_ptr<MapTile>>>& State::getMap () const {
+const std::vector<std::vector<std::shared_ptr<MapTile>>>& State::getMap () const {
 	return twoDTab;
 }
 
-std::vector<std::unique_ptr<Robot>>& State::getPlayers () {
-    vector<unique_ptr<Robot>> & refRobots = players;
+std::vector<std::shared_ptr<Robot>>& State::getPlayers () {
+    vector<shared_ptr<Robot>> & refRobots = players;
 	//cout<<(this->robotLastVisitedCP(refRobots[0])).getX()<<"robotlastvisited executed"<<endl;
 	return refRobots;
 }
@@ -166,7 +166,7 @@ bool State::getEndGame () {
     return endGame;
 }
 
-void State::checkEndGame () {
+int State::checkEndGame () {
 	/* Gets cp on the map */
 	std::vector<int> cpOnTheMap;
 	for (int i = 0 ; i < mapHeight ; i++) {
@@ -184,11 +184,13 @@ void State::checkEndGame () {
 		std::sort(cpOnTheMap.begin(), cpOnTheMap.end());
 		if (cpOnTheMap == cpOfPlayer) {
 			this->endGame = true;
+			return i;
 		}
 		for (unsigned int i = 0; i < cpOnTheMap.size() ; i++) {
 			cout<<"CP MAP : "<<cpOnTheMap[i]<<" CP PLAYER : "<<cpOfPlayer[i]<<endl;
 		}
 	}
+	return -1;
 }
 
 bool State::getEndRound () {

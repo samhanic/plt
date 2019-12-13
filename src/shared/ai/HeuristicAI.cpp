@@ -21,7 +21,7 @@ HeuristicAI::HeuristicAI(int nbRobot) {
 
 bool HeuristicAI::run(engine::Engine& engine){
     /*Verify that the game is not ended*/
-    if (engine.getMyState()->getEndGame()) return false;
+    if(engine.getMyState()->getEndGame()) return false;
     /*Verify that the robot is still alive*/
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD)
         return false;
@@ -49,9 +49,11 @@ bool HeuristicAI::run(engine::Engine& engine){
             actionNumber+=1;
         }
     }
+
     MapPathFinder mpf;
     std::array<Action, 6> actionsMove = mpf.pathToNearestCp(*engine.getMyState(),nbRobot);
     int i=0;
+    
     while (actionNumber<6){
         actions[actionNumber]=actionsMove[i];
         ++actionNumber;

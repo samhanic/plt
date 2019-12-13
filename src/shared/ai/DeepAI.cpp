@@ -8,6 +8,10 @@
 #include <sstream>
 #include <memory>
 #include <vector>
+#include <cmath>
+#include <list>
+#include <string>
+#include <algorithm>
 
 using namespace ai;
 using namespace engine;
@@ -25,9 +29,10 @@ bool DeepAI::run (engine::Engine& engine){
 
     generatePopulation();
     std::array<Action, 6> actions = tabPopulation[0].individual;
-    
+
     for (int i = 0 ; i < 6 ; i++) {
         cout<<"ACTION : "<<tabPopulation[0].individual[i]<<endl;
+        //tabPopulation[0].individual[i] = state::FORWARD;
     }
     
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
@@ -38,27 +43,30 @@ bool DeepAI::run (engine::Engine& engine){
 void DeepAI::generatePopulation() {
     
     /* Must add bonus in the generation list if available */
-    int choiceMatrix[5][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}};
+    int choiceMatrix[7][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}, {6,1}, {5, 1}};
 
     Action val;
     IndividualAI tempIndiv;
 
     for(int k = 0 ; k < 10 ; k++) {
         for(int i = 0 ; i < 3 ; i++) {
-            int randomChoice = rand() % 4;
+            int randomChoice = rand() % 6;
 
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2]);            
             tempIndiv.individual[i * 2] = val;
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
             tempIndiv.individual[i * 2 + 1] = val;
-            tempIndiv.fitnessScore = rand() % 1000;
+            //tempIndiv.fitnessScore = rand() % 1000;
         }
-        else return -1000+20*engine.getMyState()->nbRound;
+        tabPopulation[k]  = tempIndiv;
     }
 }
 
+/* Fusion genes of two individuals to improve result */
 bool DeepAI::fusionActions () {
-    return false;
+
+
+    return 1;
 }
 
 
@@ -91,16 +99,50 @@ bool DeepAI::sortTabPopulation() {
             }
         }  
     }
+
+    tabPopulation[0] = firstIndiv;
+    tabPopulation[1] = secondIndiv;
+    tabPopulation[2] = thirdIndiv;
+
+    return 1;
 }
 
-int DeepAI::min (engine::Engine& engine, int depth){
-    cout<<"min calculus with depth"<<depth<<endl;
-    int minValue = 10000;
-    if (depth==0 || engine.getMyState()->getEndGame()==true){
-        return evaluation(engine);
+int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
+    uint evaluatedRobot;
+    if (nbRobotTest!=-1) evaluatedRobot=(uint) nbRobotTest;
+    else evaluatedRobot = (uint) nbRobot;
+    int eval=0;
+    if (engine.getMyState()->getEndGame()){
+        if (engine.getMyState()->checkEndGame() == (int) evaluatedRobot){
+            return 10000; //You won!
+        }
+        else return -10000; //Other player won!
     }
-    else{
-        std::vector<state::Action> listActions;
-        
+    if (engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()==0){
+        return -10000; // You lost
     }
-}*/
+
+    //Evaluate the number of checkpoints you validated
+    eval += engine.getMyState()->getPlayers()[evaluatedRobot]->getVisitedCheckpoints().size()*1000;
+
+    //Evaluate the distance to the nearest checkpoint
+    MapPathFinder mpf;
+    state::Position nearest = mpf.nearestCP(*engine.getMyState(),evaluatedRobot);
+    int difX = nearest.getX()-engine.getMyState()->getPlayers()[evaluatedRobot]->getPosition().getX();
+    int difY = nearest.getY()-engine.getMyState()->getPlayers()[evaluatedRobot]->getPosition().getY();
+    eval += 10*(std::sqrt(std::pow(difX,2)+std::pow(difY,2)));
+
+    //evaluate the life
+    eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()*1000;
+    eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifePoints()*200;
+
+    if (nbRobotTest!=-1){
+        uint robots = engine.getMyState()->getPlayers().size();
+        for (size_t i=0; i<robots; ++i){
+            if (i!=evaluatedRobot){
+                eval -= evaluateRobot(engine,i)/(2*robots);
+            }
+        }
+    }
+    return eval;
+}

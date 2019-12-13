@@ -206,3 +206,7 @@ void Engine::checkCheckPoint () {
 int Engine::getActiveRobot() const{
     return activeRobot;
 }
+
+void Engine::setMyState(const std::shared_ptr<state::State>& myState){
+    this->myState=myState;
+}

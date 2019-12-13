@@ -53,12 +53,12 @@ int DeepAI::min (engine::Engine& engine, int depth){
 }*/
 
 int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
-    int evaluatedRobot;
-    if (nbRobotTest!=-1) evaluatedRobot=nbRobotTest;
-    else evaluatedRobot=nbRobot;
+    uint evaluatedRobot;
+    if (nbRobotTest!=-1) evaluatedRobot=(uint) nbRobotTest;
+    else evaluatedRobot=(uint) nbRobot;
     int eval=0;
     if (engine.getMyState()->getEndGame()){
-        if (engine.getMyState()->checkEndGame()==evaluatedRobot){
+        if (engine.getMyState()->checkEndGame() == (int) evaluatedRobot){
             return 10000; //You won!
         }
         else return -10000; //Other player won!
@@ -84,7 +84,7 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     if (nbRobotTest!=-1){
         uint robots = engine.getMyState()->getPlayers().size();
         for (size_t i=0; i<robots; ++i){
-            if (i!=nbRobot){
+            if (i!=evaluatedRobot){
                 eval -= evaluateRobot(engine,i)/(2*robots);
             }
         }

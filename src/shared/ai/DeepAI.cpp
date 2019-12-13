@@ -8,6 +8,7 @@
 #include <sstream>
 #include <memory>
 #include <vector>
+#include <cmath>
 
 using namespace ai;
 using namespace engine;
@@ -50,3 +51,51 @@ int DeepAI::min (engine::Engine& engine, int depth){
         
     }
 }*/
+
+int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
+    int evaluatedRobot;
+    if (nbRobotTest!=-1) evaluatedRobot=nbRobotTest;
+    else evaluatedRobot=nbRobot;
+    int eval=0;
+    if (engine.getMyState()->getEndGame()){
+        if (engine.getMyState()->checkEndGame()==evaluatedRobot){
+            return 10000; //You won!
+        }
+        else return -10000; //Other player won!
+    }
+    if (engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()==0){
+        return -10000; // You lost
+    }
+
+    //Evaluate the number of checkpoints you validated
+    eval += engine.getMyState()->getPlayers()[evaluatedRobot]->getVisitedCheckpoints().size()*1000;
+
+    //Evaluate the distance to the nearest checkpoint
+    MapPathFinder mpf;
+    state::Position nearest = mpf.nearestCP(*engine.getMyState(),evaluatedRobot);
+    int difX = nearest.getX()-engine.getMyState()->getPlayers()[evaluatedRobot]->getPosition().getX();
+    int difY = nearest.getY()-engine.getMyState()->getPlayers()[evaluatedRobot]->getPosition().getY();
+    eval += 10*(std::sqrt(std::pow(difX,2)+std::pow(difY,2)));
+
+    //evaluate the life
+    eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()*1000;
+    eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifePoints()*200;
+
+    if (nbRobotTest!=-1){
+        uint robots = engine.getMyState()->getPlayers().size();
+        for (size_t i=0; i<robots; ++i){
+            if (i!=nbRobot){
+                eval -= evaluateRobot(engine,i)/(2*robots);
+            }
+        }
+    }
+    return eval;
+}
+
+bool DeepAI::fusionActions (){
+    
+}
+
+bool sortTabPopulation (){
+
+}

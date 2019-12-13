@@ -284,6 +284,7 @@ void StateLayer::eventManager (const std::shared_ptr<state::State> ptrMyState, s
 void StateLayer::clickManager (state::State& state, sf::Event& event) {
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
+            if(state.getEndGame()==false){
             int idCommandClicked = -1;
             int slotPosition; 
             std::array<int, 6> mySlot = getSlotTab();
@@ -296,7 +297,7 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                     slotPosition = 6;
                 }
             }
-            cout<<"Slot position deb : "<<slotPosition<<endl;
+            //cout<<"Slot position deb : "<<slotPosition<<endl;
             
             /* Tab with coordiantes will be generated to accept multiple sizes of maps */
             /* Clic in the command zone */
@@ -409,7 +410,8 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
 
                     // StateEvent stateEvent(ALL_CHANGED);
                     // state.notifyObservers(stateEvent, state);
-                }                
+                }
+                else cout<<"You have not yet submitted 6 actions but only "<<slotPosition<<"now"<<endl;               
             }
 
             /* Refreshing of the command pannel */
@@ -442,10 +444,10 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
             } else {
                 setButtonReadyToClick(0);
             }		
-            cout<<"Slot position fin : "<<slotPosition<<endl;
+            //cout<<"Slot position fin : "<<slotPosition<<endl;
             refreshCommand();
             refreshSlot();
-   		}
+   		}}
 	}
 }
 

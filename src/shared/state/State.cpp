@@ -166,7 +166,7 @@ bool State::getEndGame () {
     return endGame;
 }
 
-void State::checkEndGame () {
+int State::checkEndGame () {
 	/* Gets cp on the map */
 	std::vector<int> cpOnTheMap;
 	for (int i = 0 ; i < mapHeight ; i++) {
@@ -184,11 +184,13 @@ void State::checkEndGame () {
 		std::sort(cpOnTheMap.begin(), cpOnTheMap.end());
 		if (cpOnTheMap == cpOfPlayer) {
 			this->endGame = true;
+			return i;
 		}
 		for (unsigned int i = 0; i < cpOnTheMap.size() ; i++) {
 			cout<<"CP MAP : "<<cpOnTheMap[i]<<" CP PLAYER : "<<cpOfPlayer[i]<<endl;
 		}
 	}
+	return -1;
 }
 
 bool State::getEndRound () {

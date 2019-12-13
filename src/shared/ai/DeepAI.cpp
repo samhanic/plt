@@ -32,16 +32,11 @@ bool DeepAI::run (engine::Engine& engine){
 
     std::array<Action, 6> actions = tabPopulation[0].individual;
 
-    for (int i = 0 ; i < 6 ; i++) {
-<<<<<<< HEAD
-        cout<<"ACTION : "<<tabPopulation[0].individual[i]<<endl;
-        //tabPopulation[0].individual[i] = state::FORWARD;
-=======
-        
+    for (int i = 0 ; i < 6 ; i++) {      
         //tabPopulation[0].individual[i] = state::FORWARD;
         cout<<"1st action : "<<tabPopulation[0].individual[i]<<endl;
         cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
->>>>>>> master
+
     }
     
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
@@ -73,7 +68,11 @@ void DeepAI::generatePopulation() {
 
 /* Fusion genes of two individuals to improve result */
 bool DeepAI::fusionActions () {
-
+    int indexTab[3] = {0, 2, 4};
+    int randGene = rand() % 3;
+    
+    tabPopulation[3].individual[(int)indexTab[randGene]] = tabPopulation[0].individual[indexTab[randGene]];
+    tabPopulation[4].individual[indexTab[randGene] + 1] = tabPopulation[0].individual[indexTab[randGene]+1];
 
     return 1;
 }
@@ -83,7 +82,7 @@ bool DeepAI::fusionActions () {
 bool DeepAI::sortTabPopulation() {
     IndividualAI firstIndiv , secondIndiv, thirdIndiv;
 
-    for (int k = 0 ; k < 10 ; k++) {
+    for (int k = 5 ; k < 10 ; k++) {
         if (tabPopulation[k].fitnessScore > thirdIndiv.fitnessScore) {
             if (tabPopulation[k].fitnessScore > secondIndiv.fitnessScore) {
                 if (tabPopulation[k].fitnessScore > firstIndiv.fitnessScore) {
@@ -155,14 +154,6 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     // }
     cout<<"Evaluation at"<<eval<<"points."<<endl;
     return eval;
-}
-
-bool DeepAI::fusionActions (){
-    return false;
-}
-
-bool DeepAI::sortTabPopulation (){
-    return false;
 }
 
 bool DeepAI::evaluatePopulation (engine::Engine& engine){

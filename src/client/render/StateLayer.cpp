@@ -398,7 +398,7 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                 /* Cast int to Actoion before sending them */
                 if (slotPosition == 6) {
                     std::array<Action, 6> actionSlotTab;
-                    std::unique_ptr<Robot>& ptrRobot = state.getPlayers()[0];
+                    std::shared_ptr<Robot>& ptrRobot = state.getPlayers()[0];
                     for (int i = 0; i < 6 ; i++) {
                         actionSlotTab[i] = static_cast<Action>(mySlot[i]);
                     }

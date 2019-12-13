@@ -93,9 +93,9 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
 }
 
 bool DeepAI::fusionActions (){
-    
+    return false;
 }
 
-bool sortTabPopulation (){
-
+bool DeepAI::sortTabPopulation (){
+    return false;
 }

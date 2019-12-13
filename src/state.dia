@@ -2069,7 +2069,7 @@
             <dia:string>#twoDTab#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::vector&lt;std::vector&lt;std::unique_ptr&lt;MapTile&gt;&gt;&gt;#</dia:string>
+            <dia:string>#std::vector&lt;std::vector&lt;std::shared_ptr&lt;MapTile&gt;&gt;&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -2092,7 +2092,7 @@
             <dia:string>#players#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::vector&lt;std::unique_ptr&lt;Robot&gt;&gt;#</dia:string>
+            <dia:string>#std::vector&lt;std::shared_ptr&lt;Robot&gt;&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>
@@ -2401,7 +2401,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#const std::vector&lt;std::vector&lt;std::unique_ptr&lt;MapTile&gt;&gt;&gt;&amp;#</dia:string>
+            <dia:string>#const std::vector&lt;std::vector&lt;std::shared_ptr&lt;MapTile&gt;&gt;&gt;&amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -2431,7 +2431,7 @@
             <dia:string>##</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::vector&lt;std::unique_ptr&lt;Robot&gt;&gt;&amp;#</dia:string>
+            <dia:string>#std::vector&lt;std::shared_ptr&lt;Robot&gt;&gt;&amp;#</dia:string>
           </dia:attribute>
           <dia:attribute name="visibility">
             <dia:enum val="0"/>
@@ -9476,8 +9476,8 @@
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="75.3859,28.452"/>
-        <dia:point val="38.3572,28.452"/>
-        <dia:point val="38.3572,26.0704"/>
+        <dia:point val="51.45,28.452"/>
+        <dia:point val="51.45,26.0704"/>
         <dia:point val="35.4105,26.0704"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">

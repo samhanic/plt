@@ -42,13 +42,17 @@ void DeepAI::generatePopulation() {
     /* Must add bonus in the generation list if available */
     int choiceMatrix[5][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}};
 
+    Action val;
+    IndividualAI tempIndiv;
 
     for(int k = 0 ; k < 10 ; k++) {
-        IndividualAI tempIndiv;      
         for(int i = 0 ; i < 3 ; i++) {
             int randomChoice = rand() % 4;
-            tempIndiv.individual[i * 2] = state::FORWARD;
-            tempIndiv.individual[i * 2 + 1] = state::FORWARD;
+
+            val = static_cast<Action>(choiceMatrix[randomChoice][i * 2]);            
+            tempIndiv.individual[i * 2] = val;
+            val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
+            tempIndiv.individual[i * 2 + 1] = val;
         }
         tabPopulation[k]=tempIndiv;
     }

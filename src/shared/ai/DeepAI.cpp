@@ -22,10 +22,19 @@ DeepAI::DeepAI (int nbRobot){
 
 bool DeepAI::run (engine::Engine& engine){
     /*Verify that the game is not ended*/
-    if (engine.getMyState()->getEndGame()) return false;
+    if (engine.getMyState()->getEndGame()) return false;    
 
+    generatePopulation();
+    std::array<Action, 6> actions = tabPopulation[0].individual;
+    for (int i = 0 ; i < 6 ; i++) {
+        
+        tabPopulation[0].individual[i] = state::FORWARD;
+        cout<<"ACTION : "<<tabPopulation[0].individual[i]<<endl;
+    }
     
-    //engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[0]);  
+
+    engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
+    
     return true;
 }
 
@@ -34,18 +43,19 @@ void DeepAI::generatePopulation() {
     /* Must add bonus in the generation list if available */
     int choiceMatrix[5][2] = {{7, 4}, {7, 1}, {7, 2}, {7, 3}, {14, 14}};
 
+    Action val;
+    IndividualAI tempIndiv;
 
     for(int k = 0 ; k < 10 ; k++) {
-        IndividualAI tempIndiv;
-        this->tabPopulation[k] = tempIndiv;
-//        tempIndiv = this->tabPopulation[k];
-
         for(int i = 0 ; i < 3 ; i++) {
             int randomChoice = rand() % 4;
-            tempIndiv.individual[i * 2] = state::FORWARD;
-            tempIndiv.individual[i * 2 + 1] = state::FORWARD;
-            tempIndiv.fitnessScore = 0;
+
+            val = static_cast<Action>(choiceMatrix[randomChoice][i * 2]);            
+            tempIndiv.individual[i * 2] = val;
+            val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
+            tempIndiv.individual[i * 2 + 1] = val;
         }
+        tabPopulation[k]=tempIndiv;
     }
 }
 /*

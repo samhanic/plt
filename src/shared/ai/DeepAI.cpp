@@ -159,32 +159,29 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
 bool DeepAI::evaluatePopulation (engine::Engine& engine){
     //for (size_t i=0;i<tabPopulation.size();++i){
         int i=0;
-        //1. Save the state
-        std::shared_ptr<state::State> savedstate = engine.getMyState();
+        //1. Save the engine
         //engine.saveInfoRollback();
+        engine::Engine modEngine(engine);
         //2. Fill the player actions
-        engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[i].individual);
+        modEngine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[i].individual);
         //3. Fill the others players actions
-        for (size_t j=0;j<engine.getMyState()->getPlayers().size();++j){
+        for (size_t j=0;j<modEngine.getMyState()->getPlayers().size();++j){
             if (nbRobot!=(int) j){
                 ai::HeuristicAI aiRobot(j);
-                aiRobot.run(engine);
+                aiRobot.run(modEngine);
             }
         }
         //4. Execute the 6 actions
         for (size_t j = 0 ; j < 6 ; ++j) {
-            if (!engine.getMyState()->getEndGame()) {
+            if (!modEngine.getMyState()->getEndGame()) {
                 /* Do action and check death */
-                engine.executeAction(j);
-                engine.getMyState()->checkEndGame();
+                modEngine.executeAction(j);
+                modEngine.getMyState()->checkEndGame();
             }
         }
         //5. Evaluate the robot
-        tabPopulation[i].fitnessScore=evaluateRobot(engine, nbRobot);
-        //6. Rollback
-        engine.setMyState(savedstate);
+        tabPopulation[i].fitnessScore=evaluateRobot(modEngine, nbRobot);
         //engine.doRollback();
-
     //}
     return true;
 }

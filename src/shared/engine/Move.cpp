@@ -118,11 +118,11 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
 
 bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desiredPosition){
     //Verify that the new position robot will occupy is in the map
-    if (theState->getMapWidth()==desiredPosition.getX()){
+    if (theState->getMapWidth()<=desiredPosition.getX()){
         cout<<"X is outside the map to the right"<<endl;
         return false;
     }
-    if (theState->getMapHeight()==desiredPosition.getY()){
+    if (theState->getMapHeight()<=desiredPosition.getY()){
         cout<<"Y is outside the map to the bottom"<<endl;
         return false;
     }

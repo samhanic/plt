@@ -1,6 +1,7 @@
 #include "../engine.h"
 #include "../state.h"
 #include "../client/render.h"
+#define MAP_FILE "../res/map.txt"
 
 #include <iostream>
 #include <fstream>
@@ -22,6 +23,27 @@ Engine::Engine() {
 
 Engine::Engine(std::shared_ptr<state::State> myState){
     this->myState=myState;
+}
+
+Engine::Engine(const Engine& object){
+    this->activeRobot=object.getActiveRobot();
+    this->initEngine(MAP_FILE);
+    for (size_t i=0; i<object.getMyState()->getPlayers().size(); ++i){
+        this->myState->players[i]->setLifePoints(5);
+        //this->myState->getPlayers()[i]->setLifePoints(5);
+        //this->getMyState()->getPlayers()[i]->setBonusActivated(object.getMyState()->getPlayers()[i]->getBonusActivated());
+        //this->getMyState()->getPlayers()[i]->setBonusOwned(object.getMyState()->getPlayers()[i]->getBonusOwned());
+        // this->getMyState()->getPlayers()[i]->setIsBoosted(object.getMyState()->getPlayers()[i]->getIsBoosted());
+        // this->getMyState()->getPlayers()[i]->setLifeNumber(object.getMyState()->getPlayers()[i]->getLifeNumber());
+        // this->getMyState()->getPlayers()[i]->setLifePoints(object.getMyState()->getPlayers()[i]->getLifePoints());
+        // this->getMyState()->getPlayers()[i]->setOrientation(object.getMyState()->getPlayers()[i]->getOrientation());
+        // this->getMyState()->getPlayers()[i]->setPosition(object.getMyState()->getPlayers()[i]->getPosition());
+        // this->getMyState()->getPlayers()[i]->setStatus(object.getMyState()->getPlayers()[i]->getStatus());
+        // this->getMyState()->getPlayers()[i]->setTileCode(object.getMyState()->getPlayers()[i]->getTileCode());
+        // this->getMyState()->getPlayers()[i]->setTypeId(object.getMyState()->getPlayers()[i]->getTypeId());
+        // this->getMyState()->getPlayers()[i]->setVisitedCheckpoints(object.getMyState()->getPlayers()[i]->getVisitedCheckpoints());
+    }
+    this->getMyState()->roundNumber=object.getMyState()->roundNumber;
 }
 
 bool Engine::initEngine (std::string mapFileLocation){

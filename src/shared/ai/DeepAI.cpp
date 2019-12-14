@@ -27,7 +27,7 @@ bool DeepAI::run (engine::Engine& engine){
     /*Verify that the game is not ended*/
     if (engine.getMyState()->getEndGame()) return false;    
 
-    for (int i = 0 ; i < 4 ; i++) {
+    for (int i = 0 ; i < 10 ; i++) {
         generatePopulation();
         evaluatePopulation(engine);
         sortTabPopulation();
@@ -54,7 +54,8 @@ void DeepAI::generatePopulation() {
     Action val;
     IndividualAI tempIndiv;
 
-    for(int k = 0 ; k < 10 ; k++) {
+    for(int k = 0 ; k < 100 ; k++) {
+        cout<<"INDIVIDUAL NUMBER : "<<k<<endl;
         for(int i = 0 ; i < 3 ; i++) {
             int randomChoice = rand() % 8;
 
@@ -63,6 +64,7 @@ void DeepAI::generatePopulation() {
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
             tempIndiv.individual[i * 2 + 1] = val;
             //tempIndiv.fitnessScore = rand() % 1000;
+            cout<<"|"<<tempIndiv.individual[i * 2]<<"|"<<tempIndiv.individual[i * 2 + 1]<<endl;
         }
         tabPopulation[k]  = tempIndiv;
     }
@@ -84,7 +86,7 @@ bool DeepAI::fusionActions () {
 bool DeepAI::sortTabPopulation() {
     IndividualAI firstIndiv , secondIndiv, thirdIndiv;
 
-    for (int k = 5 ; k < 10 ; k++) {
+    for (int k = 5 ; k < 100 ; k++) {
         if (tabPopulation[k].fitnessScore > thirdIndiv.fitnessScore) {
             if (tabPopulation[k].fitnessScore > secondIndiv.fitnessScore) {
                 if (tabPopulation[k].fitnessScore > firstIndiv.fitnessScore) {

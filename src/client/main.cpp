@@ -128,7 +128,7 @@ int main(int argc,char* argv[])
 		return 0;
 	}
 	else if(entry== "deep_ai"){
-/* INITIALIZATION */
+		/* INITIALIZATION */
 		/* Creates Engine that creates State */
 		Engine myEngine;
 		myEngine.initEngine(MAP_FILE);
@@ -149,17 +149,10 @@ int main(int argc,char* argv[])
 		myEngine.registerObservator(&renderObservator);
 
 		// Observable stateObservator;
-
-		/* Clean temp file to keep State history for rollback */
-		std::ofstream ofs;
-		ofs.open(FILE_NAME, std::ofstream::out | std::ofstream::trunc);
-		ofs.close();
 				
 		/* IA will be the second Robot */
 		ai::DeepAI aiRobot(1);
 		ptrState->initRobot(ORANGE);
-
-		sf::Clock clock;
 
 		while (window.isOpen()){
 			statelay.eventManager(ptrState, window, statelay);
@@ -167,14 +160,10 @@ int main(int argc,char* argv[])
 			/* Actions processed when all players have selected their actions */
 			if (myEngine.checkRobotsActions()) {
 
-				myEngine.saveInfoRollback();
 				aiRobot.run(myEngine);
 
 				for (int i = 0 ; i < 6 ; i++) {
 					if (!ptrState->getEndGame()) {
-						cout<<"ROBOT 0 : "<<myEngine.getMyState()->getPlayers()[0]->getRobotActions()[i]<<endl;  
-						cout<<"ROBOT 1 : "<<myEngine.getMyState()->getPlayers()[1]->getRobotActions()[i]<<endl;  
-
 						/* Do action and check death */
 						myEngine.executeAction(i);
 						ptrState->checkEndGame();
@@ -188,6 +177,7 @@ int main(int argc,char* argv[])
 					}
 				}
 				myEngine.endOfRound();
+				aiRobot.evaluateRobot(myEngine, 0);
 
 				statelay.initSurface(*ptrState);
 				statelay.refreshEffects(*ptrState, 0, 0);

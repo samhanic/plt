@@ -39,6 +39,7 @@ bool DeepAI::run (engine::Engine& engine){
         //tabPopulation[0].individual[i] = state::FORWARD;
         cout<<"1st action : "<<tabPopulation[0].individual[i]<<endl;
         cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
+        cout<<"ACTION "<<i<<" : "<<actions[i]<<endl;
     }
     
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
@@ -57,7 +58,7 @@ void DeepAI::generatePopulation() {
     for(int k = 0 ; k < 100 ; k++) {
         cout<<"INDIVIDUAL NUMBER : "<<k<<endl;
         for(int i = 0 ; i < 3 ; i++) {
-            int randomChoice = rand() % 8;
+            int randomChoice = rand() % 7;
 
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2]);            
             tempIndiv.individual[i * 2] = val;
@@ -126,12 +127,12 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     int eval=1000;
     if (engine.getMyState()->getEndGame()){
         if (engine.getMyState()->checkEndGame() == (int) evaluatedRobot){
-            return 10000; //You won!
+            return 50000; //You won!
         }
-        else return -10000; //Other player won!
+        else return -50000; //Other player won!
     }
     if (engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()==0){
-        return -10000; // You lost
+        return -50000; // You lost
     }
 
     //Evaluate the number of checkpoints you validated
@@ -167,13 +168,15 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
     LightRollbackSave tempRollBack;
     
     std::array<Action, 6> tempActionOthers = engine.getMyState()->getPlayers()[0]->getRobotActions();
-    
+    std::vector<int> tempCPs = engine.getMyState()->getPlayers()[0]->getVisitedCheckpoints();
+
     for (unsigned int i = 0 ; i < engine.getMyState()->getPlayers().size() ; i++) {
         tempRollBack.rsLifeNumber = engine.getMyState()->getPlayers()[i]->getLifeNumber();
         tempRollBack.rsLifePoints = engine.getMyState()->getPlayers()[i]->getLifePoints();
         tempRollBack.rsOrientation = engine.getMyState()->getPlayers()[i]->getOrientation();
         tempRollBack.rsX = engine.getMyState()->getPlayers()[i]->getPosition().getX();
         tempRollBack.rsY = engine.getMyState()->getPlayers()[i]->getPosition().getY();
+        tempRollBack.rsCP = engine.getMyState()->getPlayers()[i]->getVisitedCheckpoints();
 
         tabRollBack.push_back(tempRollBack);
         cout<<"SAVE ROBOT " << engine.getMyState()->getPlayers()[i]->getRobotId() << endl;
@@ -212,12 +215,13 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
             engine.getMyState()->getPlayers()[j]->setLifeNumber(tabRollBack[j].rsLifeNumber);
             engine.getMyState()->getPlayers()[j]->setLifePoints(tabRollBack[j].rsLifePoints);
             engine.getMyState()->getPlayers()[j]->setOrientation(tabRollBack[j].rsOrientation);
+            engine.getMyState()->getPlayers()[j]->setVisitedCheckpoints(tabRollBack[j].rsCP);
             tempPos.setX(tabRollBack[j].rsX);
             tempPos.setY(tabRollBack[j].rsY);
             engine.getMyState()->getPlayers()[j]->setPosition(tempPos);
         }
         engine.getMyState()->getPlayers()[0]->setRobotActions(tempActionOthers);
-
+        engine.getMyState()->getPlayers()[0]->setVisitedCheckpoints(tempCPs);
     }
 
 

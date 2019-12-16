@@ -53,7 +53,13 @@ state::Position MapPathFinder::nearestCP (state::State& myState, int robotNumber
     }
     if (nearestCP==-1){
         cout<<"Trying to find nearest CP but all the CP have already been visited!"<<endl;
-        return posCP[0];
+        for (size_t x=0; x<myState.getMap().size() ; ++x){
+        for (size_t y=0 ; y<myState.getMap()[0].size() ; ++y){
+            if (myState.getMap()[x][y]->getIdStatic()==CHECKPOINT){
+                CheckPoint *cp = static_cast<CheckPoint*> (myState.getMap()[x][y].get());
+                return cp->getPosition();
+            }
+        }}
     }
     //cout<<"nearestCP number : "<<nearestCP<<endl;
     //cout<<"The nearest checkpoint is located in x = "<<posCP[nearestCP].getX()<<"and y = "<<posCP[nearestCP].getY()<<endl;

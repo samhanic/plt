@@ -184,6 +184,7 @@ int State::checkEndGame () {
 		std::sort(cpOnTheMap.begin(), cpOnTheMap.end());
 		if (cpOnTheMap == cpOfPlayer) {
 			this->endGame = true;
+			cout<<"The game have been checked ended"<<endl;
 			return i;
 		}
 		// for (unsigned int i = 0; i < cpOnTheMap.size() ; i++) {

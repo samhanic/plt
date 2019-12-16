@@ -35,12 +35,12 @@ bool DeepAI::run (engine::Engine& engine){
 
     std::array<Action, 6> actions = tabPopulation[0].individual;
 
-    cout<<"POPULATION : "<<endl;
+    //cout<<"POPULATION : "<<endl;
     for (int j=0; j<1000; ++j){
         cout<<"a :"<<tabPopulation[j].individual[0]<<" , b:"<<tabPopulation[j].individual[1]<<" , c:"<<tabPopulation[j].individual[2]<<" , d:"<<tabPopulation[j].individual[j]<<" , e:"<<tabPopulation[j].individual[4]<<" , f:"<<tabPopulation[j].individual[5]<<" FITNESS : "<<tabPopulation[j].fitnessScore<<endl;
     }
     for (int i = 0 ; i < 6 ; i++) {      
-        cout<<"ACTION : "<<i<<" ; "<<(int) tabPopulation[0].individual[i]<<endl;
+        //cout<<"ACTION : "<<i<<" ; "<<(int) tabPopulation[0].individual[i]<<endl;
     }
     
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
@@ -57,7 +57,7 @@ void DeepAI::generatePopulation() {
     IndividualAI tempIndiv;
 
     for(int k = 3 ; k < 1000 ; k++) {
-        cout<<"INDIVIDUAL NUMBER : "<<k<<endl;
+        //cout<<"INDIVIDUAL NUMBER : "<<k<<endl;
         tempIndiv.fitnessScore = tabPopulation[k].fitnessScore;
         for(int i = 0 ; i < 3 ; i++) {
             int randomChoice = rand() % 7;
@@ -67,7 +67,7 @@ void DeepAI::generatePopulation() {
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
             tempIndiv.individual[i * 2 + 1] = val;
             //tempIndiv.fitnessScore = rand() % 1000;
-            //cout<<"Action list :"<<tempIndiv.individual[i * 2]<<"|"<<tempIndiv.individual[i * 2 + 1]<<endl;
+            ////cout<<"Action list :"<<tempIndiv.individual[i * 2]<<"|"<<tempIndiv.individual[i * 2 + 1]<<endl;
         }
         tabPopulation[k]  = tempIndiv;
     }
@@ -127,8 +127,10 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     if (nbRobotTest!=-1) evaluatedRobot=(uint) nbRobotTest;
     else evaluatedRobot=(uint) nbRobot;
     int eval=1000;
+    int robotWinner = engine.getMyState()->checkEndGame();
     if (engine.getMyState()->getEndGame()){
-        if (engine.getMyState()->checkEndGame() == (int) evaluatedRobot){
+        cout<<"In evaluateRobot : game ended"<<endl;
+        if (robotWinner == (int) evaluatedRobot){
             return 50000; //You won!
         }
         else return -50000; //Other player won!
@@ -151,7 +153,7 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()*1000;
     eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifePoints()*200;
 
-    cout<<"Evaluation at"<<eval<<"points."<<endl;
+    //cout<<"Evaluation at"<<eval<<"points."<<endl;
     return eval;
 }
 
@@ -173,7 +175,7 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
         tempRollBack.rsCP = engine.getMyState()->getPlayers()[i]->getVisitedCheckpoints();
 
         tabRollBack.push_back(tempRollBack);
-        cout<<"SAVE ROBOT " << engine.getMyState()->getPlayers()[i]->getRobotId() << endl;
+        //cout<<"SAVE ROBOT " << engine.getMyState()->getPlayers()[i]->getRobotId() << endl;
     }
 
     //Give the others player heuristic ai
@@ -190,7 +192,7 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
         for (int j = 0 ; j < 6 ; j++) {
 		 	if (!engine.getMyState()->getEndGame()) {
 			    /* Do action and check death */
-                //cout<<"Action runned (nb "<<i<<" ) is "<<engine.getMyState()->getPlayers()[1]->getRobotActions()[i]<<endl;
+                ////cout<<"Action runned (nb "<<i<<" ) is "<<engine.getMyState()->getPlayers()[1]->getRobotActions()[i]<<endl;
 		 		engine.executeAction(j);
 		 		engine.getMyState()->checkEndGame();
             }
@@ -200,8 +202,8 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
 
         /* Evaluate */
         tabPopulation[i].fitnessScore = evaluateRobot(engine, 1);
-        cout<<"Actions evaluated at "<<tabPopulation[i].fitnessScore<<endl;
-        cout<<"These actions are a :"<<tabPopulation[i].individual[0]<<" , b:"<<tabPopulation[i].individual[1]<<" , c:"<<tabPopulation[i].individual[2]<<" , d:"<<tabPopulation[i].individual[3]<<" , e:"<<tabPopulation[i].individual[4]<<" , f:"<<tabPopulation[i].individual[5]<<endl;
+        //cout<<"Actions evaluated at "<<tabPopulation[i].fitnessScore<<endl;
+        //cout<<"These actions are a :"<<tabPopulation[i].individual[0]<<" , b:"<<tabPopulation[i].individual[1]<<" , c:"<<tabPopulation[i].individual[2]<<" , d:"<<tabPopulation[i].individual[3]<<" , e:"<<tabPopulation[i].individual[4]<<" , f:"<<tabPopulation[i].individual[5]<<endl;
 
         
         /* Rollback */

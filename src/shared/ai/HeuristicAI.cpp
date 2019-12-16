@@ -28,7 +28,7 @@ bool HeuristicAI::run(engine::Engine& engine){
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED)
         return false;
 
-    cout<<"Choosing 6 actions"<<endl;
+    //cout<<"Choosing 6 actions"<<endl;
     
     std::array<Action, 6> actions;
     unsigned int actionNumber = 0;

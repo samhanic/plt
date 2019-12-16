@@ -123,7 +123,10 @@ void Engine::executeAction(int actionNumber) {
         //int i = 0;
         Action processedAction = myState->getPlayers()[i]->getRobotActions()[actionNumber];
 
-        if ((processedAction == ROTATION_CLK) || (processedAction == ROTATION_CCLK)) {
+        if ((processedAction < 0) || (processedAction > 15)){
+            cout<<"Error of action : memory out of range"<<endl;
+        }
+        else if ((processedAction == ROTATION_CLK) || (processedAction == ROTATION_CCLK)) {
             Rotation myRotation(myState->getPlayers()[i]->getRobotId(), processedAction);
             myRotation.executeOrder(myState);
         }
@@ -138,7 +141,7 @@ void Engine::executeAction(int actionNumber) {
         }
         else if (processedAction == state::ATTACK){
             Attack myAttack (myState->getPlayers()[i]->getRobotId());
-            cout<<"Attacking robot"<<endl;
+            //cout<<"Attacking robot"<<endl;
             myAttack.executeOrder(myState);
         }
         else{
@@ -152,7 +155,7 @@ void Engine::executeAction(int actionNumber) {
         EnvironmentMove *environment = new EnvironmentMove(0);
         environment->grabEMType(myState);
         environment->execute(myState);
-        cout<<"action : "<<myState->getPlayers()[i]->getRobotActions()[actionNumber]<< "du robot : "<<i<<endl;
+        //cout<<"action : "<<myState->getPlayers()[i]->getRobotActions()[actionNumber]<< "du robot : "<<i<<endl;
     }
  
 }

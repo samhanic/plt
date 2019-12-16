@@ -13,8 +13,8 @@ Move::Move (int robotNumber, state::Action givenAction){
 }
 
 bool Move::executeOrder (std::shared_ptr<state::State> theState){
-    cout<<"move order executing :"<<robotAction<<endl;
-    cout<<"ROBOTNUMBER :"<<robotNumber<<endl;
+    //cout<<"move order executing :"<<robotAction<<endl;
+    //cout<<"ROBOTNUMBER :"<<robotNumber<<endl;
     Position pos = theState->getPlayers()[robotNumber]->getPosition();
     if (directionMove==NONE){
         directionMove = theState->getPlayers()[robotNumber]->getOrientation();
@@ -78,7 +78,7 @@ bool Move::executeOrder (std::shared_ptr<state::State> theState){
     MapTile *tile = theState->getMap()[pos.getY()][pos.getX()].get();
     if (tile->getIdStatic() == BASIC){
         Basic *objective = static_cast<Basic*>(tile);
-        cout<<"You arrived in a basic tile : "<<objective->getBasicTypeId()<<endl;
+        //cout<<"You arrived in a basic tile : "<<objective->getBasicTypeId()<<endl;
         if (objective->getBasicTypeId()==BASIC_HOLE){
             cout<<"You arrived in a hole!"<<endl;
             theState->deathRobot(*(theState->getPlayers()[robotNumber]));
@@ -134,7 +134,7 @@ bool Move::verifyPosition(std::shared_ptr<state::State> theState, Position desir
     if (tile->getIdStatic() == BASIC){
         Basic *objective = static_cast<Basic*>(tile);
         if (objective->getBasicTypeId()==BASIC_WALL){
-            cout<<"You cannot to go over a wall!"<<endl;
+            cout<<"You cannot go over a wall!"<<endl;
             return false;
         }
     }

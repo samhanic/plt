@@ -29,7 +29,12 @@ bool DeepAI::run (engine::Engine& engine){
 
     for (int i = 0 ; i < 10 ; i++) {
         generatePopulation();
+        cout<<"The 10 first drawed rows of actions are :"<<endl;
+        for (int j=0; j<10; ++j){
+            cout<<"a :"<<tabPopulation[j].individual[0]<<" , b:"<<tabPopulation[j].individual[1]<<" , c:"<<tabPopulation[j].individual[2]<<" , d:"<<tabPopulation[j].individual[j]<<" , e:"<<tabPopulation[j].individual[4]<<" , f:"<<tabPopulation[j].individual[5]<<endl;
+        }
         evaluatePopulation(engine);
+        cout<<"Population evaluated!"<<endl;
         sortTabPopulation();
     }
 
@@ -37,8 +42,8 @@ bool DeepAI::run (engine::Engine& engine){
 
     for (int i = 0 ; i < 6 ; i++) {      
         //tabPopulation[0].individual[i] = state::FORWARD;
-        cout<<"1st action : "<<tabPopulation[0].individual[i]<<endl;
-        cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
+        cout<<"1st action : "<<(int) tabPopulation[0].individual[i]<<endl;
+        //cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
         cout<<"ACTION "<<i<<" : "<<actions[i]<<endl;
     }
     
@@ -65,7 +70,7 @@ void DeepAI::generatePopulation() {
             val = static_cast<Action>(choiceMatrix[randomChoice][i * 2 + 1]);  
             tempIndiv.individual[i * 2 + 1] = val;
             //tempIndiv.fitnessScore = rand() % 1000;
-            cout<<"|"<<tempIndiv.individual[i * 2]<<"|"<<tempIndiv.individual[i * 2 + 1]<<endl;
+            //cout<<"Action list :"<<tempIndiv.individual[i * 2]<<"|"<<tempIndiv.individual[i * 2 + 1]<<endl;
         }
         tabPopulation[k]  = tempIndiv;
     }
@@ -143,20 +148,12 @@ int DeepAI::evaluateRobot (engine::Engine& engine, int nbRobotTest){
     state::Position nearest = mpf.nearestCP(*engine.getMyState(),evaluatedRobot);
     int difX = nearest.getX()-engine.getMyState()->getPlayers()[evaluatedRobot]->getPosition().getX();
     int difY = nearest.getY()-engine.getMyState()->getPlayers()[evaluatedRobot]->getPosition().getY();
-    eval += 10*(std::sqrt(std::pow(difX,2)+std::pow(difY,2)));
+    eval += 100*(std::sqrt(std::pow(difX,2)+std::pow(difY,2)));
 
     //evaluate the life
     eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifeNumber()*1000;
     eval+=engine.getMyState()->getPlayers()[evaluatedRobot]->getLifePoints()*200;
 
-    // if (nbRobotTest!=-1){
-    //     uint robots = engine.getMyState()->getPlayers().size();
-    //     for (size_t i=0; i<robots; ++i){
-    //         if (i!=evaluatedRobot){
-    //             eval -= evaluateRobot(engine,i)/(2*robots);
-    //         }
-    //     }
-    // }
     cout<<"Evaluation at"<<eval<<"points."<<endl;
     return eval;
 }
@@ -182,23 +179,22 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
         cout<<"SAVE ROBOT " << engine.getMyState()->getPlayers()[i]->getRobotId() << endl;
     }
 
-
+    //Give the others player heuristic ai
+    ai::HeuristicAI aiRobot(0);
+    aiRobot.processPlayersStats(engine);
+    
     // /* Loop to test each individual */
     for (unsigned int i = 0 ; i  < tabPopulation.size() ; ++i) {
-
-        /* Fill players actions */      
-        engine.getMyState()->getPlayers()[1]->setRobotActions(tabPopulation[0].individual);
-        engine.getMyState()->getPlayers()[0]->setRobotActions(tabPopulation[i].individual);
-        //
-        ai::HeuristicAI aiRobot(0);
-        aiRobot.processPlayersStats(engine);
         aiRobot.run(engine);
+        /* Fill players actions */      
+        engine.getMyState()->getPlayers()[1]->setRobotActions(tabPopulation[i].individual);
 
         /* Execute actions */
-        for (int i = 0 ; i < 6 ; i++) {
+        for (int j = 0 ; j < 6 ; j++) {
 		 	if (!engine.getMyState()->getEndGame()) {
 			    /* Do action and check death */
-		 		engine.executeAction(i);
+                //cout<<"Action runned (nb "<<i<<" ) is "<<engine.getMyState()->getPlayers()[1]->getRobotActions()[i]<<endl;
+		 		engine.executeAction(j);
 		 		engine.getMyState()->checkEndGame();
             }
 		}
@@ -206,7 +202,9 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
 		
 
         /* Evaluate */
-        evaluateRobot(engine, 1);
+        tabPopulation[i].fitnessScore = evaluateRobot(engine, 1);
+        cout<<"Actions evaluated at "<<tabPopulation[i].fitnessScore<<endl;
+        cout<<"These actions are a :"<<tabPopulation[i].individual[0]<<" , b:"<<tabPopulation[i].individual[1]<<" , c:"<<tabPopulation[i].individual[2]<<" , d:"<<tabPopulation[i].individual[3]<<" , e:"<<tabPopulation[i].individual[4]<<" , f:"<<tabPopulation[i].individual[5]<<endl;
 
         
         /* Rollback */
@@ -223,39 +221,5 @@ bool DeepAI::evaluatePopulation (engine::Engine& engine){
         engine.getMyState()->getPlayers()[0]->setRobotActions(tempActionOthers);
         engine.getMyState()->getPlayers()[0]->setVisitedCheckpoints(tempCPs);
     }
-
-
-
-
-    // //for (size_t i=0;i<tabPopulation.size();++i){
-    //     int i=0;
-    //     //1. Save the state
-    //     std::shared_ptr<state::State> savedstate = engine.getMyState();
-    //     //engine.saveInfoRollback();
-    //     //2. Fill the player actions
-    //     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(tabPopulation[i].individual);
-    //     //3. Fill the others players actions
-    //     for (size_t j=0;j<engine.getMyState()->getPlayers().size();++j){
-    //         if (nbRobot!=(int) j){
-    //             ai::HeuristicAI aiRobot(j);
-    //             aiRobot.run(engine);
-    //         }
-    //     }
-    //     //4. Execute the 6 actions
-    //     for (size_t j = 0 ; j < 6 ; ++j) {
-    //         if (!engine.getMyState()->getEndGame()) {
-    //             /* Do action and check death */
-    //             engine.executeAction(j);
-    //             engine.getMyState()->checkEndGame();
-    //         }
-    //     }
-    //     //5. Evaluate the robot
-    //     tabPopulation[i].fitnessScore=evaluateRobot(engine, nbRobot);
-    //     //6. Rollback
-    //     engine.setMyState(savedstate);
-    //     //engine.doRollback();
-
-    // //}
-
     return true;
 }

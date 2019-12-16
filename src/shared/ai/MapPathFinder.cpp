@@ -35,7 +35,7 @@ state::Position MapPathFinder::nearestCP (state::State& myState, int robotNumber
             }
         }
     }
-    cout<<posCP.size()<<"cp not yet visited"<<endl;
+    //cout<<posCP.size()<<"cp not yet visited"<<endl;
     
     //Find the nearest in all these
     int nearestCP=-1;
@@ -45,7 +45,7 @@ state::Position MapPathFinder::nearestCP (state::State& myState, int robotNumber
         distance = 0;
         distance += abs(posCP[i].getX()-myState.GETY);
         distance += abs(posCP[i].getY()-myState.GETX);
-        cout<<"Distance for checkpoint nb "<<nbCP[i]<<" is "<<distance<<endl;
+        //cout<<"Distance for checkpoint nb "<<nbCP[i]<<" is "<<distance<<endl;
         if (distance<distanceNearestCP && distance!=0){
             nearestCP=static_cast<int>(i);
             distanceNearestCP=distance;
@@ -55,8 +55,8 @@ state::Position MapPathFinder::nearestCP (state::State& myState, int robotNumber
         cout<<"Trying to find nearest CP but all the CP have already been visited!"<<endl;
         return posCP[0];
     }
-    cout<<"nearestCP number : "<<nearestCP<<endl;
-    cout<<"The nearest checkpoint is located in x = "<<posCP[nearestCP].getX()<<"and y = "<<posCP[nearestCP].getY()<<endl;
+    //cout<<"nearestCP number : "<<nearestCP<<endl;
+    //cout<<"The nearest checkpoint is located in x = "<<posCP[nearestCP].getX()<<"and y = "<<posCP[nearestCP].getY()<<endl;
     return posCP[nearestCP];
 }
 
@@ -66,52 +66,52 @@ std::array<state::Action, 6> MapPathFinder::pathToNearestCp (state::State& mySta
 
     int y = myState.getPlayers()[robotNumber]->getPosition().getX();
     int x = myState.getPlayers()[robotNumber]->getPosition().getY();
-    cout<<"Now the robot is located in "<<x<<" "<<y<<endl;
+    //cout<<"Now the robot is located in "<<x<<" "<<y<<endl;
     //state::DirectionStatus dir = myState.getPlayers()[robotNumber]->getOrientation();
 
     int nbboost=1;
     for (int i=0;i<6;i++){
         if (x<objective.getX()){
             solution[i]=BACKWARD;
-            cout<<"Solution : backward for action nb "<<i<<endl;
+            //cout<<"Solution : backward for action nb "<<i<<endl;
             x++;
         }
         else if (x>objective.getX()){
             solution[i]=FORWARD;
-            cout<<"Solution : forward for action nb "<<i<<endl;
+            //cout<<"Solution : forward for action nb "<<i<<endl;
             x--;
         }
         else if (x+1 == objective.getX()){
-            cout<<"Solution : 1 right for next checkpoint for action nb "<<i<<endl;
+            //cout<<"Solution : 1 right for next checkpoint for action nb "<<i<<endl;
             solution[i]=ROTATION_CLK;
             solution[i+1]=FORWARD;
             i++;
         }
         else if (abs(objective.getY()-y)!=nbboost && i!=5){
             solution[i]=BOOSTER;
-            cout<<"Solution : boost for action nb "<<i<<endl;
+            //cout<<"Solution : boost for action nb "<<i<<endl;
             nbboost++;
         }
         else if (y<objective.getY()){
             solution[i]=RIGHT;
             y+=nbboost;
             nbboost=1;
-            cout<<"Solution : right for action nb "<<i<<endl;
+            //cout<<"Solution : right for action nb "<<i<<endl;
         }
         else if (y>objective.getY()){
             solution[i]=LEFT;
             y-=nbboost;
             nbboost=1;
-            cout<<"Solution : left for action nb "<<i<<endl;
+            //cout<<"Solution : left for action nb "<<i<<endl;
         }
         else if (x==objective.getX() && y==objective.getY()) {
-            cout<<"Solution : check the next cp for action nb "<<i<<endl;
+            //cout<<"Solution : check the next cp for action nb "<<i<<endl;
             objective = nearestCP(myState,robotNumber);
             solution[i]=NO_ACTION;
             //i--;
         }
     }
-    cout<<"The actions for this turn have been fixed : "<<solution[0]<<solution[1]<<solution[2]<<solution[3]<<solution[4]<<solution[5]<<endl;
+    //cout<<"The actions for this turn have been fixed : "<<solution[0]<<solution[1]<<solution[2]<<solution[3]<<solution[4]<<solution[5]<<endl;
     return solution;
 }
 

@@ -196,16 +196,16 @@ bool Display::loadPlayers (state::State& stateLayer, sf::Texture& textureTileSet
         // Add orientation render
         if (stateLayer.getPlayers()[i]->getOrientation()== NORTH) {
            tileNumber=stateLayer.getPlayers()[i]->getTileCode();
-           cout<<"vers nord"<<endl;
+           //cout<<"vers nord"<<endl;
         } else if (stateLayer.getPlayers()[i]->getOrientation()== EAST) {
             tileNumber=stateLayer.getPlayers()[i]->getTileCode()+5;
-            cout<<"vers est"<<endl;
+            //cout<<"vers est"<<endl;
         } else if (stateLayer.getPlayers()[i]->getOrientation()== WEST) {
             tileNumber=stateLayer.getPlayers()[i]->getTileCode()+10;
-            cout<<"vers ouest"<<endl;
+            //cout<<"vers ouest"<<endl;
         } else if (stateLayer.getPlayers()[i]->getOrientation()== SOUTH) {
             tileNumber=stateLayer.getPlayers()[i]->getTileCode()+15;
-            cout<<"vers sud"<<endl;
+            //cout<<"vers sud"<<endl;
         }
 
 

@@ -26,7 +26,7 @@ bool RandomAI::run(engine::Engine& engine){
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==FINAL_DEAD) return false;
     if(engine.getMyState()->getPlayers()[nbRobot]->getStatus()==STUNNED) return false;
 
-    cout<<"Choosing 6 actions randomly to run"<<endl;
+    //cout<<"Choosing 6 actions randomly to run"<<endl;
     std::array<Action, 6> actions;
     int randomNumber;
     for (int i=0;i<6;++i){

@@ -186,9 +186,9 @@ int State::checkEndGame () {
 			this->endGame = true;
 			return i;
 		}
-		for (unsigned int i = 0; i < cpOnTheMap.size() ; i++) {
-			cout<<"CP MAP : "<<cpOnTheMap[i]<<" CP PLAYER : "<<cpOfPlayer[i]<<endl;
-		}
+		// for (unsigned int i = 0; i < cpOnTheMap.size() ; i++) {
+		// 	cout<<"CP MAP : "<<cpOnTheMap[i]<<" CP PLAYER : "<<cpOfPlayer[i]<<endl;
+		// }
 	}
 	return -1;
 }

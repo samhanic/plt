@@ -145,7 +145,7 @@ void StateLayer::refreshEffects (state::State& stateLayer, int actionsInRound, i
                 int isCp = stateLayer.getMap()[i][j]->getTileCode();
                 if ((isCp >= 3) && (isCp <= 7) && (isCp-2) == visitedCp[k]) {
                     this->effectsTab[i][j] = isCp + 5;
-                    cout<<"CP detected : "<<isCp<<endl;
+                    //cout<<"CP detected : "<<isCp<<endl;
                 }
             }
         }

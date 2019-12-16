@@ -29,22 +29,18 @@ bool DeepAI::run (engine::Engine& engine){
 
     for (int i = 0 ; i < 10 ; i++) {
         generatePopulation();
-        cout<<"The 10 first drawed rows of actions are :"<<endl;
-        for (int j=0; j<10; ++j){
-            cout<<"a :"<<tabPopulation[j].individual[0]<<" , b:"<<tabPopulation[j].individual[1]<<" , c:"<<tabPopulation[j].individual[2]<<" , d:"<<tabPopulation[j].individual[j]<<" , e:"<<tabPopulation[j].individual[4]<<" , f:"<<tabPopulation[j].individual[5]<<endl;
-        }
         evaluatePopulation(engine);
-        cout<<"Population evaluated!"<<endl;
         sortTabPopulation();
     }
 
     std::array<Action, 6> actions = tabPopulation[0].individual;
 
+    cout<<"POPULATION : "<<endl;
+    for (int j=0; j<1000; ++j){
+        cout<<"a :"<<tabPopulation[j].individual[0]<<" , b:"<<tabPopulation[j].individual[1]<<" , c:"<<tabPopulation[j].individual[2]<<" , d:"<<tabPopulation[j].individual[j]<<" , e:"<<tabPopulation[j].individual[4]<<" , f:"<<tabPopulation[j].individual[5]<<" FITNESS : "<<tabPopulation[j].fitnessScore<<endl;
+    }
     for (int i = 0 ; i < 6 ; i++) {      
-        //tabPopulation[0].individual[i] = state::FORWARD;
-        cout<<"1st action : "<<(int) tabPopulation[0].individual[i]<<endl;
-        //cout<<"Fitness score of this action is "<<tabPopulation[i].fitnessScore<<endl;
-        cout<<"ACTION "<<i<<" : "<<actions[i]<<endl;
+        cout<<"ACTION : "<<i<<" ; "<<(int) tabPopulation[0].individual[i]<<endl;
     }
     
     engine.getMyState()->getPlayers()[nbRobot]->setRobotActions(actions);  
@@ -60,8 +56,9 @@ void DeepAI::generatePopulation() {
     Action val;
     IndividualAI tempIndiv;
 
-    for(int k = 0 ; k < 100 ; k++) {
+    for(int k = 3 ; k < 1000 ; k++) {
         cout<<"INDIVIDUAL NUMBER : "<<k<<endl;
+        tempIndiv.fitnessScore = tabPopulation[k].fitnessScore;
         for(int i = 0 ; i < 3 ; i++) {
             int randomChoice = rand() % 7;
 
@@ -79,7 +76,7 @@ void DeepAI::generatePopulation() {
 /* Fusion genes of two individuals to improve result */
 bool DeepAI::fusionActions () {
     int indexTab[3] = {0, 2, 4};
-    int randGene = rand() % 3;
+    int randGene = rand() % 2;
     
     tabPopulation[3].individual[(int)indexTab[randGene]] = tabPopulation[0].individual[indexTab[randGene]];
     tabPopulation[4].individual[indexTab[randGene] + 1] = tabPopulation[0].individual[indexTab[randGene]+1];
@@ -92,7 +89,7 @@ bool DeepAI::fusionActions () {
 bool DeepAI::sortTabPopulation() {
     IndividualAI firstIndiv , secondIndiv, thirdIndiv;
 
-    for (int k = 5 ; k < 100 ; k++) {
+    for (int k = 5 ; k < 1000 ; k++) {
         if (tabPopulation[k].fitnessScore > thirdIndiv.fitnessScore) {
             if (tabPopulation[k].fitnessScore > secondIndiv.fitnessScore) {
                 if (tabPopulation[k].fitnessScore > firstIndiv.fitnessScore) {

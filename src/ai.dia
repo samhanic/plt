@@ -2107,7 +2107,7 @@
             <dia:string>#tabPopulation#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
-            <dia:string>#std::array&lt;IndividualAI, 100&gt;#</dia:string>
+            <dia:string>#std::array&lt;IndividualAI, 1000&gt;#</dia:string>
           </dia:attribute>
           <dia:attribute name="value">
             <dia:string>##</dia:string>

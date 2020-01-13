@@ -48,6 +48,7 @@ void Engine::clickOnValidate (int robotId, bool rollback) {
 void Engine::endOfRound () {
     std::array<Action, 6> initActionsRobot = {NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION, NO_ACTION};
     myState->getPlayers()[0]->setRobotActions(initActionsRobot);
+    myState->setEndRound(true);
     
     /* Increments of round number and saves State for rollbacks */
     myState->roundNumber++;

@@ -18,7 +18,7 @@ using namespace state;
 using namespace engine;
 
 
-StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(window){
+StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(window) {
     std::unique_ptr<TileSet> ptrMapTileSet(new TileSet(MAP_TILESET));
     tilesets.push_back(std::move(ptrMapTileSet));
     std::unique_ptr<TileSet> ptrEffectTileSet(new TileSet(MAP_TILESET));
@@ -29,6 +29,13 @@ StateLayer::StateLayer (state::State& myState, sf::RenderWindow& window):window(
     tilesets.push_back(std::move(ptrCommandTileSet));
     std::unique_ptr<TileSet> ptrSlotTileSet(new TileSet(COMMAND_TILESET));
     tilesets.push_back(std::move(ptrSlotTileSet));
+}
+
+void StateLayer::runRender (const std::shared_ptr<state::State> myState, sf::RenderWindow& myWindow, StateLayer& myStateLayer) {
+    myStateLayer.initSurface(*myState);
+    myStateLayer.refreshPlayers(*myState);
+	myStateLayer.refreshEffects(*myState, 0, 0);			
+	myStateLayer.draw(*myState, myWindow);			
 }
 
 void StateLayer::initSurface (state::State& stateLayer){
@@ -135,6 +142,7 @@ void StateLayer::refreshPlayers (state::State& stateLayer) {
 
 void StateLayer::refreshEffects (state::State& stateLayer, int actionsInRound, int idMyClient) {
     Display surfaceEffects;
+    actionsInRound = 0;
 
     /* Display visited cp of the client player with the good color */
     std::vector<int> visitedCp = stateLayer.getPlayers()[idMyClient]->getVisitedCheckpoints();

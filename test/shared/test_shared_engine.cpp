@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     engine.checkRobotsActions();
     const std::shared_ptr<state::State> ptrState = engine.getMyState();
     
-    std::array<Action,6> robactions;
+    //std::array<Action,6> robactions;
     //First round
      /*robactions[0]=FORWARD;
     BOOST_CHECK_EQUAL(ptrState->getActionInRound(), 1);

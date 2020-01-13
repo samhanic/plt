@@ -9,6 +9,14 @@
 #include <thread>
 #include <SFML/System.hpp>
 #include <functional>
+#include <string.h>
+#include <map>
+#include <unistd.h>
+#include <microhttpd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <SFML/Network.hpp>
 
 #include "../../src/client/client.h"
 #include "../../src/shared/state.h"
@@ -18,12 +26,15 @@
 
 #define MAP_FILE "../res/map.txt"
 #define FILE_NAME "state.txt"
+#define PORT 80
+#define SOCKET_ERROR -1
 
 using namespace std;
 using namespace render;
 using namespace state;
 using namespace engine;
 using namespace client;
+using namespace ai;
 
 
 void runRender (const std::shared_ptr<state::State> myState, sf::RenderWindow& myWindow, StateLayer& myStateLayer) {
@@ -76,6 +87,26 @@ int main(int argc,char* argv[])
 		
 		Client myClient(window);
 		myClient.run();
+
+		return 0;
+	}
+	else if (entry == "network"){
+		
+		cout<<"Enter your player name"<<endl;
+		sf::Http http("http://localhost/", PORT);
+		string name;
+		cin>>name;
+			
+		sf::Http::Request request1;
+		request1.setMethod(sf::Http::Request::Post);
+		request1.setUri("/player");
+		request1.setHttpVersion(1, 0);
+		request1.setField("name","free");
+		string body="{\"req\" : \"POST\", \"name\":\"" + name + "\", \"free\":true}"; 
+		request1.setBody(body);
+		
+		sf::Http::Response response1 = http.sendRequest(request1);
+		cout<<"Command sent over port "<<PORT<<endl;
 
 		return 0;
 	}

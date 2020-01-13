@@ -40,21 +40,6 @@ Client::Client (sf::RenderWindow& window): window(window) {
 
 	StateLayer statelay(*ptrState, window);
 	statelay.initSurface(*ptrState);
-
-	// unsigned int longueur_map_cases = 25, largeur_map_cases = 25;
-	// std::string chemin_fichier_map_txt = "res/map1.txt";
-	// Correspondances tab_corres = Correspondances();
-
-	// moteur.getEtat().initGrille(chemin_fichier_map_txt, longueur_map_cases, largeur_map_cases, tab_corres);
-	// moteur.getEtat().initPersonnages(tab_corres);
-	// moteur.getEtat().initCurseur();
-	
-	// moteur.onThread = true;
-
-	// armeeRouge=new HeuristicIA();
-	// armeeBleue= new HeuristicIA();
-	// armeeBleue->setCamp(true);
-	// demarrage = true ;	
 }
 
 
@@ -85,7 +70,7 @@ void Client::run (){
 					cout<<"Thread created!"<<endl;
 					th.join();
                     
-                    /* Refresh and display what needs to be */					
+                    /* Refresh and display what needs to be */			
                     StateEvent majDisponibilite(ALL_CHANGED);
                     myEngine.getMyState()->notifyObservers(majDisponibilite, *myEngine.getMyState());
                         

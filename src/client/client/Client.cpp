@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <thread>
 #include <pthread.h>
+#include <unistd.h>
 
 #include "../../src/shared/state.h"
 #include "../../src/shared/engine.h"
@@ -23,16 +24,13 @@ using namespace client;
 bool v1=false;
 bool v2=true;
 
-void thread_moteur(void* ptr){
+void thread_moteur(void* ptr, int i){
 	Engine* ptr_moteur=(Engine*)ptr;
-	while(v2){
-		usleep(1000);
-		if(v1){
-			//ptr_moteur->update();
-			v1=false;
-		}
-	}
-	
+	usleep(1000);
+	//ptr_moteur->update();
+	ptr_moteur->executeAction(i);
+	ptr_moteur->getMyState()->checkEndGame();
+	v1=false;
 }
 
 Client::Client (sf::RenderWindow& window): window(window) {
@@ -61,9 +59,6 @@ Client::Client (sf::RenderWindow& window): window(window) {
 
 
 void Client::run (){
-
-
-
 	const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
 	StateLayer statelay(*ptrState, window);
@@ -76,7 +71,7 @@ void Client::run (){
 
 	ai::HeuristicAI aiRobot(1);
 	ptrState->initRobot(ORANGE);
-
+    //std::thread engineThread(engineProcess);
 	while (window.isOpen()){
 		statelay.eventManager(ptrState, window, statelay);
 
@@ -84,68 +79,20 @@ void Client::run (){
 		if (myEngine.checkRobotsActions()) {
 
 			aiRobot.run(myEngine);
-
-			for (int i = 0 ; i < 6 ; i++) {
-				if (!ptrState->getEndGame()) {
-					/* Do action and check death */
-					myEngine.executeAction(i);
-					ptrState->checkEndGame();
-					
-					/* Refresh and display what needs to be */
-					//statelay.runRender(ptrState, window, statelay);
-					
-					StateEvent majDisponibilite(ALL_CHANGED);
-					cout<<"notification od render processing"<<endl;
-					myEngine.getMyState()->notifyObservers(majDisponibilite, *myEngine.getMyState());
-						
-					sf::sleep(sf::seconds(0.5));
-				}
-			}
-			myEngine.endOfRound();
-			//statelay.runRender(ptrState, window, statelay);
+            for (int i = 0 ; i < 6 ; i++) {
+                if (!myEngine.getMyState()->getEndGame()) {
+					std::thread th(thread_moteur,&myEngine,i);
+					cout<<"Thread created!"<<endl;
+					th.join();
+                    
+                    /* Refresh and display what needs to be */					
+                    StateEvent majDisponibilite(ALL_CHANGED);
+                    myEngine.getMyState()->notifyObservers(majDisponibilite, *myEngine.getMyState());
+                        
+                    sf::sleep(sf::seconds(0.5));
+                }
+            }
+            myEngine.endOfRound();		
 		}
-	} 
-
-
-	// sf::Event event;
-	// StateLayer stateLayer(moteur.getEtat(), window);
-	// stateLayer.initSurfaces(moteur.getEtat());
-										
-	// StateLayer* ptr_stateLayer=&stateLayer;
-	// moteur.getEtat().registerObserver(ptr_stateLayer);
-	// Moteur* ptr_moteur=&moteur;
-	// stateLayer.registerObserver(ptr_moteur);
-
-	// std::thread th(thread_moteur, &moteur); //creation d'un thread qui va executer la fonction thread_moteur
-	// while(!moteur.getEtat().getFin()){
-	// 	if(!moteur.getEtat().getFin() && moteur.verificationFinDeTour()){
-	// 		moteur.verificationDebutDeTour();
-	// 		StateEvent majDisponibilite(ALLCHANGED);
-	//		moteur.getEtat().notifyObservers(majDisponibilite, moteur.getEtat());
-	// 	}
-	// 	if (demarrage){
-	// 		stateLayer.draw(window);
-								
-	// 		cout << "\n\t\t--- Tour " << moteur.getEtat().getTour() << " ---\n" << endl;
-			
-	// 		demarrage = false;
-	// 	}
-		
-	// 	armeeBleue->run(moteur);
-
-	// 	armeeRouge->run(moteur);
-	// 	while (window.pollEvent(event)){
-	// 		// Fermeture de la fenetre
-	// 		if (event.type == sf::Event::Closed){
-	// 			window.close();
-	// 			moteur.getEtat().setFin(true);
-	// 			cout << "\tFENETRE FERMEE - PROCESSUS INTERROMPU" << endl;
-	// 			break;
-	// 		}
-	// 	}
-	// }
-	// v2=false;
-	// th.join();
+	}
 }
-
-

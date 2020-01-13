@@ -4,12 +4,13 @@
 #include <thread>
 #include <pthread.h>
 
-
 #include "../../src/shared/state.h"
 #include "../../src/shared/engine.h"
 #include "../../src/shared/ai.h"
 #include "../client.h"
 #include "../render.h"
+
+#define MAP_FILE "../res/map.txt"
 
 using namespace state;
 using namespace engine;
@@ -27,7 +28,7 @@ void thread_moteur(void* ptr){
 	while(v2){
 		usleep(1000);
 		if(v1){
-			ptr_moteur->update();
+			//ptr_moteur->update();
 			v1=false;
 		}
 	}
@@ -36,8 +37,11 @@ void thread_moteur(void* ptr){
 
 Client::Client (sf::RenderWindow& window): window(window) {
 
+	myEngine.initEngine(MAP_FILE);
+	const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
-
+	StateLayer statelay(*ptrState, window);
+	statelay.initSurface(*ptrState);
 
 	// unsigned int longueur_map_cases = 25, largeur_map_cases = 25;
 	// std::string chemin_fichier_map_txt = "res/map1.txt";
@@ -60,6 +64,39 @@ Client::Client (sf::RenderWindow& window): window(window) {
 
 
 void Client::run (){
+
+	const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
+
+	StateLayer statelay(*ptrState, window);
+	statelay.initSurface(*ptrState);
+
+	ai::HeuristicAI aiRobot(1);
+	ptrState->initRobot(ORANGE);
+
+	while (window.isOpen()){
+			statelay.eventManager(ptrState, window, statelay);
+
+			/* Actions processed when all players have selected their actions */
+			if (myEngine.checkRobotsActions()) {
+
+				aiRobot.run(myEngine);
+
+				for (int i = 0 ; i < 6 ; i++) {
+					if (!ptrState->getEndGame()) {
+						/* Do action and check death */
+						myEngine.executeAction(i);
+						ptrState->checkEndGame();
+						
+						/* Refresh and display what needs to be */
+						statelay.runRender(ptrState, window, statelay);
+							
+						sf::sleep(sf::seconds(0.5));
+					}
+				}
+				myEngine.endOfRound();
+				statelay.runRender(ptrState, window, statelay);
+			}
+		} 
 
 
 	// sf::Event event;

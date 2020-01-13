@@ -10,6 +10,8 @@ void Observable::registerObserver (IObserver* observer){
 
 void Observable::notifyObservers (const StateEvent& e, State& state){
 	for(auto observer : observers){
+		cout<<"Render notified"<<endl;
 		observer->stateChanged(e, state);
+		
 	}
 }

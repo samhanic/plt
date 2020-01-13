@@ -71,7 +71,7 @@ int main(int argc,char* argv[])
 		cout << "use command 'deep_ai' to execute 'deep_ai'" << endl;
 	}
 	else if(entry== "thread"){
-		sf::RenderWindow window(sf::VideoMode(10 * 64 + 250, 10 * 64), "RobotIS");
+		sf::RenderWindow window(sf::VideoMode(640 + 250, 640), "RobotIS");
 		window.setFramerateLimit(25);
 		
 		Client myClient(window);

@@ -471,3 +471,11 @@ void StateLayer::draw (state::State& stateLayer, sf::RenderWindow& window){
     writeEndGame(stateLayer, window);
     window.display();
 }
+
+void StateLayer::stateChanged (const state::StateEvent& e, state::State& myState) {
+    cout<<"Affichage appelé"<<endl;
+    initSurface(myState);
+    refreshPlayers(myState);
+	refreshEffects(myState, 0, 0);			
+	draw(myState, window);	
+}

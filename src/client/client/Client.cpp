@@ -56,47 +56,55 @@ Client::Client (sf::RenderWindow& window): window(window) {
 	// armeeRouge=new HeuristicIA();
 	// armeeBleue= new HeuristicIA();
 	// armeeBleue->setCamp(true);
-	// demarrage = true ;
-
-	// moteur.registerObserver(this);
-	
+	// demarrage = true ;	
 }
 
 
 void Client::run (){
+
+
 
 	const std::shared_ptr<state::State> ptrState = myEngine.getMyState();
 
 	StateLayer statelay(*ptrState, window);
 	statelay.initSurface(*ptrState);
 
+
+	StateLayer* ptr_stateLayer = &statelay;
+	myEngine.getMyState()->registerObserver(ptr_stateLayer);
+
+
 	ai::HeuristicAI aiRobot(1);
 	ptrState->initRobot(ORANGE);
 
 	while (window.isOpen()){
-			statelay.eventManager(ptrState, window, statelay);
+		statelay.eventManager(ptrState, window, statelay);
 
-			/* Actions processed when all players have selected their actions */
-			if (myEngine.checkRobotsActions()) {
+		/* Actions processed when all players have selected their actions */
+		if (myEngine.checkRobotsActions()) {
 
-				aiRobot.run(myEngine);
+			aiRobot.run(myEngine);
 
-				for (int i = 0 ; i < 6 ; i++) {
-					if (!ptrState->getEndGame()) {
-						/* Do action and check death */
-						myEngine.executeAction(i);
-						ptrState->checkEndGame();
+			for (int i = 0 ; i < 6 ; i++) {
+				if (!ptrState->getEndGame()) {
+					/* Do action and check death */
+					myEngine.executeAction(i);
+					ptrState->checkEndGame();
+					
+					/* Refresh and display what needs to be */
+					//statelay.runRender(ptrState, window, statelay);
+					
+					StateEvent majDisponibilite(ALL_CHANGED);
+					cout<<"notification od render processing"<<endl;
+					myEngine.getMyState()->notifyObservers(majDisponibilite, *myEngine.getMyState());
 						
-						/* Refresh and display what needs to be */
-						statelay.runRender(ptrState, window, statelay);
-							
-						sf::sleep(sf::seconds(0.5));
-					}
+					sf::sleep(sf::seconds(0.5));
 				}
-				myEngine.endOfRound();
-				statelay.runRender(ptrState, window, statelay);
 			}
-		} 
+			myEngine.endOfRound();
+			//statelay.runRender(ptrState, window, statelay);
+		}
+	} 
 
 
 	// sf::Event event;
@@ -113,7 +121,7 @@ void Client::run (){
 	// 	if(!moteur.getEtat().getFin() && moteur.verificationFinDeTour()){
 	// 		moteur.verificationDebutDeTour();
 	// 		StateEvent majDisponibilite(ALLCHANGED);
-	// 		moteur.getEtat().notifyObservers(majDisponibilite, moteur.getEtat());
+	//		moteur.getEtat().notifyObservers(majDisponibilite, moteur.getEtat());
 	// 	}
 	// 	if (demarrage){
 	// 		stateLayer.draw(window);

@@ -11,7 +11,7 @@
 #include <string>
 #include <iostream>
 
-#define PORT 80
+#define PORT 8080
 #define GET 0
 #define POST 1
 #define ANSWER_LENGTH 1024
@@ -20,6 +20,26 @@ using namespace std;
 using namespace server;
 
 ServicesManager* manager = new ServicesManager();
+
+class Request {
+public:
+    struct MHD_PostProcessor *pp = nullptr;
+    string data;
+    ~Request() {
+        if (pp) MHD_destroy_post_processor (pp);
+    }
+};
+
+static int post_iterator(void *cls,
+        enum MHD_ValueKind kind,
+        const char *key,
+        const char *filename,
+        const char *content_type,
+        const char *transfer_encoding,
+        const char *data, uint64_t off, size_t size) 
+{
+    return MHD_NO;
+}
 
 struct connection_info_struct
 {
@@ -152,6 +172,73 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
     return -1;
 }
 
+static int main_handler (void *cls,      
+          struct MHD_Connection *connection,
+          const char *url, 
+          const char *method,
+          const char *version,
+          const char *upload_data, size_t *upload_data_size, void **ptr) 
+{
+    cout<<"Data reveived"<<endl;
+    // Données pour une requête (en plusieurs appels à cette fonction)
+    Request *request = (Request*)*ptr;
+
+    // Premier appel pour cette requête
+    if (!request) { 
+        request = new Request();
+        if (!request) {
+            return MHD_NO;
+        }
+        *ptr = request;
+        if (strcmp(method, MHD_HTTP_METHOD_POST) == 0
+         || strcmp(method, MHD_HTTP_METHOD_PUT) == 0) {
+            request->pp = MHD_create_post_processor(connection,1024,&post_iterator,request);
+            if (!request->pp) {
+                cerr << "Failed to setup post processor for " << url << endl;
+                return MHD_NO;
+            }
+        }
+        return MHD_YES;
+    }    
+    
+    // Cas où il faut récupérer les données envoyés par l'utilisateur
+    if (strcmp(method, MHD_HTTP_METHOD_POST) == 0
+     || strcmp(method, MHD_HTTP_METHOD_PUT) == 0) {
+        MHD_post_process(request->pp,upload_data,*upload_data_size);
+        if (*upload_data_size != 0) {
+            request->data = upload_data;
+            *upload_data_size = 0;
+            return MHD_YES;
+        }    
+    }
+
+    HttpStatus status;
+    string response;
+    try {
+
+        ServicesManager *manager = (ServicesManager*) cls;
+        status = manager->queryService(response,request->data,url,method);
+    }
+    catch(exception& e) {
+        status = HttpStatus::SERVER_ERROR;
+        response = e.what();
+        response += "\n";
+    }
+    catch(...) {
+        status = HttpStatus::SERVER_ERROR;
+        response = "Unknown exception\n";
+    }
+
+    struct MHD_Response *mhd_response;
+    mhd_response = MHD_create_response_from_buffer(response.size(),(void *)response.c_str(),MHD_RESPMEM_MUST_COPY);
+    if (strcmp(method,MHD_HTTP_METHOD_GET) == 0) {
+        MHD_add_response_header(mhd_response,"Content-Type","application/json; charset=utf-8");
+    }
+    int ret = MHD_queue_response(connection, status, mhd_response);
+    MHD_destroy_response(mhd_response);
+    return ret;
+}
+
 //=====================================================================================================
 //
 //                                              STARTING SERVER
@@ -167,32 +254,48 @@ int main(int argc,char* argv[]){
     }
 
     if(strcmp(argv[1],"listen")==0){
-        cout<<"Starting server for listening"<<endl;
-        Game serverGame = Game();
+        try{
+            cout<<"Starting server for listening"<<endl;
+            Game serverGame = Game();
+            ServicesManager servicesManager;
 
-        manager->registerService(unique_ptr<PlayerService>(new PlayerService(serverGame)));
+            manager->registerService(unique_ptr<PlayerService>(new PlayerService(serverGame)));
 
-        Game game;
-		PlayerService playerService(std::ref(game));
-		std::unique_ptr<AbstractService> ptr_playerService (new PlayerService(playerService));
+            Game game;
+            PlayerService playerService(std::ref(game));
+            std::unique_ptr<AbstractService> ptr_playerService (new PlayerService(playerService));
 
-        struct MHD_Daemon *daemon;
+            struct MHD_Daemon *daemon;
 
-        daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG, PORT, NULL, NULL,
-                                &answer_to_connection, NULL,
-                                MHD_OPTION_NOTIFY_COMPLETED, &request_completed, NULL,
-                                MHD_OPTION_END);
-        if (daemon == NULL) {
-            cout<<"Null daemon"<<endl;
-            return 1;
+            // daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG, PORT, NULL, NULL,
+            //                         &answer_to_connection, NULL,
+            //                         MHD_OPTION_NOTIFY_COMPLETED, &request_completed, NULL,
+            //                         MHD_OPTION_END);
+            daemon = MHD_start_daemon(// MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG | MHD_USE_POLL,
+				        MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG,
+				        // MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_POLL,
+				        // MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
+				        8080,
+				      	NULL, NULL, 
+				        &main_handler, (void*) &servicesManager,
+				        MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL,
+				        MHD_OPTION_END);
+            if (daemon == NULL) {
+                cout<<"Null daemon"<<endl;
+                return 1;
+            }
+
+            getchar ();
+
+            cout << "Enter to stop server" << endl;
+            (void) getc(stdin);
+            MHD_stop_daemon (daemon);
+
+            return 0;
         }
-
-        getchar ();
-
-        cout << "Enter to stop server" << endl;
-		(void) getc(stdin);
-        MHD_stop_daemon (daemon);
-
-        return 0;
+        catch(exception& excep){
+            cerr << "Exception : "<<excep.what() <<endl;
+            return -1;
+        }
     } 
 }

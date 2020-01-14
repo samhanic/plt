@@ -26,7 +26,7 @@
 
 #define MAP_FILE "../res/map.txt"
 #define FILE_NAME "state.txt"
-#define PORT 80
+#define PORT 8080
 #define SOCKET_ERROR -1
 
 using namespace std;

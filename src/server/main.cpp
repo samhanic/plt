@@ -185,6 +185,7 @@ static int main_handler (void *cls,
 
     // Premier appel pour cette requête
     if (!request) { 
+        cout<<"first request"<<endl;
         request = new Request();
         if (!request) {
             return MHD_NO;
@@ -204,9 +205,11 @@ static int main_handler (void *cls,
     // Cas où il faut récupérer les données envoyés par l'utilisateur
     if (strcmp(method, MHD_HTTP_METHOD_POST) == 0
      || strcmp(method, MHD_HTTP_METHOD_PUT) == 0) {
+         cout<<"We have data de get : "<<endl;
         MHD_post_process(request->pp,upload_data,*upload_data_size);
         if (*upload_data_size != 0) {
             request->data = upload_data;
+            cout<<"DATA is : "<<upload_data<<endl;
             *upload_data_size = 0;
             return MHD_YES;
         }    

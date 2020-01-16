@@ -23,7 +23,7 @@ NetworkClient::NetworkClient (std::string& url, int port, sf::RenderWindow& wind
 }
 
 void NetworkClient::run (){
-    cout<<"---- SERVER TEST ----"<<endl;
+    cout<<"Client is running"<<endl;
     string name;
     cout<<"Enter your username : ";
     cin>>name;
@@ -45,9 +45,8 @@ void NetworkClient::run (){
     if(jsonReader.parse(response1.getBody(),rep1)){
         int playerId=rep1["id"].asInt();
         cout<<"You joined the game successfully."<<endl;
-        cout<<"Your ID is : "<<playerId<<endl << "\n";
-
-        cout<< "List of players in the game : "<<endl;
+        cout<<"Your robot number is : "<<playerId<<endl << "\n";
+        cout<< "List of robots on the server : "<<endl;
         for(int j=1; j<=playerId; j++){
             sf::Http::Request request2;
             request2.setMethod(sf::Http::Request::Get);
@@ -67,9 +66,9 @@ void NetworkClient::run (){
             }
         }		
 
-        cout<<"\nPress d and then enter to disconnect the last player from the server."<<endl;
+        cout<<"\nPress 'e' to exit"<<endl;
 
-        while(getchar()!='d'){}
+        while(getchar()!='e'){}
         sf::Http::Request request3;
         request3.setMethod(sf::Http::Request::Post);
         string uri2="/player/"+ to_string(playerId);

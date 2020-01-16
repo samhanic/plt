@@ -1,33 +1,42 @@
-#include "AbstractService.h"
+#include "../server.h"
+#include <iostream>
+using namespace server;
+using namespace std;
 
-server::AbstractService::AbstractService(const std::string &pattern) :pattern(pattern) {
+// Constructor
 
+AbstractService::AbstractService (const std::string& pattern) {
+    setPattern(pattern);
 }
 
-const std::string &server::AbstractService::getPattern() const {
-    return this->pattern;
+// Functions
+
+const string& AbstractService::getPattern () const {
+    return pattern;
 }
 
-void server::AbstractService::setPattern(const std::string &pattern) {
+void AbstractService::setPattern (const std::string& pattern) {
     this->pattern = pattern;
 }
 
-server::AbstractService::~AbstractService() {
-
+HttpStatus AbstractService::get (Json::Value& out, int id) const {
+    throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not implemented");
 }
 
-server::HttpStatus server::AbstractService::get(Json::Value &out, int id) const {
-    return OUT_OF_RESOURCES;
+HttpStatus AbstractService::post (const Json::Value& in, int id) {
+    throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not implemented");
 }
 
-server::HttpStatus server::AbstractService::post(const Json::Value &in, int id) {
-    return OUT_OF_RESOURCES;
+HttpStatus AbstractService::put (Json::Value& out, const Json::Value& in) {
+    throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not implemented");
 }
 
-server::HttpStatus server::AbstractService::put(Json::Value &out, const Json::Value &in) {
-    return OUT_OF_RESOURCES;
+HttpStatus AbstractService::remove (int id) {
+    throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Non implanté");
 }
 
-server::HttpStatus server::AbstractService::remove(int id) {
-    return OUT_OF_RESOURCES;
+// Destructor
+
+AbstractService::~AbstractService() {
+    
 }

@@ -1,91 +1,109 @@
+#include "../server.h"
+#include <iostream>
+using namespace std;
+using namespace server;
 
-#include "ServicesManager.h"
-#include "PlayerService.h"
-
-void server::ServicesManager::registerService(std::unique_ptr <AbstractService> service) {
-    this->services.push_back(std::move(service));
+void ServicesManager::registerService (unique_ptr<AbstractService> service) {
+    services.push_back(std::move(service));
 }
 
-server::AbstractService *server::ServicesManager::findService(const std::string &url) const {
-    std::istringstream ss(url);
-    std::string token;
-
-    std::vector<std::string> parsedUrl;
-    while(std::getline(ss, token, '/')) {
-        parsedUrl.push_back(token);
+AbstractService* ServicesManager::findService (const string& url) const {
+    for (auto& service : services) {
+        const string& pattern(service->getPattern());
+		
+        if (url.find(pattern) != 0)
+			
+            continue;
+        if (url.size() > pattern.size() && url[pattern.size()] != '/')
+			
+            continue;
+        return service.get();
     }
-
-    if(parsedUrl[1] == "player"){
-        return this->services[0].get();
-    }
-    else{
-        return nullptr;
-    }
+    return nullptr;
 }
 
-server::HttpStatus server::ServicesManager::queryService(std::string &out, const std::string &in, const std::string &url, const std::string &method) {
-    std::istringstream ss(url);
-    std::string token;
+HttpStatus ServicesManager::queryService (string& out, const string& in, const string& url, const string& method) { 
+    AbstractService* service = findService(url);
+    if (!service)
+        throw ServiceException(HttpStatus::NOT_FOUND,"Service "+url+" not found");
 
-    std::vector<std::string> parsedUrl;
-    while(std::getline(ss, token, '/')) {
-        parsedUrl.push_back(token);
+    // Look for a potential id (ex: /my/service/<id>)
+    const string& pattern(service->getPattern());
+    int id = 0;
+	
+    if (url.size() > pattern.size()) {
+        string end = url.substr(pattern.size());
+        if (end[0] != '/')
+            throw ServiceException(HttpStatus::BAD_REQUEST,"Incorrect URL (expected: <service>/<number>)");
+        end = end.substr(1);
+        if (end.empty())
+            throw ServiceException(HttpStatus::BAD_REQUEST,"Incorrect URL (expected: <service>/<number>)");
+        try {
+            size_t pos = 0;
+            id = stoi(end,&pos);
+            if (pos != end.size())
+                throw ServiceException(HttpStatus::BAD_REQUEST,"Incorrect URL : '"+end+"' is not a number");
+        }
+        catch(...) {
+            throw ServiceException(HttpStatus::BAD_REQUEST,"Incorrect URL : '"+end+"' is not a number");
+        }
     }
-
-    if(method == "GET"){
-        Json::Value vout;
-        HttpStatus code = findService(url)->get(vout,std::stoi(parsedUrl[2]));
-        Json::FastWriter fastWriter;
-        out = fastWriter.write(vout);
-        return code;
-   }
-   else if(method == "POST"){
-        Json::Value vin;
-        Json::Reader reader;
-        std::istringstream ss2(in);
-        std::string token2;
-
-        std::vector<std::string> parsedContent;
-        while(std::getline(ss2, token2, '=')) {
-            parsedContent.push_back(token2);
-        }
-        std::string json = parsedContent[1];
-        bool parsingSuccessful = reader.parse( json.c_str(), vin );     //parse process
-        if (!parsingSuccessful) {
-            return BAD_REQUEST;
-        }
-        if(parsedUrl.size() > 2){
-            return findService(url)->post(vin,std::stoi(parsedUrl[2]));
-        }
-        else {
-            return BAD_REQUEST;
-        }
-   }
-   else if(method == "PUT"){
-        Json::Value vout;
-        Json::Value vin;
-        Json::Reader reader;
-        std::istringstream ss2(in);
-        std::string token2;
-
-        std::vector<std::string> parsedContent;
-        while(std::getline(ss2, token2, '=')) {
-            parsedContent.push_back(token2);
-        }
-        std::string json = parsedContent[1];
-        bool parsingSuccessful = reader.parse( json.c_str(), vin );     //parse process
-        if (!parsingSuccessful){
-           return BAD_REQUEST;
-        }
-        HttpStatus code = findService(url)->put(vout,vin);
-        Json::FastWriter fastWriter;
-        out = fastWriter.write(vout);
-        return code;
-   }
-   else if(method == "DELETE"){
-        return findService(url)->remove(std::stoi(parsedUrl[2]));
-   }
-   else{
-       return BAD_REQUEST;
-   }
+    // Different methods
+    if (method == "GET") {
+		int n_id=0;
+		for(size_t i=0; i<services.size(); i++){
+			if(!services[i]->isVersion()){
+				PlayerService& player_service=static_cast<PlayerService&>(*services[i]);
+				n_id=player_service.getGame().getIDseq();
+			}
+		}
+		if(id<n_id){
+        	cerr << "GET request " << pattern << " with id=" << id << endl;
+		}
+        Json::Value jsonOut;
+        HttpStatus status = service->get(jsonOut,id);
+        out = jsonOut.toStyledString();
+        return status;
+    }
+    else if (method == "POST" && in[2]!='r' && in[0]=='{') {
+        cerr << "POST request " << pattern << " with data: " << in << endl;
+        Json::Reader jsonReader;
+        Json::Value jsonIn;
+        if (!jsonReader.parse(in,jsonIn))
+            throw ServiceException(HttpStatus::BAD_REQUEST,"Invalid data: "+jsonReader.getFormattedErrorMessages());
+        return service->post(jsonIn,id);
+    }
+    else if ((method == "POST" && in[2]=='r'&& in[0]=='{')) {
+		
+		Json::Reader jsonReader;
+        Json::Value jsonIn;
+        if (!jsonReader.parse(in,jsonIn)){
+            throw ServiceException(HttpStatus::BAD_REQUEST,"Invalid data: "+jsonReader.getFormattedErrorMessages());
+			cerr << "PUT request " << pattern << " with data:" << in << endl;
+		}
+        cerr << "PUT request " << pattern << " with data: {\"name\":" << jsonIn["name"].asString()<<" ,\"free\":"<<jsonIn["free"]<<"}" << endl;
+        
+        Json::Value jsonOut;
+        HttpStatus status = service->put(jsonOut,jsonIn);
+        out = jsonOut.toStyledString();
+        return status;
+    }
+	else if (method=="PUT"){
+		
+        cerr << "PUT request " << pattern << " with data: " << in << endl;
+        Json::Reader jsonReader;
+        Json::Value jsonIn;
+        if (!jsonReader.parse(in,jsonIn))
+            throw ServiceException(HttpStatus::BAD_REQUEST,"Invalid data: "+jsonReader.getFormattedErrorMessages());
+        Json::Value jsonOut;
+        HttpStatus status = service->put(jsonOut,jsonIn);
+        out = jsonOut.toStyledString();
+        return status;
+	}
+	
+    else if (method=="DELETE" || (method == "POST" && in[0]=='D')) {
+        cerr << "DELETE request" << endl;
+        return service->remove(id);
+    }
+    throw ServiceException(HttpStatus::BAD_REQUEST,"Invalid "+method+" method");
 }

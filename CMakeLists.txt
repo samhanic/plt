@@ -109,6 +109,10 @@ find_library(
   DOC "microhttpd library"
 )
 
+#jsoncpp
+include_directories ("${PROJECT_SOURCE_DIR}/extern/jsoncpp-1.8.0")
+file(GLOB_RECURSE jsoncpp_sources extern/jsoncpp-1.8.0/*.cpp)
+
 # Add source subdirectories
 add_subdirectory(src/shared)
 add_subdirectory(src/client)

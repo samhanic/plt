@@ -91,23 +91,11 @@ int main(int argc,char* argv[])
 		return 0;
 	}
 	else if (entry == "network"){
-		
-		cout<<"Enter your player name"<<endl;
-		sf::Http http("http://localhost/", PORT);
-		string name;
-		cin>>name;
-			
-		sf::Http::Request request1;
-		request1.setMethod(sf::Http::Request::Post);
-		request1.setUri("/player");
-		request1.setHttpVersion(1, 0);
-		request1.setField("name","free");
-		string body="{\"req\" : \"POST\", \"name\":\"" + name + "\", \"free\":true}"; 
-		request1.setBody(body);
-		
-		sf::Http::Response response1 = http.sendRequest(request1);
-		cout<<"Command sent over port "<<PORT<<endl;
-
+		sf::RenderWindow window(sf::VideoMode(640 + 250, 640), "RobotIS");
+		window.setFramerateLimit(25);
+		string url = "";
+		NetworkClient NC(url,PORT,window);
+		NC.run();
 		return 0;
 	}
 	else {

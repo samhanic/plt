@@ -411,13 +411,9 @@ void StateLayer::clickManager (state::State& state, sf::Event& event) {
                         actionSlotTab[i] = static_cast<Action>(mySlot[i]);
                     }
                     ptrRobot->setRobotActions(actionSlotTab);
-                    cout<<"commandes envoyées"<<endl;
+                    // trame envoi commandes
                     
-                    /* Player has choosen his actions, it sends a notification to Engine */
-                    //notifyObservators(0, 1);
-
-                    // StateEvent stateEvent(ALL_CHANGED);
-                    // state.notifyObservers(stateEvent, state);
+                    cout<<"commandes envoyées"<<endl;
                 }
                 else cout<<"You have not yet submitted 6 actions but only "<<slotPosition<<"now"<<endl;               
             }

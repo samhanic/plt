@@ -10,6 +10,13 @@
 #include <thread>
 #include "../../../extern/jsoncpp-1.8.0/jsoncpp.cpp"
 
+#include "../../src/shared/state.h"
+#include "../../src/shared/engine.h"
+#include "../../src/shared/ai.h"
+#include "../client.h"
+#include "../render.h"
+
+#define MAP_FILE "../res/map.txt"
 
 using namespace state;
 using namespace engine;
@@ -18,8 +25,20 @@ using namespace std;
 using namespace client;
 using namespace ai;
 
-NetworkClient::NetworkClient (std::string& url, int port, sf::RenderWindow& window): url(url), port(port),window(window){
+void thread_moteur(void* ptr, int i){
+	Engine* ptr_moteur=(Engine*)ptr;
+	usleep(1000);
+	//ptr_moteur->update();
+	ptr_moteur->executeAction(i);
+	ptr_moteur->getMyState()->checkEndGame();
+}
 
+NetworkClient::NetworkClient (std::string& url, int port, sf::RenderWindow& window): url(url), port(port),window(window){
+	myEngine.initEngine(MAP_FILE);
+	ptrClientState = myEngine.getMyState();
+
+	StateLayer statelay(*ptrClientState, window);
+	statelay.initSurface(*ptrClientState);
 }
 
 void NetworkClient::run (){
@@ -28,7 +47,7 @@ void NetworkClient::run (){
     cout<<"Enter your username : ";
     cin>>name;
 
-    sf::Http http("http://localhost/", 8080);
+    sf::Http http(url, port);
                 
     sf::Http::Request request1;
     request1.setMethod(sf::Http::Request::Post);
@@ -66,39 +85,82 @@ void NetworkClient::run (){
             }
         }		
 
-        cout<<"\nPress 'e' to exit"<<endl;
+        cout<<"\nPress 'r' to Run or 'e' to Exit"<<endl;
 
-        while(getchar()!='e'){}
-        sf::Http::Request request3;
-        request3.setMethod(sf::Http::Request::Post);
-        string uri2="/player/"+ to_string(playerId);
-        request3.setUri(uri2);
-        request3.setHttpVersion(1, 0);
-        request3.setField("name","free");
-        string body3="D"; 
-        request3.setBody(body3);
-        http.sendRequest(request3);
-        cout<<""<<endl;
-        cout<<"Player "<< playerId << " has been deleted."<<endl;
-        cout<<""<<endl;
-                            
-        cout<< "List of remaining players : "<<endl;
-        for(int k=1; k<=15; k++){	
-            sf::Http::Request request4;
-            request4.setMethod(sf::Http::Request::Get);
-                string uri="/player/"+ to_string(k);
-            request4.setUri(uri);
-            request4.setHttpVersion(1, 0);
-            request4.setField("name","free");
+        char entry;
+        while(entry=getchar()) {
+            if (entry=='e') {
+                /* exit */
+                sf::Http::Request request3;
+                request3.setMethod(sf::Http::Request::Post);
+                string uri2="/player/"+ to_string(playerId);
+                request3.setUri(uri2);
+                request3.setHttpVersion(1, 0);
+                request3.setField("name","free");
+                string body3="D"; 
+                request3.setBody(body3);
+                http.sendRequest(request3);
+                cout<<""<<endl;
+                cout<<"Player "<< playerId << " has been deleted."<<endl;
+                cout<<""<<endl;
+                                    
+                cout<< "List of remaining players : "<<endl;
+                for(int k=1; k<=15; k++){	
+                    sf::Http::Request request4;
+                    request4.setMethod(sf::Http::Request::Get);
+                        string uri="/player/"+ to_string(k);
+                    request4.setUri(uri);
+                    request4.setHttpVersion(1, 0);
+                    request4.setField("name","free");
+                                        
+                    sf::Http::Response response4 = http.sendRequest(request4);
+                                        
+                    Json::Reader jsonReader4;
+                    Json::Value rep4;
+                                                
+                    if (jsonReader.parse(response4.getBody(), rep4)){
+                        string nom4=rep4["name"].asString();
+                        cout<<"	-"<<nom4<<endl;
+                    }
+                }
+            }
+           
+            else if (entry =='r') {
+                /* run */
+                myEngine.initEngine(MAP_FILE);
+                ptrClientState = myEngine.getMyState();
+
+                StateLayer statelay(*ptrClientState, window);
+                statelay.initSurface(*ptrClientState);
+                
+                StateLayer* ptr_stateLayer = &statelay;
+	            myEngine.getMyState()->registerObserver(ptr_stateLayer);
+                
+                ai::HeuristicAI aiRobot(1);
+                ptrClientState->initRobot(ORANGE);
+                while (window.isOpen()){
+                    statelay.eventManager(ptrClientState, window, statelay);
+
+                    /* Actions processed when all players have selected their actions */
+                    if (myEngine.checkRobotsActions()) {
+
+                        aiRobot.run(myEngine);
+                        for (int i = 0 ; i < 6 ; i++) {
+                            if (!myEngine.getMyState()->getEndGame()) {
+                                std::thread th(thread_moteur,&myEngine,i);
+                                cout<<"Thread created!"<<endl;
+                                th.join();
                                 
-            sf::Http::Response response4 = http.sendRequest(request4);
-                                
-            Json::Reader jsonReader4;
-            Json::Value rep4;
-                                           
-            if (jsonReader.parse(response4.getBody(), rep4)){
-                string nom4=rep4["name"].asString();
-                cout<<"	-"<<nom4<<endl;
+                                /* Refresh and display what needs to be */			
+                                StateEvent majDisponibilite(ALL_CHANGED);
+                                myEngine.getMyState()->notifyObservers(majDisponibilite, *myEngine.getMyState());
+                                    
+                                sf::sleep(sf::seconds(0.5));
+                            }
+                        }
+                        myEngine.endOfRound();		
+                    }
+                }
             }
         }
     }

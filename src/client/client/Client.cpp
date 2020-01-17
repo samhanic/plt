@@ -21,16 +21,12 @@ using namespace ai;
 using namespace client;
 
 
-bool v1=false;
-bool v2=true;
-
-void thread_moteur(void* ptr, int i){
+void thread_moteurclient(void* ptr, int i){
 	Engine* ptr_moteur=(Engine*)ptr;
 	usleep(1000);
 	//ptr_moteur->update();
 	ptr_moteur->executeAction(i);
 	ptr_moteur->getMyState()->checkEndGame();
-	v1=false;
 }
 
 Client::Client (sf::RenderWindow& window): window(window) {
@@ -66,7 +62,7 @@ void Client::run (){
 			aiRobot.run(myEngine);
             for (int i = 0 ; i < 6 ; i++) {
                 if (!myEngine.getMyState()->getEndGame()) {
-					std::thread th(thread_moteur,&myEngine,i);
+					std::thread th(thread_moteurclient,&myEngine,i);
 					cout<<"Thread created!"<<endl;
 					th.join();
                     

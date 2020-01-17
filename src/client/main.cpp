@@ -93,7 +93,8 @@ int main(int argc,char* argv[])
 	else if (entry == "network"){
 		sf::RenderWindow window(sf::VideoMode(640 + 250, 640), "RobotIS");
 		window.setFramerateLimit(25);
-		string url = "";
+		
+		string url = "http://localhost/";
 		NetworkClient NC(url,PORT,window);
 		NC.run();
 		return 0;

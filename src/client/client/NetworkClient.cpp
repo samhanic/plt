@@ -52,7 +52,7 @@ void NetworkClient::run (){
     sf::Http::Request request1;
     request1.setMethod(sf::Http::Request::Post);
     request1.setUri("/player");
-    request1.setHttpVersion(1, 0);
+    request1.setHttpVersion(5, 0);
     request1.setField("name","free");
     string body="{\"req\" : \"POST\", \"name\":\"" + name + "\", \"free\":true}"; 
     request1.setBody(body);
@@ -65,6 +65,7 @@ void NetworkClient::run (){
         int playerId=rep1["id"].asInt();
         cout<<"You joined the game successfully."<<endl;
         cout<<"Your robot number is : "<<playerId<<endl << "\n";
+        this->networkId=playerId;
         cout<< "List of robots on the server : "<<endl;
         for(int j=1; j<=playerId; j++){
             sf::Http::Request request2;
@@ -72,7 +73,7 @@ void NetworkClient::run (){
             string uri="/player/"+ to_string(j);
                             
             request2.setUri(uri);
-            request2.setHttpVersion(1, 0);
+            request2.setHttpVersion(5, 0);
             request2.setField("name","free");
 
             sf::Http::Response response2 = http.sendRequest(request2);
@@ -95,7 +96,7 @@ void NetworkClient::run (){
                 request3.setMethod(sf::Http::Request::Post);
                 string uri2="/player/"+ to_string(playerId);
                 request3.setUri(uri2);
-                request3.setHttpVersion(1, 0);
+                request3.setHttpVersion(5, 0);
                 request3.setField("name","free");
                 string body3="D"; 
                 request3.setBody(body3);
@@ -110,7 +111,7 @@ void NetworkClient::run (){
                     request4.setMethod(sf::Http::Request::Get);
                         string uri="/player/"+ to_string(k);
                     request4.setUri(uri);
-                    request4.setHttpVersion(1, 0);
+                    request4.setHttpVersion(5, 0);
                     request4.setField("name","free");
                                         
                     sf::Http::Response response4 = http.sendRequest(request4);
@@ -169,3 +170,23 @@ void NetworkClient::run (){
     }
 }
 
+void NetworkClient::sendCommands (std::array<state::Action, 6> actions){
+    sf::Http::Request requestCommand;
+    requestCommand.setMethod(sf::Http::Request::Post);
+    requestCommand.setUri("/player");
+    requestCommand.setHttpVersion(5, 0);
+    requestCommand.setField("name","free");
+    //string body="{\"req\" : \"POST\", \"name\":\"" + name + "\", \"free\":true}";
+    //"name\":\"" + name + "\",
+    string body=
+        string("{\"req\" : \"POST\", ") +
+        string("\"networkID\": \"" + std::to_string(networkId) +"\", ") +
+        string("\"action0\": \"" + std::to_string(actions[0]) +"\", ") +
+        string("\"action1\": \"" + std::to_string(actions[1]) +"\", ") +
+        string("\"action2\": \"" + std::to_string(actions[2]) +"\", ") +
+        string("\"action3\": \"" + std::to_string(actions[3]) +"\", ") +
+        string("\"action4\": \"" + std::to_string(actions[4]) +"\", ") +
+        string("\"action5\": \"" + std::to_string(actions[5]) +"\", ") +
+        string("\"free\":true}");
+    requestCommand.setBody(body);
+}
